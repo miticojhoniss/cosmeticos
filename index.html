@@ -223,6 +223,7 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
 .seal{text-decoration:none;transition:box-shadow .15s,transform .15s}.seal:hover,.pays a:hover{box-shadow:0 0 0 1.5px var(--wine);transform:translateY(-1px)}.pays a{display:block;border-radius:6px;text-decoration:none;transition:transform .15s}.pays a:hover img{box-shadow:0 0 0 1.5px var(--wine)}
 .seals{display:flex;flex-wrap:wrap;gap:10px}.seal{display:inline-flex;align-items:center;gap:10px;padding:8px 14px 8px 10px;border-radius:10px;background:#fff;box-shadow:0 0 0 1px var(--line)}
 .seal svg{width:28px;height:28px;flex:none;fill:none;stroke:#1f8a5b;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.seal b{display:block;color:#1d2a24;font-size:13px;line-height:1.2}.seal small{display:block;color:#5d6b64;font-size:12px}
+.itl{color:var(--ink);text-decoration:none}.itl:hover{color:var(--wine);text-decoration:underline}.specs a{color:var(--wine);text-decoration:none}.specs a:hover b{text-decoration:underline}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -272,7 +273,7 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
 </footer>
 
 <div class="shade" id="shade"></div>
-<aside class="mnav" id="mnav" aria-label="Menu"><div class="dh"><img src="assets/logo.webp" alt="Malta Cosméticos" style="height:48px"><button class="x" data-close aria-label="Fechar">×</button></div><nav id="mlinks"></nav></aside>
+<aside class="mnav" id="mnav" aria-label="Menu"><div class="dh"><a href="#inicio" data-close><img src="assets/logo.webp" alt="Malta Cosméticos" style="height:48px"></a><button class="x" data-close aria-label="Fechar">×</button></div><nav id="mlinks"></nav></aside>
 <aside class="drawer" id="drawer" aria-label="Carrinho">
   <div class="dh"><h3>Seu carrinho</h3><button class="x" data-close aria-label="Fechar">×</button></div>
   <div class="items" id="items"></div>
@@ -457,7 +458,7 @@ function validate(){
  bad.forEach(k=>$('#f-'+k).classList.add('bad'));
  $('#err').textContent=bad.length?'Confira os campos destacados.':'';return !bad.length}
 function resume(){const t=totals(),items=co.order?co.items:Object.entries(cart).map(([id,q])=>({p:byId(id),q})),T=co.order?co.totals:t;
- return `<aside class="panel resume" id="res"><h3>Resumo</h3>${items.map(i=>`<div class="ln"><span>${i.q}× ${esc(i.p.name)}</span><b style="white-space:nowrap">${brl(i.p.price*i.q)}</b></div>`).join('')}
+ return `<aside class="panel resume" id="res"><h3>Resumo</h3>${items.map(i=>`<div class="ln"><span>${i.q}× <a class="itl" href="#produto-${i.p.id}">${esc(i.p.name)}</a></span><b style="white-space:nowrap">${brl(i.p.price*i.q)}</b></div>`).join('')}
  <div class="ln" style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px"><span>Subtotal</span><span>${brl(T.sub)}</span></div>
  <div class="ln"><span>Frete</span><span>${T.frete?brl(T.frete):'Grátis'}</span></div>
  ${T.desc?`<div class="ln"><span>Desconto Pix (5%)</span><span>−${brl(T.desc)}</span></div>`:''}
@@ -478,8 +479,9 @@ function checkout(){
   <p class="pix">Os dados do cartão serão digitados na tela segura do meio de pagamento (Mercado Pago ou Stripe), conectado na versão completa.</p>`:''}`}
  if(co.step==3){const T=co.totals,code='00020126MALTA'+co.order+'5204000053039865802BR6304TESTE';
   body=`<h3>Pedido ${co.order} recebido!</h3><p>Enviamos a confirmação para <b>${esc(co.d.email||'')}</b>.</p>
-  ${co.pay=='pix'?`<div class="pixbox">${qr(co.order)}<b>Pague ${brl(T.tot)} com Pix</b><div class="code">${code}</div><button class="back" data-co="copy" data-v="${code}">Copiar código Pix</button></div>`:`<p>Pagamento de <b>${brl(T.tot)}</b> em ${co.inst}x no cartão.</p>`}
-  <p class="note">Pedido de teste: nenhuma cobrança real é feita neste protótipo.</p>`}
+  <p>Total: <b>${brl(T.tot)}</b> ${co.pay=='pix'?'no Pix (já com 5% de desconto)':`em ${co.inst}x no cartão`}.</p>
+  <a class="go" style="display:inline-flex;align-items:center;justify-content:center;padding:0 24px;text-decoration:none;background:#25D366" target="_blank" rel="noopener" href="https://wa.me/5545999658427?text=${encodeURIComponent(`Olá! Fiz o pedido ${co.order} na Malta Cosméticos, no valor de ${brl(T.tot)}, pagamento via ${co.pay=='pix'?'Pix':'cartão'}. Como faço o pagamento?`)}">Finalizar pagamento pelo WhatsApp</a>
+  <p class="note">Seu pedido foi registrado e aparece em <a href="#conta">Minha conta</a>. O pagamento online será ativado em breve; nossa equipe confirma o pagamento pelo WhatsApp (45) 99965-8427.</p>`}
  const acts=co.step==3?`<button class="go" data-co="home" style="padding:0 26px">Continuar comprando</button>`
   :`${co.step?'<button class="back" data-co="prev">← Voltar</button>':'<a class="back" href="#inicio" style="display:inline-flex;align-items:center;text-decoration:none">← Continuar comprando</a>'}
   <button class="go" data-co="${co.step==2?'place':'next'}" style="padding:0 26px">${co.step==2?'Confirmar pedido':'Continuar'}</button>`;
@@ -623,8 +625,8 @@ function renderCart(){
  const ids=Object.keys(cart);let n=0,t=0;
  ids.forEach(id=>{n+=cart[id];t+=byId(id).price*cart[id]});
  $('#count').textContent=n;
- $('#items').innerHTML=ids.length?ids.map(id=>{const p=byId(id);return `<div class="it"><div class="mini">${art(p)}</div>
- <div><p>${esc(p.name)}</p><div class="qty"><button data-q="${id}" data-d="-1" aria-label="Menos">−</button><span>${cart[id]}</span><button data-q="${id}" data-d="1" aria-label="Mais">+</button></div></div>
+ $('#items').innerHTML=ids.length?ids.map(id=>{const p=byId(id);return `<div class="it"><a class="mini" href="#produto-${p.id}" data-close>${art(p)}</a>
+ <div><p><a class="itl" href="#produto-${p.id}" data-close>${esc(p.name)}</a></p><div class="qty"><button data-q="${id}" data-d="-1" aria-label="Menos">−</button><span>${cart[id]}</span><button data-q="${id}" data-d="1" aria-label="Mais">+</button></div></div>
  <div style="text-align:right"><b style="white-space:nowrap">${brl(p.price*cart[id])}</b><br><button class="rm" data-rm="${id}">Remover</button></div></div>`}).join('')
  :'<div class="empty" style="margin-top:20px">Seu carrinho está vazio.</div>';
  const falta=Math.max(0,199-t);
@@ -670,7 +672,7 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  <button class="add" data-buy="${p.id}">Comprar agora</button>
  <button class="add favbtn${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}">${favs.has(p.id)?'♥ Nos favoritos':'♡ Favoritar'}</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
  <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><div class="desc">${fmtDesc(p.desc,p.name)}</div>
- <div class="specs">${[['Marca',p.brand],['Categoria',c.n],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b])=>`<div><span>${a}</span><b>${esc(b)}</b></div>`).join('')}</div>
+ <div class="specs">${[['Marca',p.brand,p.brand?'#marca-'+bslug(p.brand):''],['Categoria',c.n,'#'+c.id],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b,h])=>`<div><span>${a}</span>${h?`<a href="${h}"><b>${esc(b)}</b></a>`:`<b>${esc(b)}</b>`}</div>`).join('')}</div>
  <h3 style="font-size:22px;margin:28px 0 8px">Dúvidas frequentes</h3><div class="faq">${FAQ.map(([q,r])=>`<details><summary>${q}</summary><p>${r}</p></details>`).join('')}</div>
  </div></div>
  ${rel.length+more.length?`<div class="sec-h" style="margin-top:48px"><h2>Você também pode gostar</h2><a href="#${c.id}">Ver ${c.n} →</a></div><div class="row">${rel.concat(more).map(card).join('')}</div>`:''}
@@ -701,11 +703,19 @@ document.addEventListener('click',e=>{
  else if(t.id=='openCart'){$('#modal').classList.remove('on');openCart(true)}
  else if(t.id=='checkout'){openCart(false);co.step=0;co.order=null;location.hash=='#checkout'?route():location.hash='checkout'}
 });
+async function placeOrder(btn){btn.disabled=true;btn.textContent='Enviando pedido…';$('#err').textContent='';
+ const tok=(user&&sb)?(await sb.auth.getSession()).data.session?.access_token:null;
+ const body={itens:Object.entries(cart).map(([id,q])=>({id:+id,q})),dados:{nome:co.d.nome,email:co.d.email,tel:co.d.tel,cpf:co.d.cpf},entrega:co.ship,pagamento:co.pay,parcelas:co.inst,
+  endereco:{cep:co.d.cep,rua:co.d.rua,num:co.d.num,comp:co.d.comp,bairro:co.d.bairro,cidade:co.d.cidade,uf:co.d.uf}};
+ try{const r=await fetch(SB+'/functions/v1/criar-pedido',{method:'POST',headers:{'Content-Type':'application/json',apikey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpbHJhbHJpcXRmdmtsZ3lqbGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NTk3MTIsImV4cCI6MjExMTEzNTcxMn0.sN9ZlYrlAjfWvF3odWWqbOtZl2EkvPaqVOSo1tnT7Nw',Authorization:'Bearer '+(tok||'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpbHJhbHJpcXRmdmtsZ3lqbGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NTk3MTIsImV4cCI6MjExMTEzNTcxMn0.sN9ZlYrlAjfWvF3odWWqbOtZl2EkvPaqVOSo1tnT7Nw')},body:JSON.stringify(body)});
+  const j=await r.json().catch(()=>({}));if(!r.ok||!j.codigo)throw new Error(j.erro||'Não foi possível concluir o pedido. Tente de novo.');
+  co.order=j.codigo;co.items=Object.entries(cart).map(([id,q])=>({p:byId(id),q}));co.totals={sub:j.subtotal,frete:j.frete,desc:j.desconto,tot:j.total};cart={};save();renderCart();co.step=3;$('#app').innerHTML=checkout();window.scrollTo(0,0)}
+ catch(err){btn.disabled=false;btn.textContent='Confirmar pedido';$('#err').textContent=err.message}}
 document.addEventListener('click',e=>{
  const t=e.target.closest('[data-co]');if(!t)return;const a=t.dataset.co;
  if(a=='next'){if(!validate())return;co.step++;}
  if(a=='prev')co.step--;
- if(a=='place'){co.order='MC'+String(Date.now()).slice(-6);co.items=Object.entries(cart).map(([id,q])=>({p:byId(id),q}));co.totals=totals();cart={};save();renderCart();co.step=3}
+ if(a=='place'){placeOrder(t);return}
  if(a=='copy'){navigator.clipboard.writeText(t.dataset.v).then(()=>toast('Código copiado'),()=>toast('Não foi possível copiar'));return}
  if(a=='home'){location.hash='inicio';return}
  $('#app').innerHTML=checkout();window.scrollTo(0,0)});
