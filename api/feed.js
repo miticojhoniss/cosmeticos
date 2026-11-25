@@ -28,7 +28,7 @@ ${imgs.slice(1, 11).map((u) => `<g:additional_image_link>${x(u)}</g:additional_i
 <g:brand>${x(p.marca)}</g:brand>
 ${gtin ? `<g:gtin>${gtin}</g:gtin>` : '<g:identifier_exists>no</g:identifier_exists>'}
 ${bundle ? '<g:is_bundle>yes</g:is_bundle>' : ''}
-<g:product_type>${x('Saúde e beleza > ' + cat)}</g:product_type>
+<g:product_type>${x('Beleza > ' + cat)}</g:product_type>
 <g:shipping><g:country>BR</g:country><g:service>PAC</g:service><g:price>${ship} BRL</g:price></g:shipping>
 <g:shipping_weight>0.5 kg</g:shipping_weight>
 </item>`.replace(/\n\n+/g, '\n');
