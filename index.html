@@ -204,6 +204,7 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
 .ord{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
 @media(max-width:800px){.acc{grid-template-columns:1fr}}
 @media(max-width:600px){#accn{display:none}.ord{grid-template-columns:1fr 1fr}}
+.desc{max-width:70ch}.desc h4{font:700 16px Manrope,sans-serif;color:var(--wine);margin:20px 0 6px}.desc p{margin:0 0 10px}.desc ul,.desc ol{margin:0 0 12px;padding-left:20px}.desc li{margin:4px 0}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -590,6 +591,26 @@ function renderCart(){
 }
 function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
 function openCart(o){$('#drawer').classList.toggle('on',o);$('#shade').classList.toggle('on',o||$('#modal').classList.contains('on'))}
+function fmtDesc(raw,name){if(!raw)return '<p>Descrição em breve.</p>';
+ let t=' '+raw.replace(/Descrição do Produto/gi,' ').replace(/#+/g,' ').replace(/\s+/g,' ').trim()+' ';
+ const nm=(name||'').trim();if(nm&&t.trim().toLowerCase().startsWith(nm.toLowerCase()))t=' '+t.trim().slice(nm.length)+' ';
+ const M='\u0001';
+ t=t.replace(/\s((?:O que (?:é|e)|Para que serve|Quais? (?:são )?(?:os |as )?(?:principais )?(?:benefícios|ativos|vantagens)|Como (?:usar|aplicar|funciona)|Qual a diferença|Para quem (?:é )?indicado|Para que é indicado|Pode ser usad)[^?]{0,160}\?)/gi,' '+M+'$1'+M);
+ t=t.replace(/\s((?:Benefícios|Principais benefícios|Ativos(?: principais)?|Principais ativos|Modo de uso|Modo de usar|Como usar|Indicação|Indicações|Indicado para|Resultados?(?: esperados?)?|Precauções(?: e avisos de segurança)?|Advertências|Cuidados|Composição|Ingredientes|Textura|Fragrância|Tipo de pele|Conteúdo|O kit contém|Kit contém|Diferenciais|Recomendações)\s*:)/g,' '+M+'$1'+M);
+ t=t.replace(/([.!?;])\s(Ativos|Principais ativos|Benefícios|Modo de uso|Como usar|Indicação|Composição|Precauções|Resultado esperado)\s(?=[A-ZÁÉÍÓÚ0-9-])/g,'$1 '+M+'$2:'+M+' ');
+ const parts=t.split(M).map(x=>x.trim());const out=[];let i=0;
+ const hd=x=>{x=x.replace(/\s*:$/,'').trim();if(/^Quais?.*benef/i.test(x))return 'Benefícios';if(/^Quais?.*ativos/i.test(x))return 'Ativos';if(/^O que (é|e)/i.test(x))return 'O que é e para que serve';if(/^Como (usar|aplicar)/i.test(x))return 'Modo de uso';if(/^Para quem|^Para que é indicado/i.test(x))return 'Indicação';return x};
+ const isH=x=>/\?$|:$/.test(x)&&x.length<170;
+ const body=b=>{if(!b)return '';
+  let items=b.split(/\s(?:\*|•|-|–)\s+|\s?(?:;)\s*(?=-|\*)/).map(x=>x.replace(/^[-*•–]\s*/,'').trim()).filter(Boolean);
+  const num=b.split(/\s(?=\d{1,2}[.)]\s)/).map(x=>x.trim()).filter(Boolean);
+  if(num.length>=3&&num.slice(1).every(x=>/^\d{1,2}[.)]\s/.test(x)))return `${/^\d/.test(num[0])?'':`<p>${esc(num.shift())}</p>`}<ol>${num.map(x=>`<li>${esc(x.replace(/^\d{1,2}[.)]\s*/,''))}</li>`).join('')}</ol>`;
+  const lead=/^[*•\-–]/.test(b.trim());if(items.length>=3||(lead&&items.length>=2)){const first=lead?'':items.shift();return `${first?`<p>${esc(first)}</p>`:''}<ul>${items.map(x=>`<li>${esc(x.replace(/;$/,''))}</li>`).join('')}</ul>`}
+  const sent=b.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g)||[b];const ps=[];for(let k=0;k<sent.length;k+=3)ps.push(sent.slice(k,k+3).map(x=>x.trim()).join(' '));
+  return ps.map(x=>`<p>${esc(x)}</p>`).join('')};
+ if(parts.length>1&&parts[0]&&parts[0].length<90&&!/[.!?]/.test(parts[0]))parts.shift();
+ for(const x of parts){if(!x)continue;if(isH(x))out.push(`<h4>${esc(hd(x))}</h4>`);else out.push(body(x))}
+ return out.join('')}
 let pq=1;
 function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round((1-p.price/p.old)*100):0;
  const rel=P.filter(x=>x.cat==p.cat&&x.id!=p.id&&(!p.brand||x.brand==p.brand)).slice(0,8);
@@ -605,7 +626,7 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  <button class="add" data-buy="${p.id}">Comprar agora</button>
  <button class="add favbtn${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}">${favs.has(p.id)?'♥ Nos favoritos':'♡ Favoritar'}</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
  <div class="ship"><b>Frete grátis</b> em compras acima de R$ 199 · Envio em 1 a 2 dias úteis · Troca em até 7 dias</div>
- <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><p>${p.desc?esc(p.desc):'Descrição em breve.'}</p>
+ <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><div class="desc">${fmtDesc(p.desc,p.name)}</div>
  <div class="specs">${[['Marca',p.brand],['Categoria',c.n],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b])=>`<div><span>${a}</span><b>${esc(b)}</b></div>`).join('')}</div>
  <h3 style="font-size:22px;margin:28px 0 8px">Dúvidas frequentes</h3><div class="faq">${FAQ.map(([q,r])=>`<details><summary>${q}</summary><p>${r}</p></details>`).join('')}</div>
  </div></div>
