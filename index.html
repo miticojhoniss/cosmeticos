@@ -270,6 +270,16 @@ body.cko .ckstrip{display:block;background:var(--wine);color:#fff;text-align:cen
 .tl{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:0}.tl li{position:relative;padding:0 0 18px 30px;color:var(--mute)}.tl li span{position:absolute;left:0;top:2px;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);background:#fff}
 .tl li:not(:last-child)::before{content:"";position:absolute;left:8px;top:20px;bottom:0;width:2px;background:var(--line)}.tl li.ok{color:var(--ink)}.tl li.ok span{background:var(--wine);border-color:var(--wine)}.tl li.ok:not(:last-child)::before{background:var(--wine)}.tl li.now{font-weight:700}
 .trk-i{margin:0;padding-left:18px;font-size:14px}
+.story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
+.story img{width:100%;height:100%;object-fit:cover;display:block;min-height:280px}.story-t{padding:clamp(24px,4vw,56px);display:flex;flex-direction:column;justify-content:center}
+.eyb{display:flex;align-items:center;gap:14px;margin:0 0 14px;font:800 13px Manrope,sans-serif;letter-spacing:3px;text-transform:uppercase;color:var(--ink)}.eyb::before{content:"";width:40px;height:2px;background:#c9922e}
+.story h2{font-size:clamp(32px,4vw,52px);line-height:1.05;color:var(--wine);margin:0 0 18px}.story p{color:var(--wine);margin:0 0 12px;font-size:17px}.story .cta{align-self:flex-start;margin-top:12px}
+.about .ab-w{max-width:860px}.about h1{font-size:clamp(36px,5vw,52px);margin:0 0 20px;color:var(--wine)}.about h2{font-size:26px;margin:34px 0 14px}.about p{font-size:17px;line-height:1.75;margin:0 0 16px}
+.ab-img{width:100%;border-radius:18px;display:block;aspect-ratio:16/10;object-fit:cover}
+.ab-dl{margin:0;border:1px solid var(--line);border-radius:16px;overflow:hidden}.ab-dl div{display:grid;grid-template-columns:180px 1fr;border-bottom:1px solid var(--line)}.ab-dl div:last-child{border:0}
+.ab-dl dt{padding:12px 16px;background:var(--soft);font:800 12px Manrope,sans-serif;letter-spacing:1px;text-transform:uppercase}.ab-dl dd{margin:0;padding:12px 16px}.ab-dl a{color:var(--wine)}
+.ab-g{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}.ab-h{list-style:none;margin:0;padding:0}.ab-h li{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}.ab-h li.today{color:var(--wine);font-weight:700}
+@media(max-width:760px){.story{grid-template-columns:1fr}.story img{max-height:320px}.ab-g{grid-template-columns:1fr}.ab-dl div{grid-template-columns:1fr}}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -395,6 +405,7 @@ const byId=id=>P.find(p=>p.id==id);
 function home(){
  return `<a class="banner" href="/cabelos"><img src="/assets/banner-capilares.webp" alt="Confira a coleção Cuidados Capilares" width="2000" height="719"></a>
  ${catTiles()}
+ ${storyBlock()}
  ${CATS.map(c=>`<section class="band"><div class="wrap"><div class="sec-h"><h2>${c.n}</h2><a href="/${c.id}">Ver todos →</a></div>
  <div class="row">${P.filter(p=>p.cat==c.id).slice(0,12).map(card).join('')}</div></div></section>`).join('')}
  `;
@@ -408,6 +419,22 @@ function brandsPage(){const m=new Map();for(const p of P)if(p.brand)m.set(p.bran
  const g={};[...m].sort((a,b)=>a[0].localeCompare(b[0],'pt')).forEach(([b,n])=>{const k=/[a-z]/i.test(norm2(b)[0])?norm2(b)[0].toUpperCase():'#';(g[k]=g[k]||[]).push([b,n])});
  return `<section class="band"><div class="wrap"><div class="sec-h"><h2>Todas as marcas</h2><a href="/">← Início</a></div><p class="pix">${m.size} marcas</p>
  ${Object.entries(g).map(([k,a])=>`<h3 class="bl-h">${k}</h3><div class="bl">${a.map(([b,n])=>`<a href="/marca/${bslug(b)}">${esc(b)} <small>(${n})</small></a>`).join('')}</div>`).join('')}</div></section>`}
+function storyBlock(){return `<section class="band" style="padding-block:clamp(24px,3vw,40px)"><div class="wrap"><div class="story"><img src="/assets/loja-malta.webp" alt="Prateleiras com produtos de beleza na Malta Cosméticos" loading="lazy" width="836" height="814">
+ <div class="story-t"><p class="eyb">Malta Cosméticos</p><h2>Beleza e cuidado para você.</h2><p>Encontre produtos de beleza, cuidados pessoais e perfumaria para acompanhar a sua rotina.</p><p>Explore nossas categorias e descubra opções para cuidar de você em cada momento.</p><a class="cta" href="/quem-somos">Conheça a Malta <span aria-hidden="true">→</span></a></div></div></div></section>`}
+function aboutPage(){const dias=[['Segunda-feira','09:00h às 18:00h'],['Terça-feira','09:00h às 18:00h'],['Quarta-feira','09:00h às 18:00h'],['Quinta-feira','09:00h às 18:00h'],['Sexta-feira','09:00h às 18:00h'],['Sábado','09:00h às 13:00h'],['Domingo','Fechado']];
+ const hoje=(new Date().getDay()+6)%7;
+ return `<section class="band about"><div class="wrap ab-w"><p class="eyb">Quem somos</p><h1>Sobre nós</h1>
+ <p>A <b>Malta Cosméticos</b> é uma loja independente de dermocosméticos, proteção solar, maquiagem, cuidados capilares, corpo e banho e itens para mamãe e bebê, com sede em Foz do Iguaçu (PR), na Alameda Rui Ferreira, 61, Centro. As compras são feitas pelo site, com as mesmas informações de contato, preços e políticas publicadas no rodapé.</p>
+ <p>Não somos a loja oficial das marcas que vendemos nem temos ligação com os fabricantes. Como revendedora independente, escolhemos o sortimento, cuidamos do estoque e enviamos os pedidos a partir do nosso endereço em Foz do Iguaçu. As marcas que aparecem no catálogo pertencem aos seus donos e são citadas apenas para identificar o produto à venda.</p>
+ <p>Trabalhamos somente com produtos novos, lacrados e na embalagem original. Antes de cada envio, conferimos o lacre, o estado da embalagem e a validade. Não vendemos itens usados, abertos, reembalados ou "inspirados em".</p>
+ <p>Os pedidos são separados em 1 a 2 dias úteis e enviados pelos Correios (PAC e Sedex). Frete, formas de pagamento e regras de troca aparecem antes da finalização da compra, sem taxas escondidas.</p>
+ <p>Nossos preços refletem a operação de uma loja independente e podem ser diferentes dos praticados em outras lojas ou no canal oficial de cada marca.</p>
+ <h2>Conheça a Malta Cosméticos</h2><img class="ab-img" src="/assets/loja-malta.webp" alt="Produtos de beleza nas prateleiras da Malta Cosméticos" width="836" height="814" loading="lazy">
+ <h2>Confira nossas informações</h2><dl class="ab-dl"><div><dt>Razão social</dt><dd>${EMP.rs}</dd></div><div><dt>Nome fantasia</dt><dd>${EMP.fan}</dd></div><div><dt>CNPJ</dt><dd>${EMP.cnpj}</dd></div>
+ <div><dt>E-mail</dt><dd><a href="mailto:atendimento@maltacosmeticos.com.br">atendimento@maltacosmeticos.com.br</a></dd></div><div><dt>Site</dt><dd><a href="/">${location.host}</a></dd></div>
+ <div><dt>WhatsApp</dt><dd><a href="https://wa.me/5545999658427" target="_blank" rel="noopener">(45) 99965-8427</a></dd></div><div><dt>Endereço</dt><dd>${EMP.end}</dd></div></dl>
+ <div class="ab-g"><div class="panel"><h3>Horário de atendimento</h3><ul class="ab-h">${dias.map(([d,h],i)=>`<li class="${i==hoje?'today':''}"><span>${d}</span><b>${h}</b></li>`).join('')}</ul></div>
+ <div class="panel"><h3>Onde estamos</h3><p>${EMP.end}</p><a class="cta" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Alameda+Rui+Ferreira+61+Centro+Foz+do+Igua%C3%A7u+PR+85851-400">Ver no mapa</a></div></div></div></section>`}
 function catTiles(){return `<section class="band" style="padding-bottom:0"><div class="wrap"><div class="sec-h"><h2>Compre por categoria</h2></div><div class="tiles">${CATS.map(c=>{const p=P.find(x=>x.cat==c.id&&x.img); return `<a class="tile" href="/${c.id}"><span class="ti">${p?`<img src="${esc(p.img)}" alt="" loading="lazy">`:''}</span><b>${c.n}</b></a>`}).join('')}</div></div></section>`}
 const FAQ=[['Como funciona a devolução?','Você pode desistir da compra em até 7 dias após receber, com o produto lacrado. Produtos com defeito podem ser trocados em até 30 dias. Veja a <a href="/trocas-e-devolucoes">política de trocas</a>.'],
 ['Qual o tempo de entrega?','Separamos o pedido em 1 a 2 dias úteis. Depois da postagem, o PAC leva de 6 a 9 dias úteis e o Sedex de 2 a 4 dias úteis. Acima de R$ 199 o frete é grátis.'],
@@ -717,6 +744,7 @@ function route(){
  else if(h=='favoritos'){current=P.filter(p=>favs.has(p.id));$('#app').innerHTML=list('Meus favoritos',current);if(!current.length)setTimeout(()=>{$('#g').innerHTML='<div class="empty">Você ainda não favoritou nenhum produto. Toque no coração de um produto para guardar aqui.</div>'},0)}
  else if(h=='checkout'){$('#app').innerHTML=checkout()}
  else if(h=='rastreio'){$('#app').innerHTML=trackPage();document.title=fitTitle('Rastrear pedido')}
+ else if(h=='quem-somos'){$('#app').innerHTML=aboutPage();document.title=fitTitle('Quem somos')}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
  else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
  else if(h=='busca'){const uq=new URLSearchParams(location.search).get('q');if(uq!=null&&$('#q').value.trim()!=uq)$('#q').value=uq;const q=$('#q').value.trim();current=searchP(q);$('#app').innerHTML=list(q?`Resultados para “${q}”`:'Busca',current);$('#sugg').hidden=true}
