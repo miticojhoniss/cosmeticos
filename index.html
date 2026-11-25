@@ -192,6 +192,18 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
 .lay.nof{grid-template-columns:230px minmax(0,1fr)}
 @media(max-width:900px){.quick{display:none}}
 @media(max-width:700px){.burger{display:block}nav.cats{display:none}.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.hicon{position:relative;display:flex;align-items:center;gap:6px;color:var(--ink);text-decoration:none;font-weight:600;font-size:14px;min-height:44px;padding:0 6px;white-space:nowrap}
+.hicon svg{width:24px;height:24px;fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linejoin:round}.hicon:hover{color:var(--wine)}
+.hicon b{position:absolute;top:4px;left:20px;background:var(--acc);color:#fff;border-radius:999px;font-size:11px;min-width:18px;height:18px;display:grid;place-items:center}
+.card{position:relative}.fav{position:absolute;top:8px;right:8px;z-index:2;width:38px;height:38px;border-radius:50%;border:0;background:rgba(255,255,255,.92);display:grid;place-items:center;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.fav svg{width:20px;height:20px;fill:none;stroke:var(--wine);stroke-width:2}.fav.on svg{fill:var(--wine)}
+.favbtn.on{background:var(--soft)}
+.authbox{max-width:440px;margin:0 auto}.authbox h2{font-size:34px;margin:0 0 16px;text-align:center}
+.atabs{display:grid;grid-template-columns:1fr 1fr;background:var(--soft);border-radius:999px;padding:4px;margin-bottom:16px}.atabs a{text-align:center;padding:10px;border-radius:999px;text-decoration:none;color:var(--ink);font-weight:600}.atabs a.on{background:var(--card);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+.acc{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;align-items:start}
+.ord{display:grid;grid-template-columns:auto 1fr 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}
+@media(max-width:800px){.acc{grid-template-columns:1fr}}
+@media(max-width:600px){#accn{display:none}.ord{grid-template-columns:1fr 1fr}}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -205,6 +217,8 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
     <button class="burger" id="burger" aria-label="Abrir menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <a class="logo" href="#inicio" aria-label="Malta Cosméticos — início"><img src="assets/logo.webp" alt="Malta Cosméticos" width="90" height="60"></a>
     <form class="search" id="sf" role="search"><input id="q" type="search" placeholder="Buscar produtos, marcas…" aria-label="Buscar produtos"><button>Buscar</button></form>
+    <a class="hicon" href="#favoritos" aria-label="Favoritos"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg><b id="fcount" hidden>0</b></a>
+    <a class="hicon" href="#conta" aria-label="Minha conta" id="acc"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span id="accn">Entrar</span></a>
     <nav class="quick"><a href="#rastreio">Rastreie seu pedido</a><a href="#fale-conosco">Fale conosco</a></nav>
     <button class="cartbtn" id="openCart" aria-label="Abrir carrinho">Carrinho <b id="count">0</b></button>
   </div>
@@ -248,6 +262,7 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
 <div class="modal" id="modal" role="dialog" aria-modal="true"><div class="mbox" id="mbox"></div></div>
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 {
 const CATS=[
@@ -286,7 +301,7 @@ function art(p){if(p.img)return `<img src="${esc(p.img)}" alt="${esc(p.name)}" l
 }
 function card(p){
  const off=p.old?Math.round((1-p.price/p.old)*100):0;
- return `<article class="card"><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</a>
+ return `<article class="card"><button class="fav${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-label="Favoritar ${esc(p.name)}" aria-pressed="${favs.has(p.id)}"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg></button><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</a>
  <div class="info">${p.brand?`<a class="brand" href="#marca-${bslug(p.brand)}">${esc(p.brand)}</a>`:'<span class="brand"></span>'}<a class="name" href="#produto-${p.id}">${esc(p.name)}</a>
  <div class="price"><b>${brl(p.price)}</b></div>
  <button class="add" data-add="${p.id}">Adicionar</button></div></article>`;
@@ -459,6 +474,75 @@ function qr(seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;let r
   const on=f?(x%6==0||y%6==0||x>17&&(x==18||x==24)||y>17&&(y==18||y==24)||((x%18>1&&x%18<5)&&(y%18>1&&y%18<5))):((h=(h*1103515245+12345)>>>0)>>16)&1;
   if(on)r+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}
  return `<svg viewBox="-2 -2 29 29" role="img" aria-label="QR Code Pix de exemplo"><rect x="-2" y="-2" width="29" height="29" fill="#fff"/><g fill="#2b1118">${r}</g></svg>`}
+const SB='https://wilralriqtfvklgyjlef.supabase.co',SBK='sb_publishable_fO0oCD_OQUSxmSgp8I8Blg_TUgO4vDA';
+const sb=window.supabase?window.supabase.createClient(SB,SBK,{auth:{flowType:'pkce',detectSessionInUrl:true,persistSession:true}}):null;
+let user=null,favs=new Set();try{favs=new Set(JSON.parse(localStorage.getItem('malta-favs')||'[]'))}catch(e){}
+const saveFavLocal=()=>{try{localStorage.setItem('malta-favs',JSON.stringify([...favs]))}catch(e){}};
+function favUI(){const n=favs.size;$('#fcount').hidden=!n;$('#fcount').textContent=n;
+ document.querySelectorAll('[data-fav]').forEach(b=>{const on=favs.has(+b.dataset.fav);b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);if(b.classList.contains('favbtn'))b.textContent=on?'♥ Nos favoritos':'♡ Favoritar'})}
+async function toggleFav(id){const on=!favs.has(id);on?favs.add(id):favs.delete(id);saveFavLocal();favUI();toast(on?'Adicionado aos favoritos':'Removido dos favoritos');
+ if(user&&sb){const r=on?await sb.from('favoritos').upsert({cliente_id:user.id,produto_id:id}):await sb.from('favoritos').delete().eq('produto_id',id);if(r.error)toast('Não foi possível salvar o favorito')}}
+async function syncFavs(){if(!user||!sb)return;const local=[...favs].filter(id=>byId(id));
+ if(local.length)await sb.from('favoritos').upsert(local.map(id=>({cliente_id:user.id,produto_id:id})),{ignoreDuplicates:true});
+ const {data}=await sb.from('favoritos').select('produto_id');if(data){favs=new Set(data.map(x=>+x.produto_id));saveFavLocal();favUI()}}
+function setUser(u){user=u;$('#accn').textContent=u?((u.user_metadata?.nome||'').split(' ')[0]||'Minha conta'):'Entrar';if(u)syncFavs()}
+function authPage(mode){const t={entrar:'Entrar',cadastro:'Criar conta','nova-senha':'Criar nova senha'}[mode];
+ const f=mode=='nova-senha'?`<div class="fl"><label for="a-pw">Nova senha</label><input id="a-pw" type="password" minlength="8" autocomplete="new-password" required></div>`
+ :`${mode=='cadastro'?'<div class="fl"><label for="a-nome">Nome completo</label><input id="a-nome" autocomplete="name" required></div>':''}
+ <div class="fl"><label for="a-email">E-mail</label><input id="a-email" type="email" autocomplete="email" required></div>
+ <div class="fl"><label for="a-pw">Senha${mode=='cadastro'?' (mínimo 8 caracteres)':''}</label><input id="a-pw" type="password" minlength="8" autocomplete="${mode=='cadastro'?'new-password':'current-password'}" required></div>`;
+ return `<section class="band"><div class="authbox"><h2>${t}</h2>
+ ${mode!='nova-senha'?`<div class="atabs"><a href="#entrar" class="${mode=='entrar'?'on':''}">Já tenho conta</a><a href="#cadastro" class="${mode=='cadastro'?'on':''}">Criar conta</a></div>`:''}
+ <form id="authf" data-mode="${mode}" class="panel" style="display:grid;gap:12px">${f}<div class="err" id="aerr"></div>
+ <button class="go">${mode=='entrar'?'Entrar':mode=='cadastro'?'Criar minha conta':'Salvar nova senha'}</button>
+ ${mode=='entrar'?'<button type="button" class="rm" id="forgot" style="justify-self:center">Esqueci minha senha</button>':''}</form>
+ <p class="pix" style="text-align:center">Ao criar uma conta você concorda com os <a href="#termos">termos de uso</a> e a <a href="#privacidade">política de privacidade</a>.</p></div></section>`}
+const ERR={'Invalid login credentials':'E-mail ou senha incorretos.','Email not confirmed':'Confirme seu e-mail pelo link que enviamos antes de entrar.','User already registered':'Já existe uma conta com esse e-mail. Tente entrar.'};
+document.addEventListener('submit',async e=>{if(e.target.id=='acc-form'){e.preventDefault();return saveAccount()}
+ if(e.target.id!='authf')return;e.preventDefault();if(!sb)return toast('Login indisponível no momento');
+ const m=e.target.dataset.mode,email=$('#a-email')?.value.trim(),pw=$('#a-pw').value,btn=e.target.querySelector('.go');btn.disabled=true;$('#aerr').textContent='';let r;
+ if(m=='entrar')r=await sb.auth.signInWithPassword({email,password:pw});
+ else if(m=='cadastro')r=await sb.auth.signUp({email,password:pw,options:{data:{nome:$('#a-nome').value.trim()},emailRedirectTo:location.origin+'/'}});
+ else r=await sb.auth.updateUser({password:pw});
+ btn.disabled=false;
+ if(r.error){$('#aerr').textContent=ERR[r.error.message]||r.error.message;return}
+ if(m=='cadastro'&&!r.data.session){$('#app').innerHTML=`<section class="band"><div class="authbox panel"><h2>Confirme seu e-mail</h2><p>Enviamos um link para <b>${esc(email)}</b>. Abra o e-mail e clique no link para ativar sua conta.</p><a class="cta" href="#inicio">Continuar comprando</a></div></section>`;return}
+ toast(m=='nova-senha'?'Senha alterada':'Bem-vindo(a)!');location.hash='conta'});
+document.addEventListener('click',async e=>{const f=e.target.closest('[data-fav]');if(f){e.preventDefault();toggleFav(+f.dataset.fav);return}
+ if(e.target.id=='forgot'){const email=$('#a-email').value.trim();if(!email){$('#aerr').textContent='Digite seu e-mail acima e clique de novo.';return}
+  const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/'});$('#aerr').textContent=r.error?r.error.message:'Se o e-mail estiver cadastrado, enviamos um link para criar uma nova senha.'}
+ if(e.target.id=='logout'){await sb.auth.signOut();favs=new Set();saveFavLocal();favUI();toast('Você saiu da conta');location.hash='inicio'}});
+const STATUS={aguardando_pagamento:'Aguardando pagamento',pago:'Pago',enviado:'Enviado',entregue:'Entregue',cancelado:'Cancelado'};
+function accountPage(){const nome=user.user_metadata?.nome||'';
+ return `<section class="band"><div class="wrap"><div class="sec-h"><h2>Olá${nome?', '+esc(nome.split(' ')[0]):''}</h2><button class="back" id="logout">Sair da conta</button></div>
+ <div class="acc"><div class="panel"><h3>Meus dados</h3><form id="acc-form" class="fields">
+ <div class="fl full"><label for="c-nome">Nome completo</label><input id="c-nome" value="${esc(nome)}" autocomplete="name"></div>
+ <div class="fl"><label>E-mail</label><input value="${esc(user.email)}" disabled></div>
+ <div class="fl"><label for="c-tel">Celular</label><input id="c-tel" data-f="tel" inputmode="numeric" autocomplete="tel"></div>
+ <div class="fl"><label for="c-cpf">CPF</label><input id="c-cpf" data-f="cpf" inputmode="numeric"></div>
+ <div class="fl full"><h3 style="margin:10px 0 0">Endereço de entrega</h3></div>
+ <div class="fl"><label for="e-cep">CEP</label><input id="e-cep" data-f="cep" inputmode="numeric" autocomplete="postal-code"></div>
+ <div class="fl"><label for="e-num">Número</label><input id="e-num"></div>
+ <div class="fl full"><label for="e-rua">Endereço</label><input id="e-rua" autocomplete="address-line1"></div>
+ <div class="fl"><label for="e-comp">Complemento</label><input id="e-comp"></div><div class="fl"><label for="e-bairro">Bairro</label><input id="e-bairro"></div>
+ <div class="fl"><label for="e-cidade">Cidade</label><input id="e-cidade"></div><div class="fl"><label for="e-uf">UF</label><input id="e-uf" maxlength="2"></div>
+ <div class="fl full"><div class="err" id="cerr"></div><button class="go" style="padding:0 26px">Salvar dados</button></div></form></div>
+ <div><div class="panel"><h3>Meus pedidos</h3><div id="orders"><p class="pix">Carregando…</p></div></div>
+ <div class="panel" style="margin-top:16px"><h3>Favoritos</h3><p class="pix">${favs.size} produto${favs.size==1?'':'s'} salvo${favs.size==1?'':'s'}.</p><a class="cta" href="#favoritos">Ver favoritos</a></div></div></div></div></section>`}
+async function loadAccount(){const [c,e,o]=await Promise.all([sb.from('clientes').select('*').eq('id',user.id).maybeSingle(),sb.from('enderecos').select('*').eq('cliente_id',user.id).order('id').limit(1),sb.from('pedidos').select('codigo,total,status,criado_em').order('criado_em',{ascending:false})]);
+ const set=(id,v)=>{const el=$(id);if(el&&v)el.value=v};
+ if(c.data){set('#c-nome',c.data.nome);set('#c-tel',c.data.telefone);set('#c-cpf',c.data.cpf)}
+ const a=e.data?.[0];if(a){set('#e-cep',a.cep);set('#e-num',a.numero);set('#e-rua',a.rua);set('#e-comp',a.complemento);set('#e-bairro',a.bairro);set('#e-cidade',a.cidade);set('#e-uf',a.uf);$('#acc-form').dataset.addr=a.id}
+ $('#orders').innerHTML=o.data?.length?o.data.map(x=>`<div class="ord"><b>${esc(x.codigo)}</b><span>${new Date(x.criado_em).toLocaleDateString('pt-BR')}</span><span>${esc(STATUS[x.status]||x.status)}</span><b>${brl(+x.total)}</b></div>`).join(''):'<p class="pix">Você ainda não fez nenhum pedido.</p>'}
+async function saveAccount(){const v=id=>$(id).value.trim(),btn=$('#acc-form .go');btn.disabled=true;
+ const r1=await sb.from('clientes').upsert({id:user.id,nome:v('#c-nome'),telefone:v('#c-tel'),cpf:v('#c-cpf')});
+ const addr={cliente_id:user.id,cep:v('#e-cep'),rua:v('#e-rua'),numero:v('#e-num'),complemento:v('#e-comp'),bairro:v('#e-bairro'),cidade:v('#e-cidade'),uf:v('#e-uf').toUpperCase()||null};
+ const id=$('#acc-form').dataset.addr;const r2=id?await sb.from('enderecos').update(addr).eq('id',id):await sb.from('enderecos').insert(addr).select('id').single();
+ if(!id&&r2.data)$('#acc-form').dataset.addr=r2.data.id;
+ if(v('#c-nome'))await sb.auth.updateUser({data:{nome:v('#c-nome')}});
+ btn.disabled=false;const err=r1.error||r2.error;$('#cerr').textContent=err?'Não foi possível salvar: '+err.message:'';if(!err)toast('Dados salvos')}
+if(sb){sb.auth.getSession().then(({data})=>{setUser(data.session?.user||null);if(location.search.includes('code=')){history.replaceState(null,'',location.pathname+'#conta');route()}});
+ sb.auth.onAuthStateChange((ev,ses)=>{setUser(ses?.user||null);if(ev=='PASSWORD_RECOVERY')location.hash='nova-senha'})}
 function route(){
  const h=location.hash.slice(1)||'inicio';
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+h));
@@ -467,6 +551,9 @@ function route(){
  else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=pp.name+' | Malta Cosméticos'}
  else if(h=='marcas'){$('#app').innerHTML=brandsPage()}
  else if(/^marca-/.test(h)){const b=P.find(x=>x.brand&&bslug(x.brand)==h.slice(6))?.brand;current=b?P.filter(x=>x.brand==b):[];$('#app').innerHTML=list(b||'Marca não encontrada',current);if(b)document.querySelector('.lay').classList.add('nof')}
+ else if(h=='entrar'||h=='cadastro'||h=='nova-senha'){$('#app').innerHTML=authPage(h)}
+ else if(h=='conta'){if(!user){location.hash='entrar';return}$('#app').innerHTML=accountPage();loadAccount()}
+ else if(h=='favoritos'){current=P.filter(p=>favs.has(p.id));$('#app').innerHTML=list('Meus favoritos',current);if(!current.length)setTimeout(()=>{$('#g').innerHTML='<div class="empty">Você ainda não favoritou nenhum produto. Toque no coração de um produto para guardar aqui.</div>'},0)}
  else if(h=='checkout'){$('#app').innerHTML=checkout()}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
  else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
@@ -507,7 +594,8 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  <div class="pix" style="font-size:15px">ou 6x de ${brl(p.price/6)} sem juros</div>
  ${p.stock>0?`<div class="buy"><div class="qsel"><button data-pq="-1" aria-label="Menos">−</button><span id="pqv">1</span><button data-pq="1" aria-label="Mais">+</button></div>
  <button class="add" data-addq="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button>
- <button class="add" data-buy="${p.id}">Comprar agora</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
+ <button class="add" data-buy="${p.id}">Comprar agora</button>
+ <button class="add favbtn${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}">${favs.has(p.id)?'♥ Nos favoritos':'♡ Favoritar'}</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
  <div class="ship"><b>Frete grátis</b> em compras acima de R$ 199 · Envio em 1 a 2 dias úteis · Troca em até 7 dias</div>
  <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><p>${p.desc?esc(p.desc):'Descrição em breve.'}</p>
  <div class="specs">${[['Marca',p.brand],['Categoria',c.n],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b])=>`<div><span>${a}</span><b>${esc(b)}</b></div>`).join('')}</div>
@@ -569,10 +657,9 @@ document.addEventListener('click',e=>{if(e.target.id=='bclear'){brandSel=new Set
 document.addEventListener('click',e=>{if(e.target.id=='more')paint(false)});
 $('#sf').addEventListener('submit',e=>{e.preventDefault();if(location.hash=='#busca')route();else location.hash='busca'});
 window.addEventListener('hashchange',route);
-const SB='https://wilralriqtfvklgyjlef.supabase.co',SBK='sb_publishable_fO0oCD_OQUSxmSgp8I8Blg_TUgO4vDA';
 async function loadSB(){let all=[];for(let o=0;;o+=1000){const r=await fetch(`${SB}/rest/v1/produtos?select=id,slug,categoria_id,marca,nome,descricao,preco,preco_antigo,estoque,imagem_url,imagens,sku,ean&ativo=eq.true&order=id&offset=${o}&limit=1000`,{headers:{apikey:SBK}});if(!r.ok)throw 0;const d=await r.json();all=all.concat(d);if(d.length<1000)break}
  return all.map(x=>({...prep({id:x.id,s:x.slug,c:x.categoria_id,b:x.marca,n:x.nome,p:+x.preco,o:+x.preco_antigo||0,k:x.sku,e:x.ean,q:x.estoque}),desc:x.descricao||'',img:x.imagem_url||'',imgs:(x.imagens||[]).map(f=>`${SB}/storage/v1/object/public/produtos/${f}`)}))}
-loadSB().catch(()=>fetch('products.json').then(r=>r.json()).then(d=>d.map(prep))).then(d=>{P=d;for(const id in cart)if(!byId(id))delete cart[id];route();renderCart()}).catch(()=>{$('#app').innerHTML='<section class="band"><div class="wrap empty">Não foi possível carregar o catálogo.</div></section>'});
+loadSB().catch(()=>fetch('products.json').then(r=>r.json()).then(d=>d.map(prep))).then(d=>{P=d;for(const id in cart)if(!byId(id))delete cart[id];route();renderCart();favUI()}).catch(()=>{$('#app').innerHTML='<section class="band"><div class="wrap empty">Não foi possível carregar o catálogo.</div></section>'});
 }
 </script>
 </body>
