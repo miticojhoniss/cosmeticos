@@ -5,13 +5,18 @@ const { SB, CATS, POL, NOINDEX, bslug, esc, q, all, STORE } = require('./_lib');
 let TPL = null;
 const tpl = () => (TPL ||= fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8'));
 const SUF=' | Malta Cosméticos';
+function cutW(t,max){t=String(t).trim();if(t.length<=max)return t;let x=t.slice(0,max+1);const sp=x.lastIndexOf(' ');x=sp>10?x.slice(0,sp):t.slice(0,max);
+ for(let k=0;k<3;k++)x=x.replace(/[\s,;:+\-–|/(]+$/,'').replace(/\s+(com|de|da|do|das|dos|e|para|em|a|o|à|ao|na|no|por|sem)$/i,'').replace(/\s+[A-Za-zÀ-ÿ]{1,2}$/,'');return x}
 function fitTitle(main,suffix=SUF,max=60){main=String(main||'').replace(/\s+/g,' ').trim();
  if((main+suffix).length<=max)return main+suffix;if(main.length<=max)return main;
- let t=main.slice(0,max+1);t=t.slice(0,t.lastIndexOf(' ')>20?t.lastIndexOf(' '):max);
- t=t.replace(/[\s,;:+\-–|/(]+$/,'').replace(/\s+(com|de|da|do|das|dos|e|para|em|a|o|à|ao|na|no|por|sem|\+|-)$/i,'').replace(/[\s,;:+\-–|/(]+$/,'');return t}
+ if(/\s\+\s/.test(main))return cutW(main,max);
+ let head=main,tail='';const sep=main.match(/^(.*\S)\s+[-–]\s+([^-–]{1,24})$/);
+ if(sep){head=sep[1];tail=sep[2]}else{const w=main.split(' ');let k=w.length-1;tail=w[k];if(!/\d/.test(tail)&&k>0&&/\d/.test(w[k-1])&&(w[k-1]+' '+tail).length<=22){tail=w[k-1]+' '+tail;k--}head=w.slice(0,k).join(' ')}
+ if(tail.length>24)return cutW(main,max);
+ return cutW(head,max-tail.length-1)+' '+tail}
 
 const brl = (v) => 'R$ ' + Number(v).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-const plain = (t) => String(t || '').replace(/#+/g, ' ').replace(/\s+/g, ' ').trim();
+const plain = (t) => String(t || '').replace(/#+|\*\*+/g, ' ').replace(/\s+/g, ' ').trim();
 const cut = (t, n) => (t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : t);
 let BRANDS = null, BRANDS_AT = 0;
 async function brands() {
@@ -59,7 +64,7 @@ module.exports = async (req, res) => {
   try {
     let m;
     if ((m = key.match(/^produto\/([a-z0-9-]+)$/))) {
-      const [p] = await q(`produtos?select=id,slug,nome,marca,descricao,preco,estoque,imagem_url,imagens,sku,ean,categoria_id&slug=eq.${encodeURIComponent(m[1])}&ativo=eq.true`);
+      const [p] = await q(`produtos?select=id,slug,nome,titulo_seo,marca,descricao,preco,estoque,imagem_url,imagens,sku,ean,categoria_id&slug=eq.${encodeURIComponent(m[1])}&ativo=eq.true`);
       if (!p) return send(404, page(base, { title: 'Produto não encontrado | Malta Cosméticos', desc: 'Este produto não está mais disponível.', canonical: base + '/' + key, noindex: true }), 's-maxage=300');
       const cat = CATS.find((c) => c[0] === p.categoria_id) || CATS[0];
       const url = `${base}/produto/${p.slug}`;
@@ -83,7 +88,7 @@ module.exports = async (req, res) => {
 <div class="pdp"><div>${imgs[0] || p.imagem_url ? `<img src="${esc(imgs[0] || p.imagem_url)}" alt="${esc(p.nome)}" style="width:100%;max-width:520px;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:20px">` : ''}</div>
 <div><span class="brand">${esc(p.marca || cat[1])}</span><h1>${esc(p.nome)}</h1><div class="price"><div class="big">${brl(p.preco)}</div></div><p class="pix">ou 6x de ${brl(p.preco / 6)} sem juros</p>
 <h2 style="font-size:22px">Descrição</h2><p>${esc(cut(d, 1500))}</p></div></div></div></section>`;
-      return send(200, page(base, { title: fitTitle(p.nome), desc, canonical: url, image: imgs[0] || p.imagem_url, type: 'product', body,
+      return send(200, page(base, { title: p.titulo_seo || fitTitle(p.nome), desc, canonical: url, image: imgs[0] || p.imagem_url, type: 'product', body,
         jsonld: [org(base), prod, crumbs(base, [['Início', '/'], [cat[1], '/' + cat[0]], ...(p.marca ? [[p.marca, '/marca/' + bslug(p.marca)]] : []), [p.nome, '/produto/' + p.slug]])] }));
     }
     const cat = CATS.find((c) => c[0] === key);

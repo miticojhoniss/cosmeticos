@@ -681,10 +681,15 @@ document.addEventListener('submit',async e=>{if(e.target.id!='trkf')return;e.pre
   <h4 style="margin:16px 0 6px">Itens</h4><ul class="trk-i">${j.itens.map(i=>`<li>${i.quantidade}x ${esc(i.nome)}</li>`).join('')}</ul></div>`}
  catch(err){$('#terr').textContent=err.message}b.disabled=false;b.textContent='Rastrear'});
 const SUF=' | Malta Cosméticos';
+function cutW(t,max){t=String(t).trim();if(t.length<=max)return t;let x=t.slice(0,max+1);const sp=x.lastIndexOf(' ');x=sp>10?x.slice(0,sp):t.slice(0,max);
+ for(let k=0;k<3;k++)x=x.replace(/[\s,;:+\-–|/(]+$/,'').replace(/\s+(com|de|da|do|das|dos|e|para|em|a|o|à|ao|na|no|por|sem)$/i,'').replace(/\s+[A-Za-zÀ-ÿ]{1,2}$/,'');return x}
 function fitTitle(main,suffix=SUF,max=60){main=String(main||'').replace(/\s+/g,' ').trim();
  if((main+suffix).length<=max)return main+suffix;if(main.length<=max)return main;
- let t=main.slice(0,max+1);t=t.slice(0,t.lastIndexOf(' ')>20?t.lastIndexOf(' '):max);
- t=t.replace(/[\s,;:+\-–|/(]+$/,'').replace(/\s+(com|de|da|do|das|dos|e|para|em|a|o|à|ao|na|no|por|sem|\+|-)$/i,'').replace(/[\s,;:+\-–|/(]+$/,'');return t}
+ if(/\s\+\s/.test(main))return cutW(main,max);
+ let head=main,tail='';const sep=main.match(/^(.*\S)\s+[-–]\s+([^-–]{1,24})$/);
+ if(sep){head=sep[1];tail=sep[2]}else{const w=main.split(' ');let k=w.length-1;tail=w[k];if(!/\d/.test(tail)&&k>0&&/\d/.test(w[k-1])&&(w[k-1]+' '+tail).length<=22){tail=w[k-1]+' '+tail;k--}head=w.slice(0,k).join(' ')}
+ if(tail.length>24)return cutW(main,max);
+ return cutW(head,max-tail.length-1)+' '+tail}
 
 function setMeta(h){const c=document.querySelector('link[rel=canonical]'),d=document.querySelector('meta[name=description]');if(c)c.href=location.origin+location.pathname;
  const p=/^produto-\d+$/.test(h)&&byId(h.slice(8));if(d)d.content=p?`${p.name}${p.brand?' – '+p.brand:''} por ${brl(p.price)} na Malta Cosméticos. Produto original, envio para todo o Brasil e até 6x sem juros.`:'Malta Cosméticos: dermocosméticos, proteção solar, maquiagem e cuidados capilares de marcas originais. Envio para todo o Brasil e parcelamento em até 6x sem juros.'}
@@ -704,7 +709,7 @@ function route(){
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='/'+h));
  const c=CATS.find(c=>c.id==h);
  if(c){current=P.filter(p=>p.cat==c.id);$('#app').innerHTML=list(c.n,current)}
- else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=fitTitle(pp.name)}
+ else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=pp.ts||fitTitle(pp.name)}
  else if(h=='marcas'){$('#app').innerHTML=brandsPage()}
  else if(/^marca-/.test(h)){const b=P.find(x=>x.brand&&bslug(x.brand)==h.slice(6))?.brand;current=b?P.filter(x=>x.brand==b):[];$('#app').innerHTML=list(b||'Marca não encontrada',current);if(b)document.querySelector('.lay').classList.add('nof')}
  else if(h=='entrar'||h=='cadastro'||h=='nova-senha'){$('#app').innerHTML=authPage(h)}
@@ -741,7 +746,7 @@ function renderCart(){
 function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
 function openCart(o){$('#drawer').classList.toggle('on',o);$('#shade').classList.toggle('on',o||$('#modal').classList.contains('on'))}
 function fmtDesc(raw,name){if(!raw)return '<p>Descrição em breve.</p>';
- let t=' '+raw.replace(/Descrição do Produto/gi,' ').replace(/#+/g,' ').replace(/\s+/g,' ').trim()+' ';
+ let t=' '+raw.replace(/Descrição do Produto/gi,' ').replace(/#+|\*\*+/g,' ').replace(/\s+/g,' ').trim()+' ';
  const nm=(name||'').trim();if(nm&&t.trim().toLowerCase().startsWith(nm.toLowerCase()))t=' '+t.trim().slice(nm.length)+' ';
  const M='\u0001';
  t=t.replace(/\s((?:O que (?:é|e)|Para que serve|Quais? (?:são )?(?:os |as )?(?:principais )?(?:benefícios|ativos|vantagens)|Como (?:usar|aplicar|funciona)|Qual a diferença|Para quem (?:é )?indicado|Para que é indicado|Pode ser usad)[^?.!]{0,160}\?)/gi,' '+M+'$1'+M);
@@ -842,8 +847,8 @@ document.addEventListener('click',e=>{if(e.target.id=='bclear'){brandSel=new Set
 document.addEventListener('click',e=>{if(e.target.id=='more')paint(false)});
 $('#sf').addEventListener('submit',e=>{e.preventDefault();$('#sugg').hidden=true;$('#q').blur();if(curKey()=='busca')route();else go('busca')});
 window.addEventListener('popstate',route);
-async function loadSB(){let all=[];for(let o=0;;o+=1000){const r=await fetch(`${SB}/rest/v1/produtos?select=id,slug,categoria_id,marca,nome,descricao,preco,preco_antigo,estoque,imagem_url,imagens,sku,ean&ativo=eq.true&order=id&offset=${o}&limit=1000`,{headers:{apikey:SBK}});if(!r.ok)throw 0;const d=await r.json();all=all.concat(d);if(d.length<1000)break}
- return all.map(x=>({...prep({id:x.id,s:x.slug,c:x.categoria_id,b:x.marca,n:x.nome,p:+x.preco,o:+x.preco_antigo||0,k:x.sku,e:x.ean,q:x.estoque}),desc:x.descricao||'',img:x.imagem_url||'',imgs:(x.imagens||[]).map(f=>`${SB}/storage/v1/object/public/produtos/${f}`)}))}
+async function loadSB(){let all=[];for(let o=0;;o+=1000){const r=await fetch(`${SB}/rest/v1/produtos?select=id,slug,categoria_id,marca,nome,titulo_seo,descricao,preco,preco_antigo,estoque,imagem_url,imagens,sku,ean&ativo=eq.true&order=id&offset=${o}&limit=1000`,{headers:{apikey:SBK}});if(!r.ok)throw 0;const d=await r.json();all=all.concat(d);if(d.length<1000)break}
+ return all.map(x=>({...prep({id:x.id,s:x.slug,c:x.categoria_id,b:x.marca,n:x.nome,p:+x.preco,o:+x.preco_antigo||0,k:x.sku,e:x.ean,q:x.estoque}),desc:x.descricao||'',ts:x.titulo_seo||'',img:x.imagem_url||'',imgs:(x.imagens||[]).map(f=>`${SB}/storage/v1/object/public/produtos/${f}`)}))}
 if(location.hash.length>1){const k=location.hash.slice(1);history.replaceState(null,'','/'+(k=='inicio'?'':k))}
 loadSB().catch(()=>fetch("/products.json").then(r=>r.json()).then(d=>d.map(prep))).then(d=>{P=d;for(const id in cart)if(!byId(id))delete cart[id];route();renderCart();favUI()}).catch(()=>{$('#app').innerHTML='<section class="band"><div class="wrap empty">Não foi possível carregar o catálogo.</div></section>'});
 }
