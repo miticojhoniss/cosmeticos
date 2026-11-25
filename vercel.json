@@ -1,9 +1,21 @@
 {
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/:path((?!api/|assets/|products\\.json$|robots\\.txt$|index\\.html$).+)", "destination": "/api/render?p=:path" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/api/sitemap"
+    },
+    {
+      "source": "/feed.xml",
+      "destination": "/api/feed"
+    },
+    {
+      "source": "/:path((?!api/|assets/|products\\.json$|robots\\.txt$|index\\.html$).+)",
+      "destination": "/api/render?p=:path"
+    }
   ],
   "functions": {
-    "api/render.js": { "includeFiles": "index.html" }
+    "api/render.js": {
+      "includeFiles": "index.html"
+    }
   }
 }
