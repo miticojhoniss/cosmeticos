@@ -169,7 +169,7 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
       <div><h4>Ajuda</h4><a href="#trocas-e-devolucoes">Trocas e devoluções</a><a href="#reembolso">Reembolso</a><a href="#frete">Política de frete</a><a href="#pagamento">Formas de pagamento</a><a href="#fale-conosco">Fale conosco</a></div>
       <div><h4>Institucional</h4><a href="#quem-somos">Quem somos</a><a href="#privacidade">Política de privacidade</a><a href="#termos">Termos de uso</a><a href="#aviso-legal">Aviso legal</a></div>
     </div>
-    <div class="legal">© 2026 Malta Cosméticos é uma marca de UNIBELLA COSMETICOS LTDA · CNPJ 50.466.324/0001-98 · Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589 · WhatsApp (62) 9294-0453</div>
+    <div class="legal">© 2026 Malta Cosméticos · 67.600.045 PRISCILA DE PAULA PEREIRA MALTA · CNPJ 67.600.045/0001-78 · Foz do Iguaçu/PR, CEP 85851-400</div>
   </div>
 </footer>
 
@@ -260,14 +260,14 @@ let current=[],shown=0;const PAGE=48;
 function paint(reset){const g=$('#g');if(!g)return;if(reset){shown=0;g.innerHTML=current.length?'':'<div class="empty">Nenhum produto encontrado. Tente outro termo.</div>'}
  const next=current.slice(shown,shown+PAGE);g.insertAdjacentHTML('beforeend',next.map(card).join(''));shown+=next.length;$('#more').hidden=shown>=current.length;
  if(!$('#more').hidden)$('#more').textContent=`Ver mais produtos (${current.length-shown} restantes)`}
-const EMP={rs:'UNIBELLA COSMETICOS LTDA',fan:'Malta Cosméticos',cnpj:'50.466.324/0001-98',
- end:'Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589',
- wpp:'(62) 9294-0453',email:'e-mail de atendimento a definir',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
+const EMP={rs:'67.600.045 PRISCILA DE PAULA PEREIRA MALTA',fan:'Malta Cosméticos',cnpj:'67.600.045/0001-78',
+ end:'Centro, Foz do Iguaçu/PR, CEP 85851-400',
+ wpp:'a definir',email:'e-mail de atendimento a definir',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
 const ID=`<div class="id"><b>${EMP.rs}</b> (${EMP.fan}) · CNPJ ${EMP.cnpj}<br>${EMP.end}<br>WhatsApp ${EMP.wpp} · ${EMP.email}</div>`;
 const CT=`<h3>Contato</h3><p>WhatsApp <b>${EMP.wpp}</b> · ${EMP.email}<br>Atendimento: ${EMP.hor}.</p>`;
 const POL={
-'quem-somos':['Quem somos',`<p>A Malta Cosméticos é uma empresa goiana, com sede em Goianira/GO, que vende dermocosméticos, proteção solar, maquiagem, cuidados capilares e itens para mamãe e bebê.</p>
-<p>Atuamos no varejo e no atacado de cosméticos e perfumaria. Trabalhamos apenas com produtos originais, com nota fiscal e regularizados na Anvisa, e enviamos para todo o Brasil.</p>${CT}`],
+'quem-somos':['Quem somos',`<p>A Malta Cosméticos é uma loja de Foz do Iguaçu/PR que vende dermocosméticos, proteção solar, maquiagem, cuidados capilares e itens para mamãe e bebê.</p>
+<p>Atuamos no varejo de cosméticos, perfumaria e higiene pessoal. Trabalhamos apenas com produtos originais, com nota fiscal e regularizados na Anvisa, e enviamos para todo o Brasil.</p>${CT}`],
 'fale-conosco':['Fale conosco',`<p>Fale com a gente para dúvidas sobre produtos, pedidos, entregas, trocas e pagamentos.</p>
 <ul><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li><li><b>Endereço:</b> ${EMP.end}</li></ul>
 <p>Para agilizar, tenha em mãos o número do pedido. Respondemos em até 1 dia útil.</p>`],
@@ -278,7 +278,7 @@ const POL={
 <h3>Segurança</h3><p>Os dados do cartão são digitados direto no ambiente do intermediador de pagamento e não ficam guardados pela Malta.</p>
 <h3>Quando o pedido anda</h3><p>A separação começa só depois da confirmação do pagamento. A nota fiscal é emitida em nome de ${EMP.rs} e enviada por e-mail junto com o código de rastreio.</p>${CT}`],
 'frete':['Política de frete',`<div class="facts"><div><b>1 a 2 dias úteis</b>para separar o pedido</div><div><b>Grátis</b>acima de R$ 199</div><div><b>Todo o Brasil</b>pelos Correios</div></div>
-<h3>Modalidades</h3><ul><li><b>PAC:</b> R$ 19,90, entrega estimada de 6 a 9 dias úteis após a postagem.</li><li><b>Sedex:</b> R$ 34,90, entrega estimada de 2 a 4 dias úteis após a postagem.</li><li><b>Retirada em Goianira/GO:</b> grátis, pronta em até 1 dia útil após o pagamento.</li></ul>
+<h3>Modalidades</h3><ul><li><b>PAC:</b> R$ 19,90, entrega estimada de 6 a 9 dias úteis após a postagem.</li><li><b>Sedex:</b> R$ 34,90, entrega estimada de 2 a 4 dias úteis após a postagem.</li></ul>
 <p>Em compras a partir de R$ 199 em produtos, o PAC e o Sedex saem grátis. Os prazos contam a partir da confirmação do pagamento e podem variar conforme a região.</p>
 <h3>Entrega e endereço</h3><p>Confira o endereço antes de finalizar. Os Correios fazem até 3 tentativas; se não houver ninguém para receber, o pacote volta para a loja e o novo envio pode ter frete cobrado.</p>
 <h3>Atrasos</h3><p>Greves, feriados, chuvas e outros fatores externos podem atrasar a entrega. Nesses casos, acompanhamos o pacote com os Correios e mantemos você informado.</p>
@@ -314,14 +314,14 @@ const POL={
 <h3>Documentos complementares</h3><p>Fazem parte destes termos as políticas de <a href="#privacidade">privacidade</a>, <a href="#frete">frete</a>, <a href="#pagamento">pagamento</a>, <a href="#trocas-e-devolucoes">trocas e devoluções</a> e <a href="#reembolso">reembolso</a>.</p>
 <h3>Foro</h3><p>Vale a legislação brasileira. Fica eleito o foro do domicílio do consumidor, como garante o Código de Defesa do Consumidor.</p>${CT}`],
 'aviso-legal':['Aviso legal',`<h3>Quem é a loja</h3><ul><li><b>Razão social:</b> ${EMP.rs}</li><li><b>Nome fantasia:</b> ${EMP.fan}</li><li><b>CNPJ:</b> ${EMP.cnpj}</li><li><b>Endereço:</b> ${EMP.end}</li><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li></ul>
-<h3>O que vendemos</h3><p>Cosméticos, produtos de perfumaria e de higiene pessoal, no varejo e no atacado.</p>
+<h3>O que vendemos</h3><p>Cosméticos, produtos de perfumaria e de higiene pessoal, no varejo.</p>
 <h3>Produtos e preços</h3><p>Trabalhamos com produtos originais, regularizados na Anvisa, com nota fiscal. Descrições e fotos seguem as informações dos fabricantes.</p>
 <h3>Uso dos produtos</h3><p>As informações do site não substituem a orientação de médico ou dermatologista. Leia o rótulo, faça o teste de sensibilidade e suspenda o uso se houver irritação.</p>
 <h3>Leis aplicáveis</h3><p>Código de Defesa do Consumidor (Lei 8.078/1990), Decreto do Comércio Eletrônico (7.962/2013), Marco Civil da Internet (Lei 12.965/2014) e LGPD (Lei 13.709/2018).</p>${CT}`]};
 function polPage(k){const [t,b]=POL[k];return `<section class="band"><div class="pol"><h2>${t}</h2>${ID}${b}
 <nav class="pnav">${Object.entries(POL).filter(([x])=>x!=k).map(([x,[n]])=>`<a href="#${x}">${n}</a>`).join('')}</nav></div></section>`}
 const co={step:0,d:{},ship:'pac',pay:'pix',inst:1,order:null};
-const SHIP={pac:{n:'PAC',dias:'6 a 9 dias úteis',v:19.9},sedex:{n:'Sedex',dias:'2 a 4 dias úteis',v:34.9},retira:{n:'Retirar em Goianira/GO',dias:'Pronto em até 1 dia útil',v:0}};
+const SHIP={pac:{n:'PAC',dias:'6 a 9 dias úteis',v:19.9},sedex:{n:'Sedex',dias:'2 a 4 dias úteis',v:34.9}};
 const F=[['nome','Nome completo','full'],['email','E-mail',''],['tel','Celular',''],['cpf','CPF','']];
 const FE=[['cep','CEP',''],['rua','Endereço','full'],['num','Número',''],['comp','Complemento (opcional)',''],['bairro','Bairro',''],['cidade','Cidade',''],['uf','Estado (UF)','']];
 function totals(){let sub=0;for(const id in cart)sub+=byId(id).price*cart[id];
@@ -346,7 +346,7 @@ function checkout(){
  const t=totals();let body='';
  if(co.step==0)body=`<h3>Seus dados</h3><div class="fields">${F.map(field).join('')}</div>`;
  if(co.step==1)body=`<h3>Entrega</h3>${Object.entries(SHIP).map(([k,s])=>`<label class="opt"><input type="radio" name="ship" value="${k}" ${co.ship==k?'checked':''}><div><b>${s.n}</b><small>${s.dias}</small></div><b>${k=='retira'||t.sub>=199?'Grátis':brl(s.v)}</b></label>`).join('')}
-  ${co.ship!='retira'?`<div class="fields" style="margin-top:14px">${FE.map(field).join('')}</div>`:'<p class="pix">Retirada em Goianira/GO: Rua RSP-24, Qd. 15, Lt. 14, Residencial Solar das Paineiras. Avisamos pelo WhatsApp quando estiver pronto.</p>'}`;
+  ${co.ship!='retira'?`<div class="fields" style="margin-top:14px">${FE.map(field).join('')}</div>`:''}`;
  if(co.step==2){const inst=[1,2,3,4,5,6].map(n=>`<option value="${n}" ${co.inst==n?'selected':''}>${n}x de ${brl(t.tot/n)} sem juros</option>`).join('');
   body=`<h3>Pagamento</h3>
   <label class="opt"><input type="radio" name="pay" value="pix" ${co.pay=='pix'?'checked':''}><div><b>Pix</b><small>5% de desconto · aprovação na hora</small></div></label>
