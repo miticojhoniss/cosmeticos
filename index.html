@@ -478,10 +478,10 @@ function checkout(){
   ${co.pay=='cartao'?`<div class="fl" style="margin-top:6px"><label for="inst">Parcelas</label><select id="inst" style="width:100%;min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px;padding:0 10px">${inst}</select></div>
   <p class="pix">Os dados do cartão serão digitados na tela segura do meio de pagamento (Mercado Pago ou Stripe), conectado na versão completa.</p>`:''}`}
  if(co.step==3){const T=co.totals,code='00020126MALTA'+co.order+'5204000053039865802BR6304TESTE';
-  body=`<h3>Pedido ${co.order} recebido!</h3><p>Enviamos a confirmação para <b>${esc(co.d.email||'')}</b>.</p>
+  body=`<h3>Pedido ${co.order} recebido!</h3><p>Guarde o número do seu pedido. Para concluir, finalize o pagamento pelo WhatsApp abaixo.</p>
   <p>Total: <b>${brl(T.tot)}</b> ${co.pay=='pix'?'no Pix (já com 5% de desconto)':`em ${co.inst}x no cartão`}.</p>
   <a class="go" style="display:inline-flex;align-items:center;justify-content:center;padding:0 24px;text-decoration:none;background:#25D366" target="_blank" rel="noopener" href="https://wa.me/5545999658427?text=${encodeURIComponent(`Olá! Fiz o pedido ${co.order} na Malta Cosméticos, no valor de ${brl(T.tot)}, pagamento via ${co.pay=='pix'?'Pix':'cartão'}. Como faço o pagamento?`)}">Finalizar pagamento pelo WhatsApp</a>
-  <p class="note">Seu pedido foi registrado e aparece em <a href="#conta">Minha conta</a>. O pagamento online será ativado em breve; nossa equipe confirma o pagamento pelo WhatsApp (45) 99965-8427.</p>`}
+  <p class="note">${user?'O pedido também aparece em <a href="#conta">Minha conta</a>. ':''}Nossa equipe confirma o pagamento e o envio pelo WhatsApp (45) 99965-8427.</p>`}
  const acts=co.step==3?`<button class="go" data-co="home" style="padding:0 26px">Continuar comprando</button>`
   :`${co.step?'<button class="back" data-co="prev">← Voltar</button>':'<a class="back" href="#inicio" style="display:inline-flex;align-items:center;text-decoration:none">← Continuar comprando</a>'}
   <button class="go" data-co="${co.step==2?'place':'next'}" style="padding:0 26px">${co.step==2?'Confirmar pedido':'Continuar'}</button>`;
