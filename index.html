@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Malta Cosméticos | Dermocosméticos, maquiagem e cuidados capilares</title>
+<title>Malta Cosméticos | Dermocosméticos e Maquiagem</title>
 <meta name="description" content="Malta Cosméticos: mais de 2.500 produtos originais de dermocosméticos, proteção solar, maquiagem e cuidados capilares. Envio para todo o Brasil e parcelamento em até 6x sem juros.">
 <link rel="icon" type="image/png" href="/assets/favicon.png"><link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
@@ -680,6 +680,12 @@ document.addEventListener('submit',async e=>{if(e.target.id!='trkf')return;e.pre
   ${j.rastreio?`<p>Código de rastreio: <b>${esc(j.rastreio)}</b></p><a class="go" style="display:inline-flex;align-items:center;padding:0 20px;text-decoration:none" target="_blank" rel="noopener" href="https://rastreamento.correios.com.br/app/index.php?objeto=${encodeURIComponent(j.rastreio)}">Ver nos Correios</a>`:(idx>=2?'':'<p class="pix">O código de rastreio aparece aqui assim que o pedido for postado.</p>')}
   <h4 style="margin:16px 0 6px">Itens</h4><ul class="trk-i">${j.itens.map(i=>`<li>${i.quantidade}x ${esc(i.nome)}</li>`).join('')}</ul></div>`}
  catch(err){$('#terr').textContent=err.message}b.disabled=false;b.textContent='Rastrear'});
+const SUF=' | Malta Cosméticos';
+function fitTitle(main,suffix=SUF,max=60){main=String(main||'').replace(/\s+/g,' ').trim();
+ if((main+suffix).length<=max)return main+suffix;if(main.length<=max)return main;
+ let t=main.slice(0,max+1);t=t.slice(0,t.lastIndexOf(' ')>20?t.lastIndexOf(' '):max);
+ t=t.replace(/[\s,;:+\-–|/(]+$/,'').replace(/\s+(com|de|da|do|das|dos|e|para|em|a|o|à|ao|na|no|por|sem|\+|-)$/i,'').replace(/[\s,;:+\-–|/(]+$/,'');return t}
+
 function setMeta(h){const c=document.querySelector('link[rel=canonical]'),d=document.querySelector('meta[name=description]');if(c)c.href=location.origin+location.pathname;
  const p=/^produto-\d+$/.test(h)&&byId(h.slice(8));if(d)d.content=p?`${p.name}${p.brand?' – '+p.brand:''} por ${brl(p.price)} na Malta Cosméticos. Produto original, envio para todo o Brasil e até 6x sem juros.`:'Malta Cosméticos: dermocosméticos, proteção solar, maquiagem e cuidados capilares de marcas originais. Envio para todo o Brasil e parcelamento em até 6x sem juros.'}
 function curKey(){const p=decodeURIComponent(location.pathname).replace(/\/+$/,'')||'/';
@@ -698,20 +704,20 @@ function route(){
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='/'+h));
  const c=CATS.find(c=>c.id==h);
  if(c){current=P.filter(p=>p.cat==c.id);$('#app').innerHTML=list(c.n,current)}
- else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=pp.name+' | Malta Cosméticos'}
+ else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=fitTitle(pp.name)}
  else if(h=='marcas'){$('#app').innerHTML=brandsPage()}
  else if(/^marca-/.test(h)){const b=P.find(x=>x.brand&&bslug(x.brand)==h.slice(6))?.brand;current=b?P.filter(x=>x.brand==b):[];$('#app').innerHTML=list(b||'Marca não encontrada',current);if(b)document.querySelector('.lay').classList.add('nof')}
  else if(h=='entrar'||h=='cadastro'||h=='nova-senha'){$('#app').innerHTML=authPage(h)}
  else if(h=='conta'){if(!user){go('entrar');return}$('#app').innerHTML=accountPage();loadAccount()}
  else if(h=='favoritos'){current=P.filter(p=>favs.has(p.id));$('#app').innerHTML=list('Meus favoritos',current);if(!current.length)setTimeout(()=>{$('#g').innerHTML='<div class="empty">Você ainda não favoritou nenhum produto. Toque no coração de um produto para guardar aqui.</div>'},0)}
  else if(h=='checkout'){$('#app').innerHTML=checkout()}
- else if(h=='rastreio'){$('#app').innerHTML=trackPage();document.title='Rastrear pedido | Malta Cosméticos'}
+ else if(h=='rastreio'){$('#app').innerHTML=trackPage();document.title=fitTitle('Rastrear pedido')}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
  else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
  else if(h=='busca'){const uq=new URLSearchParams(location.search).get('q');if(uq!=null&&$('#q').value.trim()!=uq)$('#q').value=uq;const q=$('#q').value.trim();current=searchP(q);$('#app').innerHTML=list(q?`Resultados para “${q}”`:'Busca',current);$('#sugg').hidden=true}
  else if(h!='inicio'){$('#app').innerHTML=`<section class="band"><div class="wrap empty"><h2>Página não encontrada</h2><p>O endereço pode ter mudado ou o produto saiu do catálogo.</p><a class="cta" href="/">Voltar à loja</a></div></section>`;document.title='Página não encontrada | Malta Cosméticos'}
  else $('#app').innerHTML=home();
- setMeta(h); if(!/^produto-/.test(h))document.title='Malta Cosméticos | Dermocosméticos, maquiagem e cuidados capilares';paint(true);window.scrollTo(0,0);
+ setMeta(h); if(!/^produto-/.test(h))document.title='Malta Cosméticos | Dermocosméticos e Maquiagem';paint(true);window.scrollTo(0,0);
 }
 const mHtml=()=>'<a href="/rastreio" class="mtrk">Rastrear meu pedido</a><hr>'+[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="/${c.id}">${c.n}</a>`).join('')+'<hr><a href="/marcas">Todas as marcas</a><a href="/fale-conosco">Fale conosco</a><a href="/trocas-e-devolucoes">Trocas e devoluções</a>';
 const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="/${c.id}">${c.n}</a>`).join('');

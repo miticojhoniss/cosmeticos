@@ -4,6 +4,12 @@ const { SB, CATS, POL, NOINDEX, bslug, esc, q, all, STORE } = require('./_lib');
 
 let TPL = null;
 const tpl = () => (TPL ||= fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8'));
+const SUF=' | Malta Cosméticos';
+function fitTitle(main,suffix=SUF,max=60){main=String(main||'').replace(/\s+/g,' ').trim();
+ if((main+suffix).length<=max)return main+suffix;if(main.length<=max)return main;
+ let t=main.slice(0,max+1);t=t.slice(0,t.lastIndexOf(' ')>20?t.lastIndexOf(' '):max);
+ t=t.replace(/[\s,;:+\-–|/(]+$/,'').replace(/\s+(com|de|da|do|das|dos|e|para|em|a|o|à|ao|na|no|por|sem|\+|-)$/i,'').replace(/[\s,;:+\-–|/(]+$/,'');return t}
+
 const brl = (v) => 'R$ ' + Number(v).toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 const plain = (t) => String(t || '').replace(/#+/g, ' ').replace(/\s+/g, ' ').trim();
 const cut = (t, n) => (t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : t);
@@ -77,14 +83,14 @@ module.exports = async (req, res) => {
 <div class="pdp"><div>${imgs[0] || p.imagem_url ? `<img src="${esc(imgs[0] || p.imagem_url)}" alt="${esc(p.nome)}" style="width:100%;max-width:520px;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:20px">` : ''}</div>
 <div><span class="brand">${esc(p.marca || cat[1])}</span><h1>${esc(p.nome)}</h1><div class="price"><div class="big">${brl(p.preco)}</div></div><p class="pix">ou 6x de ${brl(p.preco / 6)} sem juros</p>
 <h2 style="font-size:22px">Descrição</h2><p>${esc(cut(d, 1500))}</p></div></div></div></section>`;
-      return send(200, page(base, { title: `${p.nome}${p.marca && !p.nome.toLowerCase().includes(p.marca.toLowerCase()) ? ' ' + p.marca : ''} | Malta Cosméticos`, desc, canonical: url, image: imgs[0] || p.imagem_url, type: 'product', body,
+      return send(200, page(base, { title: fitTitle(p.nome), desc, canonical: url, image: imgs[0] || p.imagem_url, type: 'product', body,
         jsonld: [org(base), prod, crumbs(base, [['Início', '/'], [cat[1], '/' + cat[0]], ...(p.marca ? [[p.marca, '/marca/' + bslug(p.marca)]] : []), [p.nome, '/produto/' + p.slug]])] }));
     }
     const cat = CATS.find((c) => c[0] === key);
     if (cat) {
       const rows = await q(`produtos?select=slug,nome,marca,preco,imagem_url&categoria_id=eq.${cat[0]}&ativo=eq.true&order=id&limit=48`);
       const body = `<section class="band"><div class="wrap"><div class="sec-h"><h1 style="font-size:34px;margin:0">${esc(cat[1])}</h1></div><p class="pix">${esc(cat[2])}</p>${cardList(rows)}</div></section>`;
-      return send(200, page(base, { title: `${cat[1]} originais com envio para todo o Brasil | Malta Cosméticos`, desc: cut(cat[2] + ' Compre na Malta Cosméticos em até 6x sem juros.', 158), canonical: `${base}/${cat[0]}`, body,
+      return send(200, page(base, { title: fitTitle(`${cat[1]} originais com entrega no Brasil`), desc: cut(cat[2] + ' Compre na Malta Cosméticos em até 6x sem juros.', 158), canonical: `${base}/${cat[0]}`, body,
         jsonld: [org(base), crumbs(base, [['Início', '/'], [cat[1], '/' + cat[0]]]), { '@context': 'https://schema.org', '@type': 'CollectionPage', name: cat[1], url: `${base}/${cat[0]}`, mainEntity: { '@type': 'ItemList', itemListElement: rows.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${base}/produto/${p.slug}` })) } }] }));
     }
     if ((m = key.match(/^marca\/([a-z0-9-]+)$/))) {
@@ -92,11 +98,11 @@ module.exports = async (req, res) => {
       if (!b) return send(404, page(base, { title: 'Marca não encontrada | Malta Cosméticos', desc: 'Marca não encontrada.', canonical: base + '/' + key, noindex: true }), 's-maxage=300');
       const rows = await q(`produtos?select=slug,nome,marca,preco,imagem_url&marca=eq.${encodeURIComponent(b)}&ativo=eq.true&order=id&limit=60`);
       const body = `<section class="band"><div class="wrap"><div class="sec-h"><h1 style="font-size:34px;margin:0">${esc(b)}</h1></div>${cardList(rows)}</div></section>`;
-      return send(200, page(base, { title: `${b}: produtos originais | Malta Cosméticos`, desc: cut(`Compre produtos ${b} originais na Malta Cosméticos: ${rows.slice(0, 3).map((r) => r.nome).join(', ')}. Envio para todo o Brasil.`, 158), canonical: `${base}/marca/${m[1]}`, body,
+      return send(200, page(base, { title: fitTitle(`${b}: produtos originais`), desc: cut(`Compre produtos ${b} originais na Malta Cosméticos: ${rows.slice(0, 3).map((r) => r.nome).join(', ')}. Envio para todo o Brasil.`, 158), canonical: `${base}/marca/${m[1]}`, body,
         jsonld: [org(base), crumbs(base, [['Início', '/'], ['Marcas', '/marcas'], [b, '/marca/' + m[1]]])] }));
     }
     if (POL[key]) {
-      return send(200, page(base, { title: `${POL[key]} | Malta Cosméticos`, desc: `${POL[key]} da Malta Cosméticos – ${STORE.legal}, CNPJ ${STORE.cnpj}, ${STORE.city}/${STORE.uf}.`, canonical: `${base}/${key}`, jsonld: [org(base)], noindex: key === 'rastreio' }));
+      return send(200, page(base, { title: fitTitle(POL[key]), desc: `${POL[key]} da Malta Cosméticos – ${STORE.legal}, CNPJ ${STORE.cnpj}, ${STORE.city}/${STORE.uf}.`, canonical: `${base}/${key}`, jsonld: [org(base)], noindex: key === 'rastreio' }));
     }
     if (NOINDEX.has(key)) {
       return send(200, page(base, { title: 'Malta Cosméticos', desc: 'Malta Cosméticos', canonical: `${base}/${key}`, noindex: true }), 'no-store');
