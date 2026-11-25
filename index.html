@@ -175,8 +175,8 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 #ftog{display:none}
 .gal-main{background:#fff;border-radius:20px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;position:relative}
 .gal-main img{width:100%;height:100%;object-fit:contain}.gal-main svg{width:80%;height:80%}
-.thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto}.thumbs button{flex:none;width:72px;height:72px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:2px;cursor:pointer}
-.thumbs button.on{border-color:var(--wine)}.thumbs img{width:100%;height:100%;object-fit:contain}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,64px);gap:10px;margin-top:12px}.thumbs button{width:64px;height:64px;min-height:0;border:1px solid var(--line);border-radius:10px;background:#fff;padding:4px;cursor:pointer;overflow:hidden;display:block;transition:border-color .15s}
+.thumbs button:hover{border-color:var(--mute)}.thumbs button.on{border:2px solid var(--wine);padding:3px}.thumbs img{width:100%;height:100%;object-fit:contain;display:block}
 @media(max-width:800px){.lay{grid-template-columns:1fr}.filters{display:none;position:static}.filters.open{display:block}#ftog{display:inline-flex;align-items:center}}
 .burger{display:none;width:44px;height:44px;border:0;background:none;padding:10px}.burger svg{width:24px;height:24px;stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round}
 .quick{display:flex;gap:16px;white-space:nowrap}.quick a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}.quick a:hover{color:var(--wine)}
@@ -596,10 +596,10 @@ function fmtDesc(raw,name){if(!raw)return '<p>Descrição em breve.</p>';
  const nm=(name||'').trim();if(nm&&t.trim().toLowerCase().startsWith(nm.toLowerCase()))t=' '+t.trim().slice(nm.length)+' ';
  const M='\u0001';
  t=t.replace(/\s((?:O que (?:é|e)|Para que serve|Quais? (?:são )?(?:os |as )?(?:principais )?(?:benefícios|ativos|vantagens)|Como (?:usar|aplicar|funciona)|Qual a diferença|Para quem (?:é )?indicado|Para que é indicado|Pode ser usad)[^?.!]{0,160}\?)/gi,' '+M+'$1'+M);
- t=t.replace(/\s((?:Benefícios|Principais benefícios|Ativos(?: principais)?|Principais ativos|Modo de uso|Modo de usar|Como usar|Indicação|Indicações|Indicado para|Resultados?(?: esperados?)?|Precauções(?: e avisos de segurança)?|Advertências|Cuidados|Composição|Ingredientes|Textura|Fragrância|Tipo de pele|Conteúdo|O kit contém|Kit contém|Diferenciais|Recomendações)\s*:)/g,' '+M+'$1'+M);
- t=t.replace(/([.!?;])\s(Ativos|Principais ativos|Benefícios|Modo de uso|Como usar|Indicação|Composição|Precauções|Resultado esperado)\s(?=[A-ZÁÉÍÓÚ0-9-])/g,'$1 '+M+'$2:'+M+' ');
+ t=t.replace(/\s((?:Benefícios|Principais benefícios|Ativos(?: principais)?|Principais ativos|Modo de uso|Modo de usar|Como usar|Indicação|Indicações|Indicado para|Resultados?(?: esperados?)?|Precauções(?: e avisos de segurança)?|Advertências|Cuidados|Composição|Ingredientes|Textura|Fragrância|Tipo de pele|Conteúdo|O kit contém|Kit contém|Diferenciais|Recomendações)\s*:)/gi,' '+M+'$1'+M);
+ t=t.replace(/([.!?;])\s(Ativos|Principais ativos|Benefícios|Modo de [Uu]so|Como usar|Indicação|Composição|Precauções|Resultado esperado)\s(?=[A-ZÁÉÍÓÚ0-9-])/g,'$1 '+M+'$2:'+M+' ');
  const parts=t.split(M).map(x=>x.trim());const out=[];let i=0;
- const hd=x=>{x=x.replace(/\s*:$/,'').trim();x=x.charAt(0).toUpperCase()+x.slice(1);if(/^Quais?.*benef/i.test(x))return 'Benefícios';if(/^Quais?.*ativos/i.test(x))return 'Ativos';if(/^O que (é|e)|^Para que serve/i.test(x))return 'O que é e para que serve';if(/^Modo de usar/i.test(x))return 'Modo de uso';if(/^Resultados?( esperados?)?$/i.test(x))return 'Resultados';if(/^Principais (benefícios|ativos)$/i.test(x))return x.split(' ')[1].replace(/^./,c=>c.toUpperCase());if(/^Como (usar|aplicar)/i.test(x))return 'Modo de uso';if(/^Para quem|^Para que é indicado/i.test(x))return 'Indicação';return x};
+ const hd=x=>{x=x.replace(/\s*:$/,'').trim();x=x.charAt(0).toUpperCase()+x.slice(1);if(/^Quais?.*benef/i.test(x))return 'Benefícios';if(/^Quais?.*ativos/i.test(x))return 'Ativos';if(/^O que (é|e)|^Para que serve/i.test(x))return 'O que é e para que serve';if(/^Modo de us(ar|o)/i.test(x))return 'Modo de uso';if(/^Resultados?( esperados?)?$/i.test(x))return 'Resultados';if(/^Principais (benefícios|ativos)$/i.test(x))return x.split(' ')[1].replace(/^./,c=>c.toUpperCase());if(/^Como (usar|aplicar)/i.test(x))return 'Modo de uso';if(/^Para quem|^Para que é indicado/i.test(x))return 'Indicação';return x};
  const isH=x=>/\?$|:$/.test(x)&&x.length<170;
  const body=b=>{if(!b)return '';
   let items=b.split(/\s(?:\*|•|-|–)\s+|\s?(?:;)\s*(?=-|\*)/).map(x=>x.replace(/^[-*•–]\s*/,'').trim()).filter(Boolean);
@@ -625,7 +625,6 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  <button class="add" data-addq="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button>
  <button class="add" data-buy="${p.id}">Comprar agora</button>
  <button class="add favbtn${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-pressed="${favs.has(p.id)}">${favs.has(p.id)?'♥ Nos favoritos':'♡ Favoritar'}</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
- <div class="ship"><b>Frete grátis</b> em compras acima de R$ 199 · Envio em 1 a 2 dias úteis · Troca em até 7 dias</div>
  <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><div class="desc">${fmtDesc(p.desc,p.name)}</div>
  <div class="specs">${[['Marca',p.brand],['Categoria',c.n],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b])=>`<div><span>${a}</span><b>${esc(b)}</b></div>`).join('')}</div>
  <h3 style="font-size:22px;margin:28px 0 8px">Dúvidas frequentes</h3><div class="faq">${FAQ.map(([q,r])=>`<details><summary>${q}</summary><p>${r}</p></details>`).join('')}</div>
