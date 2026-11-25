@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
+    { "source": "/:path((?!api/|assets/|products\\.json$|robots\\.txt$|index\\.html$).+)", "destination": "/api/render?p=:path" }
+  ],
+  "functions": {
+    "api/render.js": { "includeFiles": "index.html" }
+  }
+}

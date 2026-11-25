@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /checkout
+Disallow: /conta
+Disallow: /entrar
+Disallow: /cadastro
+Disallow: /favoritos
+Disallow: /busca
+Disallow: /nova-senha
+Disallow: /api/
+
+Sitemap: https://cosmeticos-fawn.vercel.app/sitemap.xml
