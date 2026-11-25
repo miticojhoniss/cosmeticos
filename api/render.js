@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { SB, CATS, POL, NOINDEX, bslug, esc, q, all, STORE } = require('./_lib');
+const POLHTML = require('./_pol.json');
 
 let TPL = null;
 const tpl = () => (TPL ||= fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf8'));
@@ -70,7 +71,7 @@ module.exports = async (req, res) => {
       const url = `${base}/produto/${p.slug}`;
       const imgs = (p.imagens || []).map((f) => `${SB}/storage/v1/object/public/produtos/${f}`);
       const d = plain(p.descricao);
-      const desc = cut(`${p.nome}${p.marca ? ' – ' + p.marca : ''} por ${brl(p.preco)}. ${d || 'Produto original com envio para todo o Brasil.'}`, 158);
+      const desc = cut(`${p.nome}${p.marca ? ' – ' + p.marca : ''}. ${d || 'Produto original com envio para todo o Brasil.'}`, 158);
       const prod = {
         '@context': 'https://schema.org', '@type': 'Product', name: p.nome, image: imgs.length ? imgs : [p.imagem_url].filter(Boolean),
         description: cut(d || p.nome, 4900), sku: p.sku || undefined, gtin13: p.ean && /^\d{13}$/.test(p.ean) ? p.ean : undefined,
@@ -86,7 +87,7 @@ module.exports = async (req, res) => {
       };
       const body = `<section class="band"><div class="wrap"><nav class="crumb"><a href="/">Início</a> › <a href="/${cat[0]}">${esc(cat[1])}</a>${p.marca ? ` › <a href="/marca/${bslug(p.marca)}">${esc(p.marca)}</a>` : ''}</nav>
 <div class="pdp"><div>${imgs[0] || p.imagem_url ? `<img src="${esc(imgs[0] || p.imagem_url)}" alt="${esc(p.nome)}" style="width:100%;max-width:520px;aspect-ratio:1;object-fit:contain;background:#fff;border-radius:20px">` : ''}</div>
-<div><span class="brand">${esc(p.marca || cat[1])}</span><h1>${esc(p.nome)}</h1><div class="price"><div class="big">${brl(p.preco)}</div></div><p class="pix">ou 6x de ${brl(p.preco / 6)} sem juros</p>
+<div><span class="brand">${esc(p.marca || cat[1])}</span><h1>${esc(p.nome)}</h1><div class="price"><div class="big">${brl(p.preco)}</div></div>${Math.min(6,Math.floor(p.preco/10))>1?`<p class="pix">ou ${Math.min(6,Math.floor(p.preco/10))}x de ${brl(p.preco/Math.min(6,Math.floor(p.preco/10)))} sem juros no cartão</p>`:''}
 <h2 style="font-size:22px">Descrição</h2><p>${esc(cut(d, 1500))}</p></div></div></div></section>`;
       return send(200, page(base, { title: p.titulo_seo || fitTitle(p.nome), desc, canonical: url, image: imgs[0] || p.imagem_url, type: 'product', body,
         jsonld: [org(base), prod, crumbs(base, [['Início', '/'], [cat[1], '/' + cat[0]], ...(p.marca ? [[p.marca, '/marca/' + bslug(p.marca)]] : []), [p.nome, '/produto/' + p.slug]])] }));
@@ -95,7 +96,7 @@ module.exports = async (req, res) => {
     if (cat) {
       const rows = await q(`produtos?select=slug,nome,marca,preco,imagem_url&categoria_id=eq.${cat[0]}&ativo=eq.true&order=id&limit=48`);
       const body = `<section class="band"><div class="wrap"><div class="sec-h"><h1 style="font-size:34px;margin:0">${esc(cat[1])}</h1></div><p class="pix">${esc(cat[2])}</p>${cardList(rows)}</div></section>`;
-      return send(200, page(base, { title: fitTitle(`${cat[1]} originais com entrega no Brasil`), desc: cut(cat[2] + ' Compre na Malta Cosméticos em até 6x sem juros.', 158), canonical: `${base}/${cat[0]}`, body,
+      return send(200, page(base, { title: fitTitle(`${cat[1]} originais com entrega no Brasil`), desc: cut(cat[2] + ' Compre na Malta Cosméticos.', 158), canonical: `${base}/${cat[0]}`, body,
         jsonld: [org(base), crumbs(base, [['Início', '/'], [cat[1], '/' + cat[0]]]), { '@context': 'https://schema.org', '@type': 'CollectionPage', name: cat[1], url: `${base}/${cat[0]}`, mainEntity: { '@type': 'ItemList', itemListElement: rows.map((p, i) => ({ '@type': 'ListItem', position: i + 1, url: `${base}/produto/${p.slug}` })) } }] }));
     }
     if ((m = key.match(/^marca\/([a-z0-9-]+)$/))) {
@@ -107,7 +108,8 @@ module.exports = async (req, res) => {
         jsonld: [org(base), crumbs(base, [['Início', '/'], ['Marcas', '/marcas'], [b, '/marca/' + m[1]]])] }));
     }
     if (POL[key]) {
-      return send(200, page(base, { title: fitTitle(POL[key]), desc: `${POL[key]} da Malta Cosméticos – ${STORE.legal}, CNPJ ${STORE.cnpj}, ${STORE.city}/${STORE.uf}.`, canonical: `${base}/${key}`, jsonld: [org(base)], noindex: key === 'rastreio' }));
+      const body = key !== 'rastreio' && POLHTML[key] ? POLHTML[key].split('__HOST__').join(esc(req.headers['x-forwarded-host'] || req.headers.host)) : '';
+      return send(200, page(base, { title: fitTitle(POL[key]), desc: `${POL[key]} da Malta Cosméticos – ${STORE.legal}, CNPJ ${STORE.cnpj}, ${STORE.city}/${STORE.uf}.`, canonical: `${base}/${key}`, jsonld: [org(base)], noindex: key === 'rastreio', body }));
     }
     if (NOINDEX.has(key)) {
       return send(200, page(base, { title: 'Malta Cosméticos', desc: 'Malta Cosméticos', canonical: `${base}/${key}`, noindex: true }), 'no-store');

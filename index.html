@@ -327,7 +327,7 @@ body.cko .ckstrip{display:block;background:var(--wine);color:#fff;text-align:cen
     </div>
     <div class="ft-bot"><p class="cr"><b>© 2026 Malta Cosméticos.</b> Todos os direitos reservados.</p>
       <p>67.600.045 PRISCILA DE PAULA PEREIRA MALTA<span class="sep">·</span>CNPJ 67.600.045/0001-78</p>
-      <p class="fine">Preços e condições sujeitos a alteração sem aviso prévio. Fotos meramente ilustrativas.</p></div>
+      <p class="fine">Preços e condições sujeitos a alteração sem aviso prévio.</p></div>
   </div>
 </footer>
 
@@ -437,7 +437,7 @@ function aboutPage(){const dias=[['Segunda-feira','09:00h às 18:00h'],['Terça-
 function catTiles(){return `<section class="band" style="padding-bottom:0"><div class="wrap"><div class="sec-h"><h2>Compre por categoria</h2></div><div class="tiles">${CATS.map(c=>{const p=P.find(x=>x.cat==c.id&&x.img); return `<a class="tile" href="/${c.id}"><span class="ti">${p?`<img src="${esc(p.img)}" alt="" loading="lazy">`:''}</span><b>${c.n}</b></a>`}).join('')}</div></div></section>`}
 const FAQ=[['Como funciona a devolução?','Você pode desistir da compra em até 7 dias após receber, com o produto lacrado. Produtos com defeito podem ser trocados em até 30 dias. Veja a <a href="/trocas-e-devolucoes">política de trocas</a>.'],
 ['Qual o tempo de entrega?','Separamos o pedido em 1 a 2 dias úteis. Depois da postagem, o PAC leva de 6 a 9 dias úteis e o Sedex de 2 a 4 dias úteis. Acima de R$ 199 o frete é grátis.'],
-['Quais as formas de pagamento?','Pix e cartão de crédito em até 6x sem juros. Veja as <a href="/pagamento">formas de pagamento</a>.'],
+['Quais as formas de pagamento?','Pix e cartão de crédito em até 6x sem juros (parcela mínima de R$ 10). Veja as <a href="/pagamento">formas de pagamento</a>.'],
 ['Como falar com o atendimento?','Pelo WhatsApp <a href="https://wa.me/5545999658427">(45) 99965-8427</a> ou pelo e-mail atendimento@maltacosmeticos.com.br.']];
 function list(title,items){baseItems=items;brandSel=new Set();sortV='rel';
  const opts=[['rel','Relevância'],['desc','Maior preço'],['asc','Menor preço'],['off','Maior desconto'],['new','Lançamentos'],['az','A - Z'],['za','Z - A']];
@@ -468,9 +468,9 @@ const POL={
 'fale-conosco':['Fale conosco',`<p>Fale com a gente para dúvidas sobre produtos, pedidos, entregas, trocas e pagamentos.</p>
 <ul><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> <a href="mailto:${EMP.email}">${EMP.email}</a></li><li><b>Horário:</b> ${EMP.hor}</li><li><b>Endereço:</b> ${EMP.end}</li></ul>
 <p>Para agilizar, tenha em mãos o número do pedido. Respondemos em até 1 dia útil.</p>`],
-'pagamento':['Formas de pagamento',`<div class="facts"><div><b>5% off</b>no Pix</div><div><b>6x</b>sem juros no cartão</div></div>
+'pagamento':['Formas de pagamento',`<div class="facts"><div><b>5% off</b>no Pix</div><div><b>6x</b>sem juros no cartão (parcela mín. R$ 10)</div></div>
 <h3>Pix</h3><p>Pagamento instantâneo com 5% de desconto sobre os produtos. O código vale por 30 minutos; sem pagamento nesse prazo, o pedido é cancelado automaticamente.</p>
-<h3>Cartão de crédito</h3><p>Visa, Mastercard, Elo, American Express e Hipercard, em até 6x sem juros. A aprovação depende da operadora do cartão e costuma sair em poucos minutos.</p>
+<h3>Cartão de crédito</h3><p>Visa, Mastercard, Elo, American Express e Hipercard, em até 6x sem juros, com parcela mínima de R$ 10. A aprovação depende da operadora do cartão e costuma sair em poucos minutos.</p>
 <h3>Segurança</h3><p>Os dados do cartão são digitados direto no ambiente do intermediador de pagamento e não ficam guardados pela Malta.</p>
 <h3>Quando o pedido anda</h3><p>A separação começa só depois da confirmação do pagamento. A nota fiscal é emitida em nome de ${EMP.rs} e enviada por e-mail junto com o código de rastreio.</p>${CT}`],
 'frete':['Política de frete',`<div class="facts"><div><b>1 a 2 dias úteis</b>para separar o pedido</div><div><b>Grátis</b>acima de R$ 199</div><div><b>Todo o Brasil</b>pelos Correios</div></div>
@@ -556,11 +556,11 @@ function checkout(){
   <div class="fl"><label for="f-cep">CEP</label><div class="cepw"><input id="f-cep" data-f="cep" placeholder="00000-000" inputmode="numeric" autocomplete="postal-code" value="${esc(co.d.cep||'')}"><button type="button" class="cepb" id="cepb">Buscar</button></div></div>
   ${cfield('rua','Rua','Rua, avenida, etc.')}${cfield('num','Número','Nº')}${cfield('comp','Complemento','Apto, bloco...')}${cfield('bairro','Bairro','Seu bairro')}${cfield('cidade','Cidade','Sua cidade')}${cfield('uf','Estado','UF')}</div>
   <h4 class="ck-sub">Forma de envio</h4>${Object.entries(SHIP).map(([k,s])=>`<label class="opt"><input type="radio" name="ship" value="${k}" ${co.ship==k?'checked':''}><div><b>${s.n}</b><small>${s.dias} após a postagem</small></div><b>${t.sub>=199?'Grátis':brl(s.v)}</b></label>`).join('')}</section>`;
- if(co.step==1){const inst=[1,2,3,4,5,6].map(n=>`<option value="${n}" ${co.inst==n?'selected':''}>${n}x de ${brl(t.tot/n)} sem juros</option>`).join('');
+ if(co.step==1){const inst=Array.from({length:maxInst(t.tot)},(_,i)=>i+1).map(n=>`<option value="${n}" ${co.inst==n?'selected':''}>${n}x de ${brl(t.tot/n)} sem juros</option>`).join('');
   body=`<section class="ck-c"><header><span class="ck-n">3</span><div><h3>Pagamento</h3><p>Escolha como prefere pagar.</p></div></header>
   <div class="fields"><div class="fl full"><label for="f-cpf">CPF</label><input id="f-cpf" data-f="cpf" placeholder="000.000.000-00" inputmode="numeric" value="${esc(co.d.cpf||'')}"><small class="pix">Necessário para a nota fiscal.</small></div></div>
   <label class="opt"><input type="radio" name="pay" value="pix" ${co.pay=='pix'?'checked':''}><div><b>Pix</b><small>5% de desconto · aprovação na hora</small></div><b>${brl(t.sub*.95+t.frete)}</b></label>
-  <label class="opt"><input type="radio" name="pay" value="cartao" ${co.pay=='cartao'?'checked':''}><div><b>Cartão de crédito</b><small>Até 6x sem juros</small></div></label>
+  <label class="opt"><input type="radio" name="pay" value="cartao" ${co.pay=='cartao'?'checked':''}><div><b>Cartão de crédito</b><small>${maxInst(t.tot)>1?`Até ${maxInst(t.tot)}x sem juros (parcela mínima R$ 10)`:'À vista'}</small></div></label>
   ${co.pay=='cartao'?`<div class="fl" style="margin-top:6px"><label for="inst">Parcelas</label><select id="inst" class="sel">${inst}</select></div>`:''}
   <div class="ck-rev"><b>Entregar em:</b> ${esc(co.d.rua||'')}, ${esc(co.d.num||'')}${co.d.comp?' – '+esc(co.d.comp):''} · ${esc(co.d.bairro||'')} · ${esc(co.d.cidade||'')}/${esc((co.d.uf||'').toUpperCase())} · CEP ${esc(co.d.cep||'')}<br><b>Envio:</b> ${SHIP[co.ship].n} (${SHIP[co.ship].dias})<button class="rm" data-co="prev">Alterar</button></div></section>`}
  if(co.step==2){const T=co.totals;
@@ -717,8 +717,9 @@ function fitTitle(main,suffix=SUF,max=60){main=String(main||'').replace(/\s+/g,'
  if(tail.length>24)return cutW(main,max);
  return cutW(head,max-tail.length-1)+' '+tail}
 
+const maxInst=v=>Math.max(1,Math.min(6,Math.floor(v/10)));const instTxt=v=>{const n=maxInst(v);return n>1?`ou ${n}x de ${brl(v/n)} sem juros no cartão`:'Pagamento à vista no Pix ou no cartão'};
 function setMeta(h){const c=document.querySelector('link[rel=canonical]'),d=document.querySelector('meta[name=description]');if(c)c.href=location.origin+location.pathname;
- const p=/^produto-\d+$/.test(h)&&byId(h.slice(8));if(d)d.content=p?`${p.name}${p.brand?' – '+p.brand:''} por ${brl(p.price)} na Malta Cosméticos. Produto original, envio para todo o Brasil e até 6x sem juros.`:'Malta Cosméticos: dermocosméticos, proteção solar, maquiagem e cuidados capilares de marcas originais. Envio para todo o Brasil e parcelamento em até 6x sem juros.'}
+ const p=/^produto-\d+$/.test(h)&&byId(h.slice(8));if(d)d.content=p?`${p.name}${p.brand?' – '+p.brand:''} na Malta Cosméticos. Produto original e lacrado, com envio para todo o Brasil.`:'Malta Cosméticos: dermocosméticos, proteção solar, maquiagem e cuidados capilares de marcas originais. Envio para todo o Brasil e parcelamento em até 6x sem juros.'}
 function curKey(){const p=decodeURIComponent(location.pathname).replace(/\/+$/,'')||'/';
  if(p=='/'||p=='/inicio'||p=='/index.html')return 'inicio';
  let m=p.match(/^\/produto\/(.+)$/);if(m){const x=P.find(x=>x.slug==m[1]);return x?'produto-'+x.id:'nao-encontrado'}
@@ -745,14 +746,14 @@ function route(){
  else if(h=='rastreio'){$('#app').innerHTML=trackPage();document.title=fitTitle('Rastrear pedido')}
  else if(h=='quem-somos'){$('#app').innerHTML=aboutPage();document.title=fitTitle('Quem somos')}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
- else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
+ else if(h=='ofertas'){history.replaceState(null,'','/');$('#app').innerHTML=home()}
  else if(h=='busca'){const uq=new URLSearchParams(location.search).get('q');if(uq!=null&&$('#q').value.trim()!=uq)$('#q').value=uq;const q=$('#q').value.trim();current=searchP(q);$('#app').innerHTML=list(q?`Resultados para “${q}”`:'Busca',current);$('#sugg').hidden=true}
  else if(h!='inicio'){$('#app').innerHTML=`<section class="band"><div class="wrap empty"><h2>Página não encontrada</h2><p>O endereço pode ter mudado ou o produto saiu do catálogo.</p><a class="cta" href="/">Voltar à loja</a></div></section>`;document.title='Página não encontrada | Malta Cosméticos'}
  else $('#app').innerHTML=home();
  setMeta(h); if(!/^produto-/.test(h)){const cc=CATS.find(c=>c.id==h);document.title=h=='inicio'?'Malta Cosméticos | Dermocosméticos e Maquiagem':cc?fitTitle(cc.n+' originais'):h=='quem-somos'?fitTitle('Quem somos'):POL[h]?fitTitle(POL[h][0]):/^marca-/.test(h)?fitTitle((P.find(x=>x.brand&&bslug(x.brand)==h.slice(6))?.brand||'Marca')+': produtos originais'):h=='rastreio'?fitTitle('Rastrear pedido'):'Malta Cosméticos'}paint(true);window.scrollTo(0,0);
 }
-const mHtml=()=>'<a href="/rastreio" class="mtrk">Rastrear meu pedido</a><hr>'+[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="/${c.id}">${c.n}</a>`).join('')+'<hr><a href="/marcas">Todas as marcas</a><a href="/fale-conosco">Fale conosco</a><a href="/trocas-e-devolucoes">Trocas e devoluções</a>';
-const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="/${c.id}">${c.n}</a>`).join('');
+const mHtml=()=>'<a href="/rastreio" class="mtrk">Rastrear meu pedido</a><hr>'+CATS.map(c=>`<a href="/${c.id}">${c.n}</a>`).join('')+'<hr><a href="/marcas">Todas as marcas</a><a href="/fale-conosco">Fale conosco</a><a href="/trocas-e-devolucoes">Trocas e devoluções</a>';
+const navHtml=CATS.map(c=>`<a href="/${c.id}">${c.n}</a>`).join('');
 $('#nav').innerHTML=navHtml+'<a href="/marcas">Marcas</a>';$('#mlinks').innerHTML=mHtml();
 
 
@@ -801,7 +802,7 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  ${(p.imgs||[]).length>1?`<div class="thumbs">${p.imgs.map((u,i)=>`<button data-gi="${esc(u)}" class="${i?'':'on'}" aria-label="Foto ${i+1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')}</div>`:''}</div>
  <div><span class="brand">${esc(p.brand||c.n)}</span><h1>${esc(p.name)}</h1>
  <div class="price"><div class="big">${brl(p.price)}</div></div>
- <div class="pix" style="font-size:15px">ou 6x de ${brl(p.price/6)} sem juros</div>
+ <div class="pix" style="font-size:15px">${instTxt(p.price)}</div>
  ${p.stock>0?`<div class="buy"><div class="qsel"><button data-pq="-1" aria-label="Menos">−</button><span id="pqv">1</span><button data-pq="1" aria-label="Mais">+</button></div>
  <button class="add" data-addq="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button>
  <button class="add" data-buy="${p.id}">Comprar agora</button>
@@ -821,7 +822,7 @@ function view(id){const p=byId(id),c=CATS.find(c=>c.id==p.cat);
  $('#mbox').innerHTML=`<button class="x" data-close aria-label="Fechar">×</button><div class="thumb">${art(p)}</div><div class="mtxt">
  <span class="brand">${esc(p.brand)} · ${esc(c.n)}</span><h3>${esc(p.name)}</h3><span class="pix">${p.ean?"EAN "+esc(p.ean):""}${p.ean&&p.sku?" · ":""}${p.sku?"SKU "+esc(p.sku):""}</span>
  <div class="price"><b style="font-size:26px">${brl(p.price)}</b></div>
- <span class="pix">ou 6x de ${brl(p.price/6)} sem juros</span><p class="pix">${p.stock>0?'Em estoque':'Indisponível no momento'}</p>
+ <span class="pix">${instTxt(p.price)}</span><p class="pix">${p.stock>0?'Em estoque':'Indisponível no momento'}</p>
  <button class="add" data-add="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button></div>`;
  $('#modal').classList.add('on');$('#shade').classList.add('on')}
 function closeAll(){$('#mnav').classList.remove('on');$('#modal').classList.remove('on');openCart(false)}
