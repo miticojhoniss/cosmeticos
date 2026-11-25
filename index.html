@@ -301,7 +301,7 @@ function art(p){if(p.img)return `<img src="${esc(p.img)}" alt="${esc(p.name)}" l
 }
 function card(p){
  const off=p.old?Math.round((1-p.price/p.old)*100):0;
- return `<article class="card"><button class="fav${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-label="Favoritar ${esc(p.name)}" aria-pressed="${favs.has(p.id)}"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg></button><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</a>
+ return `<article class="card"><button class="fav${favs.has(p.id)?' on':''}" data-fav="${p.id}" aria-label="Favoritar ${esc(p.name)}" aria-pressed="${favs.has(p.id)}"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg></button><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${art(p)}</a>
  <div class="info">${p.brand?`<a class="brand" href="#marca-${bslug(p.brand)}">${esc(p.brand)}</a>`:'<span class="brand"></span>'}<a class="name" href="#produto-${p.id}">${esc(p.name)}</a>
  <div class="price"><b>${brl(p.price)}</b></div>
  <button class="add" data-add="${p.id}">Adicionar</button></div></article>`;
@@ -595,7 +595,7 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  const rel=P.filter(x=>x.cat==p.cat&&x.id!=p.id&&(!p.brand||x.brand==p.brand)).slice(0,8);
  const more=rel.length<8?P.filter(x=>x.cat==p.cat&&x.id!=p.id&&!rel.includes(x)).slice(0,8-rel.length):[];
  return `<section class="band"><div class="wrap"><nav class="crumb"><a href="#inicio">Início</a> › <a href="#${c.id}">${c.n}</a>${p.brand?` › <a href="#marca-${bslug(p.brand)}">${esc(p.brand)}</a>`:''}</nav>
- <div class="pdp"><div><div class="gal-main" id="gm">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</div>
+ <div class="pdp"><div><div class="gal-main" id="gm">${art(p)}</div>
  ${(p.imgs||[]).length>1?`<div class="thumbs">${p.imgs.map((u,i)=>`<button data-gi="${esc(u)}" class="${i?'':'on'}" aria-label="Foto ${i+1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')}</div>`:''}</div>
  <div><span class="brand">${esc(p.brand||c.n)}</span><h1>${esc(p.name)}</h1>
  <div class="price"><div class="big">${brl(p.price)}</div></div>
