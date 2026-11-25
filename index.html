@@ -570,9 +570,10 @@ async function cepFill(el){const d=el.value.replace(/\D/g,'');if(d.length!=8||el
  catch(e){hint.textContent='CEP não encontrado. Preencha o endereço manualmente.'}}
 document.addEventListener('input',e=>{if(e.target.id=='e-cep'||e.target.id=='f-cep')cepFill(e.target)});
 const SYN={hidratante:['hidrata','creme'],protetor:['fps','solar'],shampoo:['xampu'],rimel:['mascara de cilios','cilios'],batom:['labial','lip'],base:['foundation'],sabonete:['limpeza','gel de limpeza'],serum:['serum','sérum']};
-const qTokens=q=>norm(q).replace(/[^a-z0-9%,. ]/g,' ').split(/\s+/).filter(t=>t.length>0);
+const sNorm=x=>norm(x).replace(/['’´`]/g,'').replace(/[-/]/g,' ');
+const qTokens=q=>sNorm(q).replace(/[^a-z0-9%,. ]/g,' ').split(/\s+/).filter(t=>t.length>0);
 function searchP(q){const tk=qTokens(q);if(!tk.length)return[];const out=[];
- for(const p of P){const n=norm(p.name),b=norm(p.brand||''),c=norm(CATS.find(x=>x.id==p.cat)?.n||'');const hay=n+' '+b+' '+c;let sc=0,ok=true;
+ for(const p of P){const n=sNorm(p.name),b=sNorm(p.brand||''),c=sNorm(CATS.find(x=>x.id==p.cat)?.n||'');const hay=n+' '+b+' '+c;let sc=0,ok=true;
   for(const t of tk){let hit=hay.includes(t);if(!hit&&SYN[t])hit=SYN[t].some(s=>hay.includes(norm(s)));if(!hit&&t.length>4)hit=hay.includes(t.slice(0,-1));if(!hit){ok=false;break}
    if(b==t||b.startsWith(t))sc+=6;if(n.startsWith(t))sc+=4;if(new RegExp('(^|\\s)'+t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).test(n))sc+=3;else if(n.includes(t))sc+=1}
   if(ok)out.push([sc+(p.stock>0?1:0),p])}
@@ -581,7 +582,7 @@ function hl(text,q){let h=esc(text);for(const t of qTokens(q).filter(t=>t.length
 let sgIdx=-1;
 function renderSugg(){const q=$('#q').value.trim(),box=$('#sugg');$('#qx').hidden=!q;if(q.length<2){box.hidden=true;$('#q').setAttribute('aria-expanded','false');return}
  const res=searchP(q),bm=new Map();res.forEach(p=>p.brand&&bm.set(p.brand,(bm.get(p.brand)||0)+1));
- const nq=norm(q),brands=[...bm].sort((a,b)=>(norm(b[0]).startsWith(nq)-norm(a[0]).startsWith(nq))||b[1]-a[1]).slice(0,4);
+ const nq=sNorm(q),brands=[...bm].sort((a,b)=>(sNorm(b[0]).startsWith(nq)-sNorm(a[0]).startsWith(nq))||b[1]-a[1]).slice(0,4);
  const cats=CATS.filter(c=>res.some(p=>p.cat==c.id)).slice(0,4);sgIdx=-1;
  box.innerHTML=res.length?`${brands.length?`<h5>Marcas</h5><div class="chipl">${brands.map(([b])=>`<a href="#marca-${bslug(b)}" class="si">${hl(b,q)}</a>`).join('')}</div>`:''}
  <h5>Produtos</h5>${res.slice(0,6).map(p=>`<a class="sg si" href="#produto-${p.id}">${p.img?`<img src="${esc(p.img)}" alt="" loading="lazy">`:''}<span>${hl(p.name,q)}<small>${esc(p.brand||'')}</small></span><b>${brl(p.price)}</b></a>`).join('')}
