@@ -750,7 +750,7 @@ function route(){
  else if(h=='busca'){const uq=new URLSearchParams(location.search).get('q');if(uq!=null&&$('#q').value.trim()!=uq)$('#q').value=uq;const q=$('#q').value.trim();current=searchP(q);$('#app').innerHTML=list(q?`Resultados para “${q}”`:'Busca',current);$('#sugg').hidden=true}
  else if(h!='inicio'){$('#app').innerHTML=`<section class="band"><div class="wrap empty"><h2>Página não encontrada</h2><p>O endereço pode ter mudado ou o produto saiu do catálogo.</p><a class="cta" href="/">Voltar à loja</a></div></section>`;document.title='Página não encontrada | Malta Cosméticos'}
  else $('#app').innerHTML=home();
- setMeta(h); if(!/^produto-/.test(h))document.title='Malta Cosméticos | Dermocosméticos e Maquiagem';paint(true);window.scrollTo(0,0);
+ setMeta(h); if(!/^produto-/.test(h)){const cc=CATS.find(c=>c.id==h);document.title=h=='inicio'?'Malta Cosméticos | Dermocosméticos e Maquiagem':cc?fitTitle(cc.n+' originais'):h=='quem-somos'?fitTitle('Quem somos'):POL[h]?fitTitle(POL[h][0]):/^marca-/.test(h)?fitTitle((P.find(x=>x.brand&&bslug(x.brand)==h.slice(6))?.brand||'Marca')+': produtos originais'):h=='rastreio'?fitTitle('Rastrear pedido'):'Malta Cosméticos'}paint(true);window.scrollTo(0,0);
 }
 const mHtml=()=>'<a href="/rastreio" class="mtrk">Rastrear meu pedido</a><hr>'+[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="/${c.id}">${c.n}</a>`).join('')+'<hr><a href="/marcas">Todas as marcas</a><a href="/fale-conosco">Fale conosco</a><a href="/trocas-e-devolucoes">Trocas e devoluções</a>';
 const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="/${c.id}">${c.n}</a>`).join('');
