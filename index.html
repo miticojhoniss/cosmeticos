@@ -224,7 +224,7 @@ function card(p){
  const off=p.old?Math.round((1-p.price/p.old)*100):0;
  return `<article class="card"><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</a>
  <div class="info"><span class="brand">${esc(p.brand)}</span><a class="name" href="#produto-${p.id}">${esc(p.name)}</a>
- <div class="price">${p.old?`<s>${brl(p.old)}</s>`:''}<b>${brl(p.price)}</b></div><span class="pix">${brl(p.price*.95)} no Pix</span>
+ <div class="price"><b>${brl(p.price)}</b></div>
  <button class="add" data-add="${p.id}">Adicionar</button></div></article>`;
 }
 const scene=`<svg class="scene" viewBox="0 0 560 400" role="img" aria-label="Frascos de cosméticos em uma prateleira">
@@ -396,7 +396,7 @@ function renderCart(){
  const falta=Math.max(0,199-t);
  $('#df').innerHTML=ids.length?`<div style="font-size:14px">${falta?`Faltam <b>${brl(falta)}</b> para frete grátis`:'Você ganhou <b>frete grátis</b>!'}</div>
  <div class="bar"><i style="width:${Math.min(100,t/199*100)}%"></i></div>
- <div class="sum"><span>Subtotal</span><b>${brl(t)}</b></div><div class="pix" style="text-align:right">${brl(t*.95)} no Pix</div>
+ <div class="sum"><span>Subtotal</span><b>${brl(t)}</b></div>
  <button class="go" id="checkout">Finalizar compra</button>`:'';
 }
 function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
@@ -408,8 +408,8 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  return `<section class="band"><div class="wrap"><nav class="crumb"><a href="#inicio">Início</a> › <a href="#${c.id}">${c.n}</a>${p.brand?` › ${esc(p.brand)}`:''}</nav>
  <div class="pdp"><div class="gal" style="position:relative">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</div>
  <div><span class="brand">${esc(p.brand||c.n)}</span><h1>${esc(p.name)}</h1>
- <div class="price">${p.old?`<s>${brl(p.old)}</s>`:''}<div class="big">${brl(p.price)}</div></div>
- <div class="pix" style="font-size:15px"><b style="color:var(--ink)">${brl(p.price*.95)}</b> no Pix (5% off) · ou 6x de ${brl(p.price/6)} sem juros</div>
+ <div class="price"><div class="big">${brl(p.price)}</div></div>
+ <div class="pix" style="font-size:15px">ou 6x de ${brl(p.price/6)} sem juros</div>
  ${p.stock>0?`<div class="buy"><div class="qsel"><button data-pq="-1" aria-label="Menos">−</button><span id="pqv">1</span><button data-pq="1" aria-label="Mais">+</button></div>
  <button class="add" data-addq="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button>
  <button class="add" data-buy="${p.id}">Comprar agora</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
@@ -426,8 +426,8 @@ document.addEventListener('click',e=>{const t=e.target.closest('[data-pq],[data-
 function view(id){const p=byId(id),c=CATS.find(c=>c.id==p.cat);
  $('#mbox').innerHTML=`<button class="x" data-close aria-label="Fechar">×</button><div class="thumb">${art(p)}</div><div class="mtxt">
  <span class="brand">${esc(p.brand)} · ${esc(c.n)}</span><h3>${esc(p.name)}</h3><span class="pix">${p.ean?"EAN "+esc(p.ean):""}${p.ean&&p.sku?" · ":""}${p.sku?"SKU "+esc(p.sku):""}</span>
- <div class="price">${p.old?`<s>${brl(p.old)}</s>`:''}<b style="font-size:26px">${brl(p.price)}</b></div>
- <span class="pix">${brl(p.price*.95)} no Pix ou 6x de ${brl(p.price/6)} sem juros</span><p class="pix">${p.stock>0?'Em estoque':'Indisponível no momento'}</p>
+ <div class="price"><b style="font-size:26px">${brl(p.price)}</b></div>
+ <span class="pix">ou 6x de ${brl(p.price/6)} sem juros</span><p class="pix">${p.stock>0?'Em estoque':'Indisponível no momento'}</p>
  <button class="add" data-add="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button></div>`;
  $('#modal').classList.add('on');$('#shade').classList.add('on')}
 function closeAll(){$('#modal').classList.remove('on');openCart(false)}
