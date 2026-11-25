@@ -178,6 +178,20 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 .thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto}.thumbs button{flex:none;width:72px;height:72px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:2px;cursor:pointer}
 .thumbs button.on{border-color:var(--wine)}.thumbs img{width:100%;height:100%;object-fit:contain}
 @media(max-width:800px){.lay{grid-template-columns:1fr}.filters{display:none;position:static}.filters.open{display:block}#ftog{display:inline-flex;align-items:center}}
+.burger{display:none;width:44px;height:44px;border:0;background:none;padding:10px}.burger svg{width:24px;height:24px;stroke:var(--ink);stroke-width:2;fill:none;stroke-linecap:round}
+.quick{display:flex;gap:16px;white-space:nowrap}.quick a{color:var(--ink);text-decoration:none;font-size:14px;font-weight:600}.quick a:hover{color:var(--wine)}
+.mnav{position:fixed;top:0;left:0;bottom:0;width:min(320px,86%);background:var(--bg);z-index:50;transform:translateX(-100%);transition:transform .25s;display:flex;flex-direction:column}
+.mnav.on{transform:none}.mnav nav{display:flex;flex-direction:column;padding:8px 12px;overflow:auto}.mnav nav a{padding:13px 10px;color:var(--ink);text-decoration:none;font-weight:600;border-radius:10px}.mnav nav a:hover{background:var(--soft)}.mnav hr{border:0;border-top:1px solid var(--line);margin:8px 0;width:100%}
+.tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px}
+.tile{display:flex;flex-direction:column;align-items:center;gap:6px;text-decoration:none;color:var(--ink);text-align:center}
+.tile .ti{width:100%;aspect-ratio:1;border-radius:50%;background:var(--soft);overflow:hidden;display:block;border:2px solid var(--line);transition:border-color .2s}.tile:hover .ti{border-color:var(--wine)}
+.tile img{width:100%;height:100%;object-fit:contain;background:#fff;padding:12%}.tile b{font-size:15px}.tile small{color:var(--mute)}
+a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
+.faq details{border-bottom:1px solid var(--line);padding:4px 0}.faq summary{cursor:pointer;padding:12px 0;font-weight:600;list-style-position:outside}.faq p{margin:0 0 12px;color:var(--mute)}
+.bl-h{font-size:22px;margin:24px 0 8px;color:var(--wine)}.bl{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:6px 16px}.bl a{color:var(--ink);text-decoration:none;padding:4px 0}.bl a:hover{color:var(--wine)}.bl small{color:var(--mute)}
+.lay.nof{grid-template-columns:230px minmax(0,1fr)}
+@media(max-width:900px){.quick{display:none}}
+@media(max-width:700px){.burger{display:block}nav.cats{display:none}.tiles{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -188,8 +202,10 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 <body>
 <header>
   <div class="top">
+    <button class="burger" id="burger" aria-label="Abrir menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <a class="logo" href="#inicio" aria-label="Malta Cosméticos — início"><img src="assets/logo.webp" alt="Malta Cosméticos" width="90" height="60"></a>
     <form class="search" id="sf" role="search"><input id="q" type="search" placeholder="Buscar produtos, marcas…" aria-label="Buscar produtos"><button>Buscar</button></form>
+    <nav class="quick"><a href="#rastreio">Rastreie seu pedido</a><a href="#fale-conosco">Fale conosco</a></nav>
     <button class="cartbtn" id="openCart" aria-label="Abrir carrinho">Carrinho <b id="count">0</b></button>
   </div>
   <nav class="cats" id="nav"></nav>
@@ -223,6 +239,7 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 </footer>
 
 <div class="shade" id="shade"></div>
+<aside class="mnav" id="mnav" aria-label="Menu"><div class="dh"><img src="assets/logo.webp" alt="Malta Cosméticos" style="height:48px"><button class="x" data-close aria-label="Fechar">×</button></div><nav id="mlinks"></nav></aside>
 <aside class="drawer" id="drawer" aria-label="Carrinho">
   <div class="dh"><h3>Seu carrinho</h3><button class="x" data-close aria-label="Fechar">×</button></div>
   <div class="items" id="items"></div>
@@ -270,7 +287,7 @@ function art(p){if(p.img)return `<img src="${esc(p.img)}" alt="${esc(p.name)}" l
 function card(p){
  const off=p.old?Math.round((1-p.price/p.old)*100):0;
  return `<article class="card"><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</a>
- <div class="info"><span class="brand">${esc(p.brand)}</span><a class="name" href="#produto-${p.id}">${esc(p.name)}</a>
+ <div class="info">${p.brand?`<a class="brand" href="#marca-${bslug(p.brand)}">${esc(p.brand)}</a>`:'<span class="brand"></span>'}<a class="name" href="#produto-${p.id}">${esc(p.name)}</a>
  <div class="price"><b>${brl(p.price)}</b></div>
  <button class="add" data-add="${p.id}">Adicionar</button></div></article>`;
 }
@@ -292,14 +309,26 @@ const byId=id=>P.find(p=>p.id==id);
 
 function home(){
  return `<a class="banner" href="#cabelos"><img src="assets/banner-capilares.webp" alt="Confira a coleção Cuidados Capilares" width="2000" height="719"></a>
+ ${catTiles()}
  ${CATS.map(c=>`<section class="band"><div class="wrap"><div class="sec-h"><h2>${c.n}</h2><a href="#${c.id}">Ver todos →</a></div>
  <div class="row">${P.filter(p=>p.cat==c.id).slice(0,12).map(card).join('')}</div></div></section>`).join('')}
  `;
 }
+const bslug=b=>norm2(b).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 let baseItems=[],brandSel=new Set(),sortV='rel';
 const norm2=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 function brandList(q){const m=new Map();for(const p of baseItems)if(p.brand)m.set(p.brand,(m.get(p.brand)||0)+1);
  return [...m].filter(([b])=>!q||norm2(b).includes(norm2(q))).sort((a,b)=>a[0].localeCompare(b[0],'pt')).map(([b,n])=>`<label class="fb"><input type="checkbox" data-brand="${esc(b)}" ${brandSel.has(b)?'checked':''}> <span>${esc(b)}</span> <small>(${n})</small></label>`).join('')||'<p class="pix">Nenhuma marca.</p>'}
+function brandsPage(){const m=new Map();for(const p of P)if(p.brand)m.set(p.brand,(m.get(p.brand)||0)+1);
+ const g={};[...m].sort((a,b)=>a[0].localeCompare(b[0],'pt')).forEach(([b,n])=>{const k=/[a-z]/i.test(norm2(b)[0])?norm2(b)[0].toUpperCase():'#';(g[k]=g[k]||[]).push([b,n])});
+ return `<section class="band"><div class="wrap"><div class="sec-h"><h2>Todas as marcas</h2><a href="#inicio">← Início</a></div><p class="pix">${m.size} marcas</p>
+ ${Object.entries(g).map(([k,a])=>`<h3 class="bl-h">${k}</h3><div class="bl">${a.map(([b,n])=>`<a href="#marca-${bslug(b)}">${esc(b)} <small>(${n})</small></a>`).join('')}</div>`).join('')}</div></section>`}
+function catTiles(){return `<section class="band" style="padding-bottom:0"><div class="wrap"><div class="sec-h"><h2>Compre por categoria</h2></div><div class="tiles">${CATS.map(c=>{const p=P.find(x=>x.cat==c.id&&x.img);const n=P.filter(x=>x.cat==c.id).length;
+ return `<a class="tile" href="#${c.id}"><span class="ti">${p?`<img src="${esc(p.img)}" alt="" loading="lazy">`:''}</span><b>${c.n}</b><small>${n} produtos</small></a>`}).join('')}</div></div></section>`}
+const FAQ=[['Como funciona a devolução?','Você pode desistir da compra em até 7 dias após receber, com o produto lacrado. Produtos com defeito podem ser trocados em até 30 dias. Veja a <a href="#trocas-e-devolucoes">política de trocas</a>.'],
+['Qual o tempo de entrega?','Separamos o pedido em 1 a 2 dias úteis. Depois da postagem, o PAC leva de 6 a 9 dias úteis e o Sedex de 2 a 4 dias úteis. Acima de R$ 199 o frete é grátis.'],
+['Quais as formas de pagamento?','Pix, cartão de crédito em até 6x sem juros e boleto. Veja as <a href="#pagamento">formas de pagamento</a>.'],
+['Como falar com o atendimento?','Pelo WhatsApp <a href="https://wa.me/5545999658427">(45) 99965-8427</a> ou pelo e-mail atendimento@maltacosmeticos.com.br.']];
 function list(title,items){baseItems=items;brandSel=new Set();sortV='rel';
  const opts=[['rel','Relevância'],['desc','Maior preço'],['asc','Menor preço'],['off','Maior desconto'],['new','Lançamentos'],['az','A - Z'],['za','Z - A']];
  return `<section class="band"><div class="wrap"><div class="sec-h"><h2>${esc(title)}</h2><a href="#inicio">← Início</a></div>
@@ -436,6 +465,8 @@ function route(){
  const c=CATS.find(c=>c.id==h);
  if(c){current=P.filter(p=>p.cat==c.id);$('#app').innerHTML=list(c.n,current)}
  else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=pp.name+' | Malta Cosméticos'}
+ else if(h=='marcas'){$('#app').innerHTML=brandsPage()}
+ else if(/^marca-/.test(h)){const b=P.find(x=>x.brand&&bslug(x.brand)==h.slice(6))?.brand;current=b?P.filter(x=>x.brand==b):[];$('#app').innerHTML=list(b||'Marca não encontrada',current);if(b)document.querySelector('.lay').classList.add('nof')}
  else if(h=='checkout'){$('#app').innerHTML=checkout()}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
  else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
@@ -443,8 +474,9 @@ function route(){
  else $('#app').innerHTML=home();
  if(!/^produto-/.test(h))document.title='Malta Cosméticos | Dermocosméticos, maquiagem e cuidados capilares';paint(true);window.scrollTo(0,0);
 }
+const mHtml=()=>[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('')+'<hr><a href="#marcas">Todas as marcas</a><a href="#rastreio">Rastreie seu pedido</a><a href="#fale-conosco">Fale conosco</a><a href="#trocas-e-devolucoes">Trocas e devoluções</a>';
 const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('');
-$('#nav').innerHTML=navHtml;
+$('#nav').innerHTML=navHtml+'<a href="#marcas">Marcas</a>';$('#mlinks').innerHTML=mHtml();
 
 
 function renderCart(){
@@ -467,7 +499,7 @@ let pq=1;
 function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round((1-p.price/p.old)*100):0;
  const rel=P.filter(x=>x.cat==p.cat&&x.id!=p.id&&(!p.brand||x.brand==p.brand)).slice(0,8);
  const more=rel.length<8?P.filter(x=>x.cat==p.cat&&x.id!=p.id&&!rel.includes(x)).slice(0,8-rel.length):[];
- return `<section class="band"><div class="wrap"><nav class="crumb"><a href="#inicio">Início</a> › <a href="#${c.id}">${c.n}</a>${p.brand?` › ${esc(p.brand)}`:''}</nav>
+ return `<section class="band"><div class="wrap"><nav class="crumb"><a href="#inicio">Início</a> › <a href="#${c.id}">${c.n}</a>${p.brand?` › <a href="#marca-${bslug(p.brand)}">${esc(p.brand)}</a>`:''}</nav>
  <div class="pdp"><div><div class="gal-main" id="gm">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</div>
  ${(p.imgs||[]).length>1?`<div class="thumbs">${p.imgs.map((u,i)=>`<button data-gi="${esc(u)}" class="${i?'':'on'}" aria-label="Foto ${i+1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')}</div>`:''}</div>
  <div><span class="brand">${esc(p.brand||c.n)}</span><h1>${esc(p.name)}</h1>
@@ -479,6 +511,7 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  <div class="ship"><b>Frete grátis</b> em compras acima de R$ 199 · Envio em 1 a 2 dias úteis · Troca em até 7 dias</div>
  <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><p>${p.desc?esc(p.desc):'Descrição em breve.'}</p>
  <div class="specs">${[['Marca',p.brand],['Categoria',c.n],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b])=>`<div><span>${a}</span><b>${esc(b)}</b></div>`).join('')}</div>
+ <h3 style="font-size:22px;margin:28px 0 8px">Dúvidas frequentes</h3><div class="faq">${FAQ.map(([q,r])=>`<details><summary>${q}</summary><p>${r}</p></details>`).join('')}</div>
  </div></div>
  ${rel.length+more.length?`<div class="sec-h" style="margin-top:48px"><h2>Você também pode gostar</h2><a href="#${c.id}">Ver ${c.n} →</a></div><div class="row">${rel.concat(more).map(card).join('')}</div>`:''}
  </div></section>`}
@@ -494,7 +527,7 @@ function view(id){const p=byId(id),c=CATS.find(c=>c.id==p.cat);
  <span class="pix">ou 6x de ${brl(p.price/6)} sem juros</span><p class="pix">${p.stock>0?'Em estoque':'Indisponível no momento'}</p>
  <button class="add" data-add="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button></div>`;
  $('#modal').classList.add('on');$('#shade').classList.add('on')}
-function closeAll(){$('#modal').classList.remove('on');openCart(false)}
+function closeAll(){$('#mnav').classList.remove('on');$('#modal').classList.remove('on');openCart(false)}
 
 document.addEventListener('click',e=>{
  const t=e.target.closest('[data-add],[data-view],[data-q],[data-rm],[data-close],#openCart,#checkout');
@@ -527,6 +560,7 @@ document.addEventListener('change',e=>{const f=e.target;
  if(f.name=='pay'){co.pay=f.value;$('#app').innerHTML=checkout()}
  if(f.id=='inst'){co.inst=+f.value}});
 document.addEventListener('keydown',e=>{if(e.key=='Escape')closeAll()});
+document.addEventListener('click',e=>{if(e.target.closest('#burger')){$('#mnav').classList.add('on');$('#shade').classList.add('on')}else if(e.target.closest('#mlinks a'))closeAll()});
 document.addEventListener('change',e=>{const t=e.target;if(t.id=='sort'){sortV=t.value;applyF()}
  else if(t.dataset&&t.dataset.brand!==undefined){t.checked?brandSel.add(t.dataset.brand):brandSel.delete(t.dataset.brand);applyF()}});
 document.addEventListener('input',e=>{if(e.target.id=='bq')$('#blist').innerHTML=brandList(e.target.value)});
