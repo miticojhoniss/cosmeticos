@@ -3,7 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Malta Cosméticos</title>
+<title>Malta Cosméticos | Dermocosméticos, maquiagem e cuidados capilares</title>
+<meta name="description" content="Malta Cosméticos: mais de 2.500 produtos originais de dermocosméticos, proteção solar, maquiagem e cuidados capilares. Envio para todo o Brasil e parcelamento em até 6x sem juros.">
+<link rel="icon" type="image/png" href="assets/favicon.png"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta name="theme-color" content="#6b1d33">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Malta Cosméticos">
+<meta property="og:title" content="Malta Cosméticos"><meta property="og:description" content="Dermocosméticos, proteção solar, maquiagem e cuidados capilares de marcas originais, com envio para todo o Brasil.">
+<meta property="og:image" content="https://cosmeticos-fawn.vercel.app/assets/og.jpg"><meta property="og:url" content="https://cosmeticos-fawn.vercel.app/"><meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://cosmeticos-fawn.vercel.app/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -159,6 +166,18 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 .ft-bot{border-top:1px solid var(--line);margin-top:32px;padding-top:20px;font-size:13px}.ft-bot p{margin:0 0 6px}
 @media(max-width:1000px){.ft-top{grid-template-columns:1fr 1fr}.ft-cols{grid-column:1/-1;order:2}.ft-contact{order:1}}
 @media(max-width:640px){.ft-top,.ft-mid{grid-template-columns:1fr}.ft-cols{grid-template-columns:1fr 1fr}}
+.lay{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;align-items:start}
+.filters{border:1px solid var(--line);border-radius:14px;padding:16px;position:sticky;top:130px;background:var(--card)}
+.filters h3{margin:0 0 10px;font:700 15px Manrope,sans-serif}
+.filters input[type=search]{width:100%;min-height:40px;border:1px solid var(--line);border-radius:10px;padding:0 10px;font-size:16px;background:var(--bg);margin-bottom:8px}
+.blist{max-height:420px;overflow:auto;display:grid;gap:2px}
+.fb{display:flex;gap:8px;align-items:center;font-size:14px;padding:5px 2px;cursor:pointer}.fb input{width:18px;height:18px;accent-color:var(--wine)}.fb small{color:var(--mute)}
+#ftog{display:none}
+.gal-main{background:#fff;border-radius:20px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;position:relative}
+.gal-main img{width:100%;height:100%;object-fit:contain}.gal-main svg{width:80%;height:80%}
+.thumbs{display:flex;gap:8px;margin-top:10px;overflow-x:auto}.thumbs button{flex:none;width:72px;height:72px;border:2px solid var(--line);border-radius:12px;background:#fff;padding:2px;cursor:pointer}
+.thumbs button.on{border-color:var(--wine)}.thumbs img{width:100%;height:100%;object-fit:contain}
+@media(max-width:800px){.lay{grid-template-columns:1fr}.filters{display:none;position:static}.filters.open{display:block}#ftog{display:inline-flex;align-items:center}}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -277,12 +296,24 @@ function home(){
  <div class="row">${P.filter(p=>p.cat==c.id).slice(0,12).map(card).join('')}</div></div></section>`).join('')}
  `;
 }
-function list(title,items){
+let baseItems=[],brandSel=new Set(),sortV='rel';
+const norm2=t=>t.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+function brandList(q){const m=new Map();for(const p of baseItems)if(p.brand)m.set(p.brand,(m.get(p.brand)||0)+1);
+ return [...m].filter(([b])=>!q||norm2(b).includes(norm2(q))).sort((a,b)=>a[0].localeCompare(b[0],'pt')).map(([b,n])=>`<label class="fb"><input type="checkbox" data-brand="${esc(b)}" ${brandSel.has(b)?'checked':''}> <span>${esc(b)}</span> <small>(${n})</small></label>`).join('')||'<p class="pix">Nenhuma marca.</p>'}
+function list(title,items){baseItems=items;brandSel=new Set();sortV='rel';
+ const opts=[['rel','Relevância'],['desc','Maior preço'],['asc','Menor preço'],['off','Maior desconto'],['new','Lançamentos'],['az','A - Z'],['za','Z - A']];
  return `<section class="band"><div class="wrap"><div class="sec-h"><h2>${esc(title)}</h2><a href="#inicio">← Início</a></div>
- <div class="toolbar"><span>${items.length} produto${items.length==1?'':'s'}</span><select id="sort" aria-label="Ordenar">
- <option value="rel">Mais relevantes</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option><option value="off">Maior desconto</option></select></div>
- <div class="grid" id="g"></div><div style="text-align:center;margin-top:22px"><button class="back" id="more" hidden>Ver mais produtos</button></div></div></section>`;
+ <div class="toolbar"><span id="cnt">${items.length} produto${items.length==1?'':'s'}</span><button class="back" id="ftog">Filtrar por marca</button>
+ <select id="sort" aria-label="Ordenar">${opts.map(([v,n])=>`<option value="${v}">${n}</option>`).join('')}</select></div>
+ <div class="lay"><aside class="filters" id="filters"><h3>Marca</h3><input id="bq" type="search" placeholder="Buscar marca" aria-label="Buscar marca"><div class="blist" id="blist">${brandList('')}</div>
+ <button class="back" id="bclear" style="width:100%;margin-top:10px">Limpar filtros</button></aside>
+ <div><div class="grid" id="g"></div><div style="text-align:center;margin-top:22px"><button class="back" id="more" hidden>Ver mais produtos</button></div></div></div></div></section>`;
 }
+function applyF(){let a=baseItems.filter(p=>!brandSel.size||brandSel.has(p.brand));const v=sortV;a=[...a];
+ if(v=='asc')a.sort((x,y)=>x.price-y.price);if(v=='desc')a.sort((x,y)=>y.price-x.price);
+ if(v=='off')a.sort((x,y)=>(y.old?1-y.price/y.old:0)-(x.old?1-x.price/x.old:0));if(v=='new')a.sort((x,y)=>y.id-x.id);
+ if(v=='az')a.sort((x,y)=>x.name.localeCompare(y.name,'pt'));if(v=='za')a.sort((x,y)=>y.name.localeCompare(x.name,'pt'));
+ current=a;$('#cnt').textContent=`${a.length} produto${a.length==1?'':'s'}`;paint(true)}
 let current=[],shown=0;const PAGE=48;
 function paint(reset){const g=$('#g');if(!g)return;if(reset){shown=0;g.innerHTML=current.length?'':'<div class="empty">Nenhum produto encontrado. Tente outro termo.</div>'}
  const next=current.slice(shown,shown+PAGE);g.insertAdjacentHTML('beforeend',next.map(card).join(''));shown+=next.length;$('#more').hidden=shown>=current.length;
@@ -404,13 +435,13 @@ function route(){
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+h));
  const c=CATS.find(c=>c.id==h);
  if(c){current=P.filter(p=>p.cat==c.id);$('#app').innerHTML=list(c.n,current)}
- else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){$('#app').innerHTML=prodPage(byId(h.slice(8)))}
+ else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){const pp=byId(h.slice(8));$('#app').innerHTML=prodPage(pp);document.title=pp.name+' | Malta Cosméticos'}
  else if(h=='checkout'){$('#app').innerHTML=checkout()}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
  else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
  else if(h=='busca'){const t=norm($('#q').value.trim());current=P.filter(p=>norm(p.name+' '+p.brand+' '+p.cat).includes(t));$('#app').innerHTML=list(`Resultados para “${$('#q').value.trim()}”`,current)}
  else $('#app').innerHTML=home();
- paint(true);window.scrollTo(0,0);
+ if(!/^produto-/.test(h))document.title='Malta Cosméticos | Dermocosméticos, maquiagem e cuidados capilares';paint(true);window.scrollTo(0,0);
 }
 const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('');
 $('#nav').innerHTML=navHtml;
@@ -437,7 +468,8 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  const rel=P.filter(x=>x.cat==p.cat&&x.id!=p.id&&(!p.brand||x.brand==p.brand)).slice(0,8);
  const more=rel.length<8?P.filter(x=>x.cat==p.cat&&x.id!=p.id&&!rel.includes(x)).slice(0,8-rel.length):[];
  return `<section class="band"><div class="wrap"><nav class="crumb"><a href="#inicio">Início</a> › <a href="#${c.id}">${c.n}</a>${p.brand?` › ${esc(p.brand)}`:''}</nav>
- <div class="pdp"><div class="gal" style="position:relative">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</div>
+ <div class="pdp"><div><div class="gal-main" id="gm">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</div>
+ ${(p.imgs||[]).length>1?`<div class="thumbs">${p.imgs.map((u,i)=>`<button data-gi="${esc(u)}" class="${i?'':'on'}" aria-label="Foto ${i+1}"><img src="${esc(u)}" alt="" loading="lazy"></button>`).join('')}</div>`:''}</div>
  <div><span class="brand">${esc(p.brand||c.n)}</span><h1>${esc(p.name)}</h1>
  <div class="price"><div class="big">${brl(p.price)}</div></div>
  <div class="pix" style="font-size:15px">ou 6x de ${brl(p.price/6)} sem juros</div>
@@ -450,6 +482,7 @@ function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round
  </div></div>
  ${rel.length+more.length?`<div class="sec-h" style="margin-top:48px"><h2>Você também pode gostar</h2><a href="#${c.id}">Ver ${c.n} →</a></div><div class="row">${rel.concat(more).map(card).join('')}</div>`:''}
  </div></section>`}
+document.addEventListener('click',e=>{const g=e.target.closest('[data-gi]');if(g){const im=$('#gm img');if(im)im.src=g.dataset.gi;document.querySelectorAll('.thumbs button').forEach(b=>b.classList.toggle('on',b==g));return}});
 document.addEventListener('click',e=>{const t=e.target.closest('[data-pq],[data-addq],[data-buy]');if(!t)return;
  if(t.dataset.pq){pq=Math.max(1,Math.min(20,pq+(+t.dataset.pq)));$('#pqv').textContent=pq;return}
  const id=t.dataset.addq||t.dataset.buy;cart[id]=(cart[id]||0)+pq;save();renderCart();
@@ -494,15 +527,17 @@ document.addEventListener('change',e=>{const f=e.target;
  if(f.name=='pay'){co.pay=f.value;$('#app').innerHTML=checkout()}
  if(f.id=='inst'){co.inst=+f.value}});
 document.addEventListener('keydown',e=>{if(e.key=='Escape')closeAll()});
-document.addEventListener('change',e=>{if(e.target.id!='sort')return;const v=e.target.value,a=[...current];
- if(v=='asc')a.sort((x,y)=>x.price-y.price);if(v=='desc')a.sort((x,y)=>y.price-x.price);if(v=='off')a.sort((x,y)=>(y.old?1-y.price/y.old:0)-(x.old?1-x.price/x.old:0));
- current=a;paint(true)});
+document.addEventListener('change',e=>{const t=e.target;if(t.id=='sort'){sortV=t.value;applyF()}
+ else if(t.dataset&&t.dataset.brand!==undefined){t.checked?brandSel.add(t.dataset.brand):brandSel.delete(t.dataset.brand);applyF()}});
+document.addEventListener('input',e=>{if(e.target.id=='bq')$('#blist').innerHTML=brandList(e.target.value)});
+document.addEventListener('click',e=>{if(e.target.id=='bclear'){brandSel=new Set();$('#bq').value='';$('#blist').innerHTML=brandList('');applyF()}
+ if(e.target.id=='ftog')$('#filters').classList.toggle('open')});
 document.addEventListener('click',e=>{if(e.target.id=='more')paint(false)});
 $('#sf').addEventListener('submit',e=>{e.preventDefault();if(location.hash=='#busca')route();else location.hash='busca'});
 window.addEventListener('hashchange',route);
 const SB='https://wilralriqtfvklgyjlef.supabase.co',SBK='sb_publishable_fO0oCD_OQUSxmSgp8I8Blg_TUgO4vDA';
-async function loadSB(){let all=[];for(let o=0;;o+=1000){const r=await fetch(`${SB}/rest/v1/produtos?select=id,slug,categoria_id,marca,nome,descricao,preco,preco_antigo,estoque,imagem_url,sku,ean&ativo=eq.true&order=id&offset=${o}&limit=1000`,{headers:{apikey:SBK}});if(!r.ok)throw 0;const d=await r.json();all=all.concat(d);if(d.length<1000)break}
- return all.map(x=>({...prep({id:x.id,s:x.slug,c:x.categoria_id,b:x.marca,n:x.nome,p:+x.preco,o:+x.preco_antigo||0,k:x.sku,e:x.ean,q:x.estoque}),desc:x.descricao||'',img:x.imagem_url||''}))}
+async function loadSB(){let all=[];for(let o=0;;o+=1000){const r=await fetch(`${SB}/rest/v1/produtos?select=id,slug,categoria_id,marca,nome,descricao,preco,preco_antigo,estoque,imagem_url,imagens,sku,ean&ativo=eq.true&order=id&offset=${o}&limit=1000`,{headers:{apikey:SBK}});if(!r.ok)throw 0;const d=await r.json();all=all.concat(d);if(d.length<1000)break}
+ return all.map(x=>({...prep({id:x.id,s:x.slug,c:x.categoria_id,b:x.marca,n:x.nome,p:+x.preco,o:+x.preco_antigo||0,k:x.sku,e:x.ean,q:x.estoque}),desc:x.descricao||'',img:x.imagem_url||'',imgs:(x.imagens||[]).map(f=>`${SB}/storage/v1/object/public/produtos/${f}`)}))}
 loadSB().catch(()=>fetch('products.json').then(r=>r.json()).then(d=>d.map(prep))).then(d=>{P=d;for(const id in cart)if(!byId(id))delete cart[id];route();renderCart()}).catch(()=>{$('#app').innerHTML='<section class="band"><div class="wrap empty">Não foi possível carregar o catálogo.</div></section>'});
 }
 </script>
