@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Unibella Cosméticos</title>
+<title>Malta Cosméticos</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -152,7 +152,7 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 <div class="promo">Frete grátis acima de R$ 199 · 5% de desconto no Pix · Até 6x sem juros</div>
 <header>
   <div class="top">
-    <a class="logo" href="#inicio">Unibella<small>Cosméticos</small></a>
+    <a class="logo" href="#inicio">Malta<small>Cosméticos</small></a>
     <form class="search" id="sf" role="search"><input id="q" type="search" placeholder="Buscar produtos, marcas…" aria-label="Buscar produtos"><button>Buscar</button></form>
     <button class="cartbtn" id="openCart" aria-label="Abrir carrinho">Carrinho <b id="count">0</b></button>
   </div>
@@ -164,12 +164,12 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 <footer class="band">
   <div class="wrap">
     <div class="cols">
-      <div><div class="logo" style="color:inherit">Unibella</div><p style="font-size:14px;opacity:.85">Dermocosméticos, maquiagem e cuidados para todos os dias.</p></div>
+      <div><div class="logo" style="color:inherit">Malta</div><p style="font-size:14px;opacity:.85">Dermocosméticos, maquiagem e cuidados para todos os dias.</p></div>
       <div><h4>Categorias</h4><div id="fcats"></div></div>
       <div><h4>Ajuda</h4><a href="#trocas-e-devolucoes">Trocas e devoluções</a><a href="#reembolso">Reembolso</a><a href="#frete">Política de frete</a><a href="#pagamento">Formas de pagamento</a><a href="#fale-conosco">Fale conosco</a></div>
       <div><h4>Institucional</h4><a href="#quem-somos">Quem somos</a><a href="#privacidade">Política de privacidade</a><a href="#termos">Termos de uso</a><a href="#aviso-legal">Aviso legal</a></div>
     </div>
-    <div class="legal">© 2026 UNIBELLA COSMETICOS LTDA · CNPJ 50.466.324/0001-98 · Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589 · WhatsApp (62) 9294-0453<br>Fotos dos produtos em breve.</div>
+    <div class="legal">© 2026 Malta Cosméticos é uma marca de UNIBELLA COSMETICOS LTDA · CNPJ 50.466.324/0001-98 · Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589 · WhatsApp (62) 9294-0453</div>
   </div>
 </footer>
 
@@ -237,8 +237,8 @@ const scene=`<svg class="scene" viewBox="0 0 560 400" role="img" aria-label="Fra
 <g><rect x="480" y="200" width="34" height="60" rx="14" fill="#c0616f"/><rect x="474" y="256" width="46" height="64" rx="10" fill="#6b1d33"/></g>
 <circle cx="150" cy="80" r="6" fill="#fff" opacity=".8"/><circle cx="420" cy="120" r="4" fill="#fff" opacity=".8"/><circle cx="470" cy="70" r="7" fill="#fff" opacity=".6"/></svg>`;
 
-let cart={};try{cart=JSON.parse(localStorage.getItem('ub-cart')||'{}')}catch(e){}
-const save=()=>{try{localStorage.setItem('ub-cart',JSON.stringify(cart))}catch(e){}};
+let cart={};try{cart=JSON.parse(localStorage.getItem('malta-cart')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('malta-cart',JSON.stringify(cart))}catch(e){}};
 const byId=id=>P.find(p=>p.id==id);
 
 function home(){
@@ -260,13 +260,13 @@ let current=[],shown=0;const PAGE=48;
 function paint(reset){const g=$('#g');if(!g)return;if(reset){shown=0;g.innerHTML=current.length?'':'<div class="empty">Nenhum produto encontrado. Tente outro termo.</div>'}
  const next=current.slice(shown,shown+PAGE);g.insertAdjacentHTML('beforeend',next.map(card).join(''));shown+=next.length;$('#more').hidden=shown>=current.length;
  if(!$('#more').hidden)$('#more').textContent=`Ver mais produtos (${current.length-shown} restantes)`}
-const EMP={rs:'UNIBELLA COSMETICOS LTDA',fan:'Unibella Cosméticos',cnpj:'50.466.324/0001-98',
+const EMP={rs:'UNIBELLA COSMETICOS LTDA',fan:'Malta Cosméticos',cnpj:'50.466.324/0001-98',
  end:'Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589',
  wpp:'(62) 9294-0453',email:'e-mail de atendimento a definir',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
 const ID=`<div class="id"><b>${EMP.rs}</b> (${EMP.fan}) · CNPJ ${EMP.cnpj}<br>${EMP.end}<br>WhatsApp ${EMP.wpp} · ${EMP.email}</div>`;
 const CT=`<h3>Contato</h3><p>WhatsApp <b>${EMP.wpp}</b> · ${EMP.email}<br>Atendimento: ${EMP.hor}.</p>`;
 const POL={
-'quem-somos':['Quem somos',`<p>A Unibella Cosméticos é uma empresa goiana, com sede em Goianira/GO, que vende dermocosméticos, proteção solar, maquiagem, cuidados capilares e itens para mamãe e bebê.</p>
+'quem-somos':['Quem somos',`<p>A Malta Cosméticos é uma empresa goiana, com sede em Goianira/GO, que vende dermocosméticos, proteção solar, maquiagem, cuidados capilares e itens para mamãe e bebê.</p>
 <p>Atuamos no varejo e no atacado de cosméticos e perfumaria. Trabalhamos apenas com produtos originais, com nota fiscal e regularizados na Anvisa, e enviamos para todo o Brasil.</p>${CT}`],
 'fale-conosco':['Fale conosco',`<p>Fale com a gente para dúvidas sobre produtos, pedidos, entregas, trocas e pagamentos.</p>
 <ul><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li><li><b>Endereço:</b> ${EMP.end}</li></ul>
@@ -275,7 +275,7 @@ const POL={
 <h3>Pix</h3><p>Pagamento instantâneo com 5% de desconto sobre os produtos. O código vale por 30 minutos; sem pagamento nesse prazo, o pedido é cancelado automaticamente.</p>
 <h3>Cartão de crédito</h3><p>Visa, Mastercard, Elo, American Express e Hipercard, em até 6x sem juros. A aprovação depende da operadora do cartão e costuma sair em poucos minutos.</p>
 <h3>Boleto bancário</h3><p>Vence em 3 dias úteis. A compensação leva até 2 dias úteis depois do pagamento.</p>
-<h3>Segurança</h3><p>Os dados do cartão são digitados direto no ambiente do intermediador de pagamento e não ficam guardados pela Unibella.</p>
+<h3>Segurança</h3><p>Os dados do cartão são digitados direto no ambiente do intermediador de pagamento e não ficam guardados pela Malta.</p>
 <h3>Quando o pedido anda</h3><p>A separação começa só depois da confirmação do pagamento. A nota fiscal é emitida em nome de ${EMP.rs} e enviada por e-mail junto com o código de rastreio.</p>${CT}`],
 'frete':['Política de frete',`<div class="facts"><div><b>1 a 2 dias úteis</b>para separar o pedido</div><div><b>Grátis</b>acima de R$ 199</div><div><b>Todo o Brasil</b>pelos Correios</div></div>
 <h3>Modalidades</h3><ul><li><b>PAC:</b> R$ 19,90, entrega estimada de 6 a 9 dias úteis após a postagem.</li><li><b>Sedex:</b> R$ 34,90, entrega estimada de 2 a 4 dias úteis após a postagem.</li><li><b>Retirada em Goianira/GO:</b> grátis, pronta em até 1 dia útil após o pagamento.</li></ul>
@@ -306,11 +306,11 @@ const POL={
 <h3>Mudanças</h3><p>Esta política pode ser atualizada. A versão em vigor é sempre a publicada nesta página. Última atualização: 24/11/2026.</p>${CT}`],
 'termos':['Termos e condições de uso',`<h3>Concordância</h3><p>Ao navegar ou comprar no site da ${EMP.fan}, você concorda com estes termos e com as demais políticas da loja.</p>
 <h3>Quem pode comprar</h3><p>Pessoas maiores de 18 anos e capazes, ou menores acompanhados pelos responsáveis, e empresas com CNPJ ativo.</p>
-<h3>Conta do cliente</h3><p>Os dados informados devem ser verdadeiros. Você cuida da sua senha; a Unibella nunca pede senha por telefone, e-mail ou WhatsApp.</p>
+<h3>Conta do cliente</h3><p>Os dados informados devem ser verdadeiros. Você cuida da sua senha; a Malta nunca pede senha por telefone, e-mail ou WhatsApp.</p>
 <h3>Catálogo e preços</h3><p>Fotos são ilustrativas e as embalagens podem mudar por decisão do fabricante. Preços e estoque podem mudar sem aviso, mas o valor confirmado no checkout é o que vale para o seu pedido. Em caso de erro evidente de preço, avisamos e você escolhe entre seguir com o valor correto ou cancelar com reembolso integral.</p>
 <h3>Confirmação da compra</h3><p>O pedido é confirmado quando o pagamento é aprovado. Pedidos com indício de fraude podem ser cancelados, com devolução integral do valor.</p>
 <h3>Uso do site</h3><p>Não é permitido usar o site para fins ilícitos, coletar dados de forma automatizada ou tentar invadir os sistemas.</p>
-<h3>Propriedade intelectual</h3><p>A marca Unibella, os textos e o layout do site pertencem à empresa. As marcas dos produtos pertencem aos seus fabricantes.</p>
+<h3>Propriedade intelectual</h3><p>A marca Malta, os textos e o layout do site pertencem à empresa. As marcas dos produtos pertencem aos seus fabricantes.</p>
 <h3>Documentos complementares</h3><p>Fazem parte destes termos as políticas de <a href="#privacidade">privacidade</a>, <a href="#frete">frete</a>, <a href="#pagamento">pagamento</a>, <a href="#trocas-e-devolucoes">trocas e devoluções</a> e <a href="#reembolso">reembolso</a>.</p>
 <h3>Foro</h3><p>Vale a legislação brasileira. Fica eleito o foro do domicílio do consumidor, como garante o Código de Defesa do Consumidor.</p>${CT}`],
 'aviso-legal':['Aviso legal',`<h3>Quem é a loja</h3><ul><li><b>Razão social:</b> ${EMP.rs}</li><li><b>Nome fantasia:</b> ${EMP.fan}</li><li><b>CNPJ:</b> ${EMP.cnpj}</li><li><b>Endereço:</b> ${EMP.end}</li><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li></ul>
@@ -354,7 +354,7 @@ function checkout(){
   <label class="opt"><input type="radio" name="pay" value="boleto" ${co.pay=='boleto'?'checked':''}><div><b>Boleto</b><small>Vence em 3 dias úteis</small></div></label>
   ${co.pay=='cartao'?`<div class="fl" style="margin-top:6px"><label for="inst">Parcelas</label><select id="inst" style="width:100%;min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px;padding:0 10px">${inst}</select></div>
   <p class="pix">Os dados do cartão serão digitados na tela segura do meio de pagamento (Mercado Pago ou Stripe), conectado na versão completa.</p>`:''}`}
- if(co.step==3){const T=co.totals,code='00020126UNIBELLA'+co.order+'5204000053039865802BR6304TESTE';
+ if(co.step==3){const T=co.totals,code='00020126MALTA'+co.order+'5204000053039865802BR6304TESTE';
   body=`<h3>Pedido ${co.order} recebido!</h3><p>Enviamos a confirmação para <b>${esc(co.d.email||'')}</b>.</p>
   ${co.pay=='pix'?`<div class="pixbox">${qr(co.order)}<b>Pague ${brl(T.tot)} com Pix</b><div class="code">${code}</div><button class="back" data-co="copy" data-v="${code}">Copiar código Pix</button></div>`
    :co.pay=='boleto'?`<p>Boleto de <b>${brl(T.tot)}</b> gerado. Vencimento em 3 dias úteis.</p>`:`<p>Pagamento de <b>${brl(T.tot)}</b> em ${co.inst}x no cartão.</p>`}
@@ -448,7 +448,7 @@ document.addEventListener('click',e=>{
  const t=e.target.closest('[data-co]');if(!t)return;const a=t.dataset.co;
  if(a=='next'){if(!validate())return;co.step++;}
  if(a=='prev')co.step--;
- if(a=='place'){co.order='UB'+String(Date.now()).slice(-6);co.items=Object.entries(cart).map(([id,q])=>({p:byId(id),q}));co.totals=totals();cart={};save();renderCart();co.step=3}
+ if(a=='place'){co.order='MC'+String(Date.now()).slice(-6);co.items=Object.entries(cart).map(([id,q])=>({p:byId(id),q}));co.totals=totals();cart={};save();renderCart();co.step=3}
  if(a=='copy'){navigator.clipboard.writeText(t.dataset.v).then(()=>toast('Código copiado'),()=>toast('Não foi possível copiar'));return}
  if(a=='home'){location.hash='inicio';return}
  $('#app').innerHTML=checkout();window.scrollTo(0,0)});
