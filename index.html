@@ -505,7 +505,7 @@ document.addEventListener('submit',async e=>{if(e.target.id=='acc-form'){e.preve
  else if(m=='cadastro')r=await sb.auth.signUp({email,password:pw,options:{data:{nome:$('#a-nome').value.trim()},emailRedirectTo:location.origin+'/'}});
  else r=await sb.auth.updateUser({password:pw});
  btn.disabled=false;
- if(r.error){$('#aerr').textContent=ERR[r.error.message]||r.error.message;return}
+ if(r.error){$('#aerr').textContent=ERR[r.error.message]||(/is invalid/.test(r.error.message)?'Esse e-mail não foi aceito. Use um e-mail real que você consiga abrir.':/rate limit|security purposes/i.test(r.error.message)?'Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.':/Password should/.test(r.error.message)?'A senha precisa ter pelo menos 8 caracteres.':r.error.message);return}
  if(m=='cadastro'&&!r.data.session){$('#app').innerHTML=`<section class="band"><div class="authbox panel"><h2>Confirme seu e-mail</h2><p>Enviamos um link para <b>${esc(email)}</b>. Abra o e-mail e clique no link para ativar sua conta.</p><a class="cta" href="#inicio">Continuar comprando</a></div></section>`;return}
  toast(m=='nova-senha'?'Senha alterada':'Bem-vindo(a)!');location.hash='conta'});
 document.addEventListener('click',async e=>{const f=e.target.closest('[data-fav]');if(f){e.preventDefault();toggleFav(+f.dataset.fav);return}
