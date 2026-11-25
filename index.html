@@ -254,8 +254,13 @@ body.cko .ckstrip{display:block;background:var(--wine);color:#fff;text-align:cen
 .cs-t{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);margin-top:12px;padding-top:12px}.cs-t span{font-weight:700}.cs-t b{font-size:26px;color:var(--wine)}
 .ck-ok{text-align:center}.ck-ok .go{display:inline-flex;align-items:center;justify-content:center;padding:0 24px;text-decoration:none}.go.wa{background:#25D366;color:#fff;margin:8px 0}
 .ck-chk{width:56px;height:56px;border-radius:50%;background:#e7f6ee;color:#1f8a5b;display:grid;place-items:center;font-size:28px;margin:0 auto 10px}
-@media(max-width:900px){.ck-g{grid-template-columns:1fr}.cs{position:static;order:-1}.ck-st b{display:none}.ck-st .on b{display:inline}}
+@media(max-width:900px){.ck-g{grid-template-columns:1fr}.cs{position:static;order:-1}}
+@media(max-width:520px){.ck-st b{display:none}.ck-st .on b{display:inline}}
 @media(max-width:600px){body.cko .ckbar a:first-child{font-size:13px}.cks{font-size:12px}}
+.ck-acc{background:#fff;border:1.5px solid var(--wine);border-radius:18px;padding:18px 20px;margin-bottom:16px;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.ck-acc h3{margin:0 0 4px;font:800 15px Manrope,sans-serif;text-transform:uppercase;letter-spacing:.3px}.ck-acc p{margin:0;color:var(--mute);font-size:14px;max-width:46ch}
+.ck-ab{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.ck-ab .go,.ck-ab .back{min-height:44px;padding:0 20px}.ck-ab .rm{font-size:14px;padding:8px}
+.ck-acc.ck-in{border-width:1px;font-size:14px;padding:12px 18px}.ck-acc.ck-in a{color:var(--wine);font-weight:700}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -477,7 +482,7 @@ const POL={
 <h3>Leis aplicáveis</h3><p>Código de Defesa do Consumidor (Lei 8.078/1990), Decreto do Comércio Eletrônico (7.962/2013), Marco Civil da Internet (Lei 12.965/2014) e LGPD (Lei 13.709/2018).</p>${CT}`]};
 function polPage(k){const [t,b]=POL[k];return `<section class="band"><div class="pol"><h2>${t}</h2>${ID}${b}
 <nav class="pnav">${Object.entries(POL).filter(([x])=>x!=k).map(([x,[n]])=>`<a href="#${x}">${n}</a>`).join('')}</nav></div></section>`}
-const co={step:0,d:{},ship:'pac',pay:'pix',inst:1,order:null};
+const co={guest:false,step:0,d:{},ship:'pac',pay:'pix',inst:1,order:null};
 const SHIP={pac:{n:'PAC',dias:'6 a 9 dias úteis',v:19.9},sedex:{n:'Sedex',dias:'2 a 4 dias úteis',v:34.9}};
 const F=[['nome','Nome completo','full'],['email','E-mail',''],['tel','Celular',''],['cpf','CPF','']];
 const FE=[['cep','CEP',''],['rua','Endereço','full'],['num','Número',''],['comp','Complemento (opcional)',''],['bairro','Bairro',''],['cidade','Cidade',''],['uf','Estado (UF)','']];
@@ -504,7 +509,10 @@ function checkout(){
  const names=['Dados e entrega','Pagamento','Confirmação'];
  const st=`<p class="ck-e">Etapa ${co.step+1} de 3 · ${names[co.step]}</p><div class="ck-st">${names.map((n,i)=>`<div class="${i==co.step?'on':i<co.step?'ok':''}"><span>${i<co.step?'✓':i+1}</span><b>${n}</b></div>`).join('<i></i>')}</div>`;
  const t=totals();let body='';
- if(co.step==0)body=`<section class="ck-c"><header><span class="ck-n">1</span><div><h3>Seus dados</h3><p>Usamos nome, e-mail e celular só para confirmar o pedido.</p></div></header><div class="fields">
+ if(co.step==0)body=`${user?`<section class="ck-acc ck-in"><span>Comprando como <b>${esc(user.user_metadata?.nome||user.email)}</b> · ${esc(user.email)}</span><a href="#conta">Minha conta</a></section>`
+ :co.guest?'':`<section class="ck-acc"><div><h3>Como você quer continuar?</h3><p>Com uma conta você acompanha seus pedidos e compra mais rápido da próxima vez.</p></div>
+ <div class="ck-ab"><button class="go" data-ck="entrar">Entrar</button><button class="back" data-ck="cadastro">Criar conta</button><button class="rm" data-ck="guest">Continuar sem conta</button></div></section>`}
+ <section class="ck-c"><header><span class="ck-n">1</span><div><h3>Seus dados</h3><p>Usamos nome, e-mail e celular só para confirmar o pedido.</p></div></header><div class="fields">
   ${cfield('nome','Nome completo','Como está no seu documento','full')}${cfield('email','E-mail','voce@email.com')}${cfield('tel','Celular','(00) 00000-0000','phone','<span class="ddi">BR +55</span>')}</div></section>
  <section class="ck-c"><header><span class="ck-n">2</span><div><h3>Entrega</h3><p>O CEP mostra o prazo e o valor do frete antes do pagamento.</p></div></header><div class="fields">
   <div class="fl"><label for="f-cep">CEP</label><div class="cepw"><input id="f-cep" data-f="cep" placeholder="00000-000" inputmode="numeric" autocomplete="postal-code" value="${esc(co.d.cep||'')}"><button type="button" class="cepb" id="cepb">Buscar</button></div></div>
@@ -542,7 +550,7 @@ async function toggleFav(id){const on=!favs.has(id);on?favs.add(id):favs.delete(
 async function syncFavs(){if(!user||!sb)return;const local=[...favs].filter(id=>byId(id));
  if(local.length)await sb.from('favoritos').upsert(local.map(id=>({cliente_id:user.id,produto_id:id})),{ignoreDuplicates:true});
  const {data}=await sb.from('favoritos').select('produto_id');if(data){favs=new Set(data.map(x=>+x.produto_id));saveFavLocal();favUI()}}
-function setUser(u){user=u;$('#accn').textContent=u?((u.user_metadata?.nome||'').split(' ')[0]||'Minha conta'):'Entrar';if(u)syncFavs()}
+function setUser(u){user=u;if(location.hash=='#checkout'&&co.step==0&&!co.order){co.pref=false;setTimeout(()=>{$('#app').innerHTML=checkout();prefillCo()},0)}$('#accn').textContent=u?((u.user_metadata?.nome||'').split(' ')[0]||'Minha conta'):'Entrar';if(u)syncFavs()}
 function authPage(mode){const t={entrar:'Entrar',cadastro:'Criar conta','nova-senha':'Criar nova senha'}[mode];
  const f=mode=='nova-senha'?`<div class="fl"><label for="a-pw">Nova senha</label><input id="a-pw" type="password" minlength="8" autocomplete="new-password" required></div>`
  :`${mode=='cadastro'?'<div class="fl"><label for="a-nome">Nome completo</label><input id="a-nome" autocomplete="name" required></div>':''}
@@ -564,7 +572,7 @@ document.addEventListener('submit',async e=>{if(e.target.id=='acc-form'){e.preve
  btn.disabled=false;
  if(r.error){$('#aerr').textContent=ERR[r.error.message]||(/is invalid/.test(r.error.message)?'Esse e-mail não foi aceito. Use um e-mail real que você consiga abrir.':/rate limit|security purposes/i.test(r.error.message)?'Muitas tentativas seguidas. Aguarde alguns minutos e tente de novo.':/Password should/.test(r.error.message)?'A senha precisa ter pelo menos 8 caracteres.':r.error.message);return}
  if(m=='cadastro'&&!r.data.session){$('#app').innerHTML=`<section class="band"><div class="authbox panel"><h2>Confirme seu e-mail</h2><p>Enviamos um link para <b>${esc(email)}</b>. Abra o e-mail e clique no link para ativar sua conta.</p><a class="cta" href="#inicio">Continuar comprando</a></div></section>`;return}
- toast(m=='nova-senha'?'Senha alterada':'Bem-vindo(a)!');location.hash='conta'});
+ toast(m=='nova-senha'?'Senha alterada':'Bem-vindo(a)!');let nx='conta';try{nx=sessionStorage.getItem('malta-after')||'conta';sessionStorage.removeItem('malta-after')}catch(_){}co.pref=false;location.hash=nx});
 document.addEventListener('click',async e=>{const f=e.target.closest('[data-fav]');if(f){e.preventDefault();toggleFav(+f.dataset.fav);return}
  if(e.target.id=='forgot'){const email=$('#a-email').value.trim();if(!email){$('#aerr').textContent='Digite seu e-mail acima e clique de novo.';return}
   const r=await sb.auth.resetPasswordForEmail(email,{redirectTo:location.origin+'/'});$('#aerr').textContent=r.error?r.error.message:'Se o e-mail estiver cadastrado, enviamos um link para criar uma nova senha.'}
@@ -609,6 +617,12 @@ async function cepFill(el){const d=el.value.replace(/\D/g,'');if(d.length!=8||el
   hint.textContent='';const n=$(`#${pre}-num`);if(n&&!n.value)n.focus()}
  catch(e){hint.textContent='CEP não encontrado. Preencha o endereço manualmente.'}}
 document.addEventListener('input',e=>{if(e.target.id=='e-cep'||e.target.id=='f-cep')cepFill(e.target)});
+document.addEventListener('click',e=>{const k=e.target.closest('[data-ck]');if(!k)return;const v=k.dataset.ck;
+ if(v=='guest'){co.guest=true;$('#app').innerHTML=checkout();$('#f-nome')?.focus();return}
+ try{sessionStorage.setItem('malta-after','checkout')}catch(_){}location.hash=v});
+async function prefillCo(){if(!user||!sb||co.pref)return;co.pref=true;const [c,e]=await Promise.all([sb.from('clientes').select('nome,telefone,cpf').eq('id',user.id).maybeSingle(),sb.from('enderecos').select('*').eq('cliente_id',user.id).order('id').limit(1)]);
+ const d=co.d,a=e.data?.[0]||{},put=(k,v)=>{if(v&&!d[k])d[k]=v};put('nome',c.data?.nome||user.user_metadata?.nome);put('email',user.email);put('tel',c.data?.telefone);put('cpf',c.data?.cpf);
+ put('cep',a.cep);put('rua',a.rua);put('num',a.numero);put('comp',a.complemento);put('bairro',a.bairro);put('cidade',a.cidade);put('uf',a.uf);if(location.hash=='#checkout'&&co.step==0)$('#app').innerHTML=checkout()}
 document.addEventListener('click',e=>{if(e.target.id=='cepb'){const c=$('#f-cep');c.dataset.last='';cepFill(c)}});
 const SYN={hidratante:['hidrata','creme'],protetor:['fps','solar'],shampoo:['xampu'],rimel:['mascara de cilios','cilios'],batom:['labial','lip'],base:['foundation'],sabonete:['limpeza','gel de limpeza'],serum:['serum','sérum']};
 const sNorm=x=>norm(x).replace(/['’´`]/g,'').replace(/[-/]/g,' ');
@@ -640,7 +654,7 @@ document.addEventListener('click',e=>{if(e.target.closest('#qx')){$('#q').value=
  if(!e.target.closest('#sf'))$('#sugg').hidden=true});
 document.addEventListener('focusin',e=>{if(e.target.id=='q'&&$('#q').value.trim().length>1)renderSugg()});
 function route(){
- const h=location.hash.slice(1)||'inicio';document.body.classList.toggle('cko',h=='checkout');
+ const h=location.hash.slice(1)||'inicio';document.body.classList.toggle('cko',h=='checkout');if(h=='checkout')prefillCo();
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+h));
  const c=CATS.find(c=>c.id==h);
  if(c){current=P.filter(p=>p.cat==c.id);$('#app').innerHTML=list(c.n,current)}
