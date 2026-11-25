@@ -543,6 +543,15 @@ async function saveAccount(){const v=id=>$(id).value.trim(),btn=$('#acc-form .go
  btn.disabled=false;const err=r1.error||r2.error;$('#cerr').textContent=err?'Não foi possível salvar: '+err.message:'';if(!err)toast('Dados salvos')}
 if(sb){sb.auth.getSession().then(({data})=>{setUser(data.session?.user||null);if(location.search.includes('code=')){history.replaceState(null,'',location.pathname+'#conta');route()}});
  sb.auth.onAuthStateChange((ev,ses)=>{setUser(ses?.user||null);if(ev=='PASSWORD_RECOVERY')location.hash='nova-senha'})}
+async function cepFill(el){const d=el.value.replace(/\D/g,'');if(d.length!=8||el.dataset.last==d)return;el.dataset.last=d;
+ const pre=el.id=='e-cep'?'e':'f';const box=el.closest('.fl');let hint=box.querySelector('.hint');if(!hint){hint=document.createElement('small');hint.className='hint pix';box.appendChild(hint)}
+ hint.textContent='Buscando endereço…';
+ try{const j=await fetch(`https://viacep.com.br/ws/${d}/json/`).then(r=>r.json());if(j.erro)throw 0;
+  const put=(k,v)=>{const x=$(`#${pre}-${k}`);if(x&&v){x.value=v;x.classList.remove('bad');if(pre=='f')co.d[k]=v}};
+  put('rua',j.logradouro);put('bairro',j.bairro);put('cidade',j.localidade);put('uf',j.uf);if(j.complemento)put('comp',j.complemento);
+  hint.textContent='';const n=$(`#${pre}-num`);if(n&&!n.value)n.focus()}
+ catch(e){hint.textContent='CEP não encontrado. Preencha o endereço manualmente.'}}
+document.addEventListener('input',e=>{if(e.target.id=='e-cep'||e.target.id=='f-cep')cepFill(e.target)});
 function route(){
  const h=location.hash.slice(1)||'inicio';
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+h));
