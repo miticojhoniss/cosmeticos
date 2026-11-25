@@ -205,6 +205,10 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
 @media(max-width:800px){.acc{grid-template-columns:1fr}}
 @media(max-width:600px){#accn{display:none}.ord{grid-template-columns:1fr 1fr}}
 .desc{max-width:70ch}.desc h4{font:700 16px Manrope,sans-serif;color:var(--wine);margin:20px 0 6px}.desc p{margin:0 0 10px}.desc ul,.desc ol{margin:0 0 12px;padding-left:20px}.desc li{margin:4px 0}
+.pays{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.pays img{width:56px;height:36px;display:block;border-radius:6px;box-shadow:0 0 0 1px var(--line)}
+.pay{height:36px;display:inline-flex;align-items:center;gap:6px;padding:0 10px;border-radius:6px;background:#fff;box-shadow:0 0 0 1px var(--line);font-weight:700;font-size:14px}
+.pay.pix{color:#32BCAD;text-transform:lowercase;letter-spacing:.3px}.pay.pix i{width:18px;height:18px;background:#32BCAD;-webkit-mask:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/pix.svg) center/contain no-repeat;mask:url(https://cdn.jsdelivr.net/npm/simple-icons@13.21.0/icons/pix.svg) center/contain no-repeat}
+.pay.bol{color:#222}.pay.bol svg{width:22px;height:16px;stroke:#222;stroke-width:1.2}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -246,7 +250,7 @@ a.brand{text-decoration:none}a.brand:hover{color:var(--wine)}
     </div>
     <div class="ft-mid">
       <div><h3>Loja segura</h3><div class="chips"><span>Site protegido (HTTPS)</span><span>Pagamento por intermediador seguro</span></div></div>
-      <div><h3>Formas de pagamento</h3><div class="chips"><span>Pix</span><span>Visa</span><span>Mastercard</span><span>Elo</span><span>American Express</span><span>Hipercard</span><span>Boleto</span></div></div>
+      <div><h3>Formas de pagamento</h3><div class="pays"><span class="pay pix" title="Pix"><i aria-hidden="true"></i>pix</span><img src="https://cdn.jsdelivr.net/npm/payment-icons@1.2.1/min/flat/visa.svg" alt="Visa" title="Visa" width="56" height="36" loading="lazy"><img src="https://cdn.jsdelivr.net/npm/payment-icons@1.2.1/min/flat/mastercard.svg" alt="Mastercard" title="Mastercard" width="56" height="36" loading="lazy"><img src="https://cdn.jsdelivr.net/npm/payment-icons@1.2.1/min/flat/elo.svg" alt="Elo" title="Elo" width="56" height="36" loading="lazy"><img src="https://cdn.jsdelivr.net/npm/payment-icons@1.2.1/min/flat/amex.svg" alt="American Express" title="American Express" width="56" height="36" loading="lazy"><img src="https://cdn.jsdelivr.net/npm/payment-icons@1.2.1/min/flat/hipercard.svg" alt="Hipercard" title="Hipercard" width="56" height="36" loading="lazy"><span class="pay bol" title="Boleto"><svg viewBox="0 0 24 16" aria-hidden="true"><path d="M2 2v12M4.5 2v12M6 2v12M9 2v12M11 2v12M13.5 2v12M15 2v12M18 2v12M20 2v12M22 2v12"/></svg>Boleto</span></div></div>
     </div>
     <div class="ft-bot"><p>© 2026 Todos os direitos reservados · Malta Cosméticos · 67.600.045 PRISCILA DE PAULA PEREIRA MALTA · CNPJ 67.600.045/0001-78</p>
       <p>Os preços e condições dos produtos estão sujeitos a alteração sem aviso prévio. Fotos meramente ilustrativas.</p></div>
