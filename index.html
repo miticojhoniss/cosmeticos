@@ -261,6 +261,13 @@ body.cko .ckstrip{display:block;background:var(--wine);color:#fff;text-align:cen
 .ck-acc h3{margin:0 0 4px;font:800 15px Manrope,sans-serif;text-transform:uppercase;letter-spacing:.3px}.ck-acc p{margin:0;color:var(--mute);font-size:14px;max-width:46ch}
 .ck-ab{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.ck-ab .go,.ck-ab .back{min-height:44px;padding:0 20px}.ck-ab .rm{font-size:14px;padding:8px}
 .ck-acc.ck-in{border-width:1px;font-size:14px;padding:12px 18px}.ck-acc.ck-in a{color:var(--wine);font-weight:700}
+.hicon.trk span{font-size:13px}@media(max-width:600px){.top{gap:6px}.logo img{height:48px}.cartbtn{padding:0 10px;font-size:13px;gap:5px}.hicon{padding:0 3px}}@media(min-width:901px){.hicon.trk{display:none}}
+@media(max-width:600px){.hicon.trk{flex-direction:column;gap:0;font-size:11px;min-height:44px;justify-content:center}.hicon.trk span{font-size:11px;line-height:1}}
+.mnav nav a.mtrk{background:var(--wine);color:#fff;margin:4px 0}.mnav nav a.mtrk:hover{background:var(--wine)}
+.trk-r{margin-top:16px}.trk-h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:12px}.trk-h span{color:var(--mute);font-size:14px}
+.tl{list-style:none;margin:0 0 12px;padding:0;display:grid;gap:0}.tl li{position:relative;padding:0 0 18px 30px;color:var(--mute)}.tl li span{position:absolute;left:0;top:2px;width:18px;height:18px;border-radius:50%;border:2px solid var(--line);background:#fff}
+.tl li:not(:last-child)::before{content:"";position:absolute;left:8px;top:20px;bottom:0;width:2px;background:var(--line)}.tl li.ok{color:var(--ink)}.tl li.ok span{background:var(--wine);border-color:var(--wine)}.tl li.ok:not(:last-child)::before{background:var(--wine)}.tl li.now{font-weight:700}
+.trk-i{margin:0;padding-left:18px;font-size:14px}
 .note{font-size:13px;color:var(--mute);margin-top:14px}
 @media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
@@ -275,6 +282,7 @@ body.cko .ckstrip{display:block;background:var(--wine);color:#fff;text-align:cen
     <button class="burger" id="burger" aria-label="Abrir menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
     <a class="logo" href="#inicio" aria-label="Malta Cosméticos — início"><img src="assets/logo.webp" alt="Malta Cosméticos" width="90" height="60"></a>
     <form class="search" id="sf" role="search" autocomplete="off"><svg class="mag" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="q" type="search" placeholder="O que você procura? Produto, marca ou tipo" aria-label="Buscar produtos" aria-autocomplete="list" aria-controls="sugg" aria-expanded="false"><button type="button" class="qx" id="qx" aria-label="Limpar busca" hidden>×</button><button class="qgo" aria-label="Buscar"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg></button><div class="sugg" id="sugg" role="listbox" hidden></div></form>
+    <a class="hicon trk" href="#rastreio" aria-label="Rastrear pedido"><svg viewBox="0 0 24 24"><path d="M3 6h11v9H3zM14 9h4l3 3v3h-7z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span>Rastrear</span></a>
     <a class="hicon" href="#favoritos" aria-label="Favoritos"><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-9-9a4.8 4.8 0 0 1 9-3 4.8 4.8 0 0 1 9 3c-2 4.6-9 9-9 9Z"/></svg><b id="fcount" hidden>0</b></a>
     <a class="hicon" href="#conta" aria-label="Minha conta" id="acc"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg><span id="accn">Entrar</span></a>
     <nav class="quick"><a href="#rastreio">Rastreie seu pedido</a><a href="#fale-conosco">Fale conosco</a></nav>
@@ -653,6 +661,21 @@ document.addEventListener('click',e=>{if(e.target.closest('#qx')){$('#q').value=
  if(e.target.closest('#sugg a')){$('#sugg').hidden=true;if(e.target.closest('.sall')&&location.hash=='#busca')route();return}
  if(!e.target.closest('#sf'))$('#sugg').hidden=true});
 document.addEventListener('focusin',e=>{if(e.target.id=='q'&&$('#q').value.trim().length>1)renderSugg()});
+const TST=['aguardando_pagamento','pago','enviado','entregue'],TSN={aguardando_pagamento:'Pedido recebido',pago:'Pagamento aprovado',enviado:'Enviado',entregue:'Entregue'};
+function trackPage(){return `<section class="band"><div class="authbox" style="max-width:560px"><h2>Rastrear pedido</h2>
+ <p class="pix" style="text-align:center;margin-top:-6px">Digite o número do pedido e o e-mail usado na compra.</p>
+ <form id="trkf" class="panel" style="display:grid;gap:12px"><div class="fl"><label for="t-cod">Número do pedido</label><input id="t-cod" placeholder="Ex.: MC12345678" autocapitalize="characters" required></div>
+ <div class="fl"><label for="t-email">E-mail</label><input id="t-email" type="email" autocomplete="email" value="${esc(user?.email||'')}" required></div><div class="err" id="terr"></div><button class="go">Rastrear</button></form>
+ <div id="tres"></div><p class="pix" style="text-align:center;margin-top:16px">Não encontrou? Fale com a gente no <a href="https://wa.me/5545999658427" target="_blank" rel="noopener">WhatsApp (45) 99965-8427</a>.</p></div></section>`}
+document.addEventListener('submit',async e=>{if(e.target.id!='trkf')return;e.preventDefault();const b=e.target.querySelector('.go');b.disabled=true;b.textContent='Buscando…';$('#terr').textContent='';$('#tres').innerHTML='';
+ try{const r=await fetch(SB+'/functions/v1/rastrear-pedido',{method:'POST',headers:{'Content-Type':'application/json',apikey:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpbHJhbHJpcXRmdmtsZ3lqbGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NTk3MTIsImV4cCI6MjExMTEzNTcxMn0.sN9ZlYrlAjfWvF3odWWqbOtZl2EkvPaqVOSo1tnT7Nw',Authorization:'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpbHJhbHJpcXRmdmtsZ3lqbGVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTU1NTk3MTIsImV4cCI6MjExMTEzNTcxMn0.sN9ZlYrlAjfWvF3odWWqbOtZl2EkvPaqVOSo1tnT7Nw'},body:JSON.stringify({codigo:$('#t-cod').value,email:$('#t-email').value})});
+  const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(j.erro||'Não foi possível consultar agora.');
+  const cancel=j.status=='cancelado',idx=TST.indexOf(j.status);
+  $('#tres').innerHTML=`<div class="panel trk-r"><div class="trk-h"><b>Pedido ${esc(j.codigo)}</b><span>${new Date(j.criado_em).toLocaleDateString('pt-BR')} · ${brl(+j.total)}</span></div>
+  ${cancel?'<p class="empty">Este pedido foi cancelado.</p>':`<ol class="tl">${TST.map((k,i)=>`<li class="${i<=idx?'ok':''}${i==idx?' now':''}"><span></span>${TSN[k]}</li>`).join('')}</ol>`}
+  ${j.rastreio?`<p>Código de rastreio: <b>${esc(j.rastreio)}</b></p><a class="go" style="display:inline-flex;align-items:center;padding:0 20px;text-decoration:none" target="_blank" rel="noopener" href="https://rastreamento.correios.com.br/app/index.php?objeto=${encodeURIComponent(j.rastreio)}">Ver nos Correios</a>`:(idx>=2?'':'<p class="pix">O código de rastreio aparece aqui assim que o pedido for postado.</p>')}
+  <h4 style="margin:16px 0 6px">Itens</h4><ul class="trk-i">${j.itens.map(i=>`<li>${i.quantidade}x ${esc(i.nome)}</li>`).join('')}</ul></div>`}
+ catch(err){$('#terr').textContent=err.message}b.disabled=false;b.textContent='Rastrear'});
 function route(){
  const h=location.hash.slice(1)||'inicio';document.body.classList.toggle('cko',h=='checkout');if(h=='checkout')prefillCo();
  document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+h));
@@ -665,13 +688,14 @@ function route(){
  else if(h=='conta'){if(!user){location.hash='entrar';return}$('#app').innerHTML=accountPage();loadAccount()}
  else if(h=='favoritos'){current=P.filter(p=>favs.has(p.id));$('#app').innerHTML=list('Meus favoritos',current);if(!current.length)setTimeout(()=>{$('#g').innerHTML='<div class="empty">Você ainda não favoritou nenhum produto. Toque no coração de um produto para guardar aqui.</div>'},0)}
  else if(h=='checkout'){$('#app').innerHTML=checkout()}
+ else if(h=='rastreio'){$('#app').innerHTML=trackPage();document.title='Rastrear pedido | Malta Cosméticos'}
  else if(POL[h]){$('#app').innerHTML=polPage(h)}
  else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
  else if(h=='busca'){const q=$('#q').value.trim();current=searchP(q);$('#app').innerHTML=list(q?`Resultados para “${q}”`:'Busca',current);$('#sugg').hidden=true}
  else $('#app').innerHTML=home();
  if(!/^produto-/.test(h))document.title='Malta Cosméticos | Dermocosméticos, maquiagem e cuidados capilares';paint(true);window.scrollTo(0,0);
 }
-const mHtml=()=>[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('')+'<hr><a href="#marcas">Todas as marcas</a><a href="#rastreio">Rastreie seu pedido</a><a href="#fale-conosco">Fale conosco</a><a href="#trocas-e-devolucoes">Trocas e devoluções</a>';
+const mHtml=()=>'<a href="#rastreio" class="mtrk">Rastrear meu pedido</a><hr>'+[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('')+'<hr><a href="#marcas">Todas as marcas</a><a href="#fale-conosco">Fale conosco</a><a href="#trocas-e-devolucoes">Trocas e devoluções</a>';
 const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('');
 $('#nav').innerHTML=navHtml+'<a href="#marcas">Marcas</a>';$('#mlinks').innerHTML=mHtml();
 
