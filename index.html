@@ -262,14 +262,14 @@ function paint(reset){const g=$('#g');if(!g)return;if(reset){shown=0;g.innerHTML
  if(!$('#more').hidden)$('#more').textContent=`Ver mais produtos (${current.length-shown} restantes)`}
 const EMP={rs:'67.600.045 PRISCILA DE PAULA PEREIRA MALTA',fan:'Malta Cosméticos',cnpj:'67.600.045/0001-78',
  end:'Centro, Foz do Iguaçu/PR, CEP 85851-400',
- wpp:'(45) 99965-8427',email:'e-mail de atendimento a definir',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
+ wpp:'(45) 99965-8427',email:'atendimento@maltacosmeticos.com.br',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
 const ID=`<div class="id"><b>${EMP.rs}</b> (${EMP.fan}) · CNPJ ${EMP.cnpj}<br>${EMP.end}<br>WhatsApp ${EMP.wpp} · ${EMP.email}</div>`;
 const CT=`<h3>Contato</h3><p>WhatsApp <a href="https://wa.me/5545999658427"><b>${EMP.wpp}</b></a> · ${EMP.email}<br>Atendimento: ${EMP.hor}.</p>`;
 const POL={
 'quem-somos':['Quem somos',`<p>A Malta Cosméticos é uma loja de Foz do Iguaçu/PR que vende dermocosméticos, proteção solar, maquiagem, cuidados capilares e itens para mamãe e bebê.</p>
 <p>Atuamos no varejo de cosméticos, perfumaria e higiene pessoal. Trabalhamos apenas com produtos originais, com nota fiscal e regularizados na Anvisa, e enviamos para todo o Brasil.</p>${CT}`],
 'fale-conosco':['Fale conosco',`<p>Fale com a gente para dúvidas sobre produtos, pedidos, entregas, trocas e pagamentos.</p>
-<ul><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li><li><b>Endereço:</b> ${EMP.end}</li></ul>
+<ul><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> <a href="mailto:${EMP.email}">${EMP.email}</a></li><li><b>Horário:</b> ${EMP.hor}</li><li><b>Endereço:</b> ${EMP.end}</li></ul>
 <p>Para agilizar, tenha em mãos o número do pedido. Respondemos em até 1 dia útil.</p>`],
 'pagamento':['Formas de pagamento',`<div class="facts"><div><b>5% off</b>no Pix</div><div><b>6x</b>sem juros no cartão</div><div><b>3 dias úteis</b>vencimento do boleto</div></div>
 <h3>Pix</h3><p>Pagamento instantâneo com 5% de desconto sobre os produtos. O código vale por 30 minutos; sem pagamento nesse prazo, o pedido é cancelado automaticamente.</p>
@@ -313,7 +313,7 @@ const POL={
 <h3>Propriedade intelectual</h3><p>A marca Malta, os textos e o layout do site pertencem à empresa. As marcas dos produtos pertencem aos seus fabricantes.</p>
 <h3>Documentos complementares</h3><p>Fazem parte destes termos as políticas de <a href="#privacidade">privacidade</a>, <a href="#frete">frete</a>, <a href="#pagamento">pagamento</a>, <a href="#trocas-e-devolucoes">trocas e devoluções</a> e <a href="#reembolso">reembolso</a>.</p>
 <h3>Foro</h3><p>Vale a legislação brasileira. Fica eleito o foro do domicílio do consumidor, como garante o Código de Defesa do Consumidor.</p>${CT}`],
-'aviso-legal':['Aviso legal',`<h3>Quem é a loja</h3><ul><li><b>Razão social:</b> ${EMP.rs}</li><li><b>Nome fantasia:</b> ${EMP.fan}</li><li><b>CNPJ:</b> ${EMP.cnpj}</li><li><b>Endereço:</b> ${EMP.end}</li><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li></ul>
+'aviso-legal':['Aviso legal',`<h3>Quem é a loja</h3><ul><li><b>Razão social:</b> ${EMP.rs}</li><li><b>Nome fantasia:</b> ${EMP.fan}</li><li><b>CNPJ:</b> ${EMP.cnpj}</li><li><b>Endereço:</b> ${EMP.end}</li><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> <a href="mailto:${EMP.email}">${EMP.email}</a></li><li><b>Horário:</b> ${EMP.hor}</li></ul>
 <h3>O que vendemos</h3><p>Cosméticos, produtos de perfumaria e de higiene pessoal, no varejo.</p>
 <h3>Produtos e preços</h3><p>Trabalhamos com produtos originais, regularizados na Anvisa, com nota fiscal. Descrições e fotos seguem as informações dos fabricantes.</p>
 <h3>Uso dos produtos</h3><p>As informações do site não substituem a orientação de médico ou dermatologista. Leia o rótulo, faça o teste de sensibilidade e suspenda o uso se houver irritação.</p>
