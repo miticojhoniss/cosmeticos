@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unibella Cosméticos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* VOICE: elegante, leve, de vitrine de perfumaria
+   IDEA: balcão de perfumaria — prateleiras com frascos iluminados
+   PICTURE: cena de frascos em uma prateleira rosada, com luz suave
+   COLOUR and TYPE: rosa-pó dominante, vinho de apoio, coral de destaque; Marcellus + Manrope
+   LAYOUT: loja completa — topo, busca, menu, destaque, vitrines por categoria, carrinho lateral, rodapé */
+:root{color-scheme:light dark;
+--bg:light-dark(#fff,#1a0f13);--soft:light-dark(#f8e7e2,#2a1820);--rose:light-dark(#efcfc6,#3b2029);
+--ink:light-dark(#2b1118,#f6e9ec);--mute:light-dark(#7a5a62,#c8a9b1);--wine:light-dark(#6b1d33,#e7a2b3);
+--acc:light-dark(#e2553f,#ff8a73);--line:light-dark(#ecd9d5,#3a2630);--card:light-dark(#fff,#221419)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Manrope,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.logo{font-family:Marcellus,Georgia,serif;font-weight:400}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.promo{background:var(--wine);color:var(--bg);text-align:center;font-size:14px;padding:8px 16px}
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top{display:flex;align-items:center;gap:20px;padding:14px max(5vw,16px);max-width:1340px;margin:0 auto}
+.logo{font-size:28px;color:var(--wine);text-decoration:none;white-space:nowrap}
+.logo small{font:600 11px Manrope,sans-serif;display:block;color:var(--mute);margin-top:-4px}
+.search{flex:1;display:flex;background:var(--soft);border-radius:999px;padding:4px 4px 4px 18px}
+.search input{flex:1;border:0;background:none;font-size:16px;min-height:40px;outline:none}
+.search button{border:0;background:var(--wine);color:var(--bg);border-radius:999px;padding:0 18px;font-weight:600}
+.cartbtn{position:relative;border:1px solid var(--line);background:var(--card);border-radius:999px;min-height:44px;padding:0 16px;font-weight:600;display:flex;gap:8px;align-items:center}
+.cartbtn b{background:var(--acc);color:#fff;border-radius:999px;font-size:12px;min-width:22px;height:22px;display:grid;place-items:center}
+nav.cats{display:flex;gap:4px;overflow-x:auto;padding:0 max(5vw,16px) 8px;max-width:1340px;margin:0 auto;scrollbar-width:none}
+nav.cats a{flex:none;padding:10px 14px;border-radius:999px;color:var(--ink);text-decoration:none;font-weight:600;font-size:15px}
+nav.cats a:hover,nav.cats a.on{background:var(--rose)}
+.hero{background:var(--rose);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);align-items:center;gap:24px;padding-block:clamp(24px,4vw,48px)}
+.hero h1{font-size:clamp(34px,5vw,52px);line-height:1.05;margin:0 0 14px;text-wrap:balance;color:var(--wine)}
+.hero p{margin:0 0 22px;max-width:46ch;color:var(--ink)}
+.cta{display:inline-flex;align-items:center;min-height:48px;padding:0 26px;border-radius:999px;background:var(--wine);color:var(--bg);text-decoration:none;font-weight:700}
+.scene{width:100%;height:auto;display:block;max-height:420px}
+.perks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;border-bottom:1px solid var(--line);padding-block:20px}
+.perks div{font-size:14px;color:var(--mute)}.perks b{display:block;color:var(--ink);font-size:15px}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:18px}
+.sec-h h2{font-size:32px;margin:0;line-height:1.1}
+.sec-h a{color:var(--wine);font-weight:700;text-decoration:none;white-space:nowrap}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px}
+.row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,1fr);gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
+.row>*{scroll-snap-align:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,box-shadow .2s}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px -14px rgba(107,29,51,.45)}
+.thumb{background:var(--soft);aspect-ratio:1;display:block;border:0;padding:0;width:100%;position:relative}
+.thumb svg{width:100%;height:100%;display:block}
+.tag{position:absolute;top:10px;left:10px;background:var(--acc);color:#fff;font-size:12px;font-weight:700;border-radius:999px;padding:3px 9px}
+.info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+.brand{font-size:13px;color:var(--mute);font-weight:600}
+.name{font-size:15px;font-weight:600;line-height:1.3;color:var(--ink);text-decoration:none}.name:hover{color:var(--wine)}
+.crumb{font-size:14px;color:var(--mute);margin-bottom:16px}.crumb a{color:var(--mute)}
+.pdp{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:start}
+.pdp .gal{background:var(--soft);border-radius:20px;aspect-ratio:1;display:grid;place-items:center}.pdp .gal svg{width:80%;height:80%}
+.pdp h1{font-size:clamp(28px,3.4vw,40px);line-height:1.1;margin:4px 0 10px;text-wrap:balance}
+.pdp .big{font-size:34px;color:var(--wine);font-weight:700}
+.buy{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.qsel{display:flex;align-items:center;border:1px solid var(--line);border-radius:999px}.qsel button{width:44px;height:48px;border:0;background:none;font-size:20px}.qsel span{min-width:28px;text-align:center;font-weight:700}
+.buy .add{margin:0;flex:1;min-height:48px;min-width:160px}
+.specs{border-top:1px solid var(--line);margin-top:8px}.specs div{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}.specs span{color:var(--mute)}
+.ship{background:var(--soft);border-radius:14px;padding:14px 16px;font-size:14px;display:grid;gap:4px}
+@media(max-width:760px){.pdp{grid-template-columns:1fr}}
+.price{margin-top:auto;padding-top:6px;white-space:nowrap}
+.price s{color:var(--mute);font-size:13px;margin-right:6px}.price b{font-size:18px;color:var(--wine)}
+.pix{font-size:13px;color:var(--mute)}
+.add{margin-top:8px;min-height:44px;border-radius:999px;border:1.5px solid var(--wine);background:none;color:var(--wine);font-weight:700}
+.add:hover{background:var(--wine);color:var(--bg)}
+.toolbar{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px;color:var(--mute)}
+.toolbar select{min-height:44px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:0 14px;font:inherit;font-size:16px}
+.empty{padding:40px;text-align:center;color:var(--mute);background:var(--soft);border-radius:16px}
+.shade{position:fixed;inset:0;background:rgba(30,10,16,.45);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.shade.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(420px,100%);background:var(--bg);z-index:50;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column}
+.drawer.on{transform:none}
+.dh{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.dh h3{margin:0;font-size:24px}
+.x{border:0;background:var(--soft);width:44px;height:44px;border-radius:999px;font-size:20px}
+.items{flex:1;overflow:auto;padding:12px 20px}
+.it{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.it .mini{width:64px;height:64px;border-radius:10px;background:var(--soft);overflow:hidden}
+.it .mini svg{width:100%;height:100%}
+.it p{margin:0;font-size:14px;font-weight:600;line-height:1.3}
+.qty{display:flex;align-items:center;gap:4px;margin-top:6px}
+.qty button{width:32px;height:32px;border-radius:999px;border:1px solid var(--line);background:var(--card)}
+.rm{border:0;background:none;color:var(--mute);font-size:13px;text-decoration:underline}
+.df{padding:18px 20px;border-top:1px solid var(--line);display:grid;gap:10px}
+.bar{height:8px;background:var(--soft);border-radius:999px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+.sum{display:flex;justify-content:space-between;font-size:18px}
+.go{min-height:52px;border:0;border-radius:999px;background:var(--wine);color:var(--bg);font-weight:700;font-size:16px}
+.modal{position:fixed;inset:0;z-index:60;display:none;place-items:center;padding:16px}
+.modal.on{display:grid}
+.mbox{background:var(--bg);border-radius:20px;max-width:860px;width:100%;max-height:92vh;overflow:auto;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);position:relative}
+.mbox .thumb{aspect-ratio:auto;min-height:320px}
+.mtxt{padding:28px;display:flex;flex-direction:column;gap:10px}
+.mtxt h3{font-size:30px;line-height:1.1;margin:0}
+.mbox .x{position:absolute;top:12px;right:12px;z-index:2}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:12px 20px;border-radius:999px;z-index:70;transition:transform .25s;font-weight:600}
+.toast.on{transform:translate(-50%,0)}
+footer{background:var(--wine);color:var(--bg)}
+footer .cols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px}
+footer h4{margin:0 0 10px;font-size:15px}footer a{display:block;color:inherit;opacity:.85;text-decoration:none;padding:3px 0;font-size:14px}
+footer .legal{margin-top:28px;font-size:13px;opacity:.7}
+.co{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:28px;align-items:start}
+.steps{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.steps span{padding:8px 14px;border-radius:999px;background:var(--soft);font-size:14px;font-weight:600;color:var(--mute)}
+.steps span.on{background:var(--wine);color:var(--bg)}.steps span.ok{color:var(--wine)}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.panel h3{margin:0 0 14px;font-size:24px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.fields .full{grid-column:1/-1}
+.fl label{display:block;font-size:14px;font-weight:600;margin-bottom:4px}
+.fl input{width:100%;min-height:46px;border:1px solid var(--line);border-radius:10px;padding:0 12px;font-size:16px;background:var(--bg)}
+.fl input.bad{border-color:var(--acc)}
+.err{color:var(--acc);font-size:13px;min-height:18px}
+.opt{display:flex;gap:12px;align-items:center;border:1.5px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer}
+.opt:has(input:checked){border-color:var(--wine);background:var(--soft)}
+.opt input{width:20px;height:20px;accent-color:var(--wine)}
+.opt div{flex:1}.opt small{display:block;color:var(--mute)}
+.acts{display:flex;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}
+.back{min-height:48px;border-radius:999px;border:1px solid var(--line);background:none;padding:0 22px;font-weight:600}
+.resume .ln{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:6px 0}
+.resume .tot{border-top:1px solid var(--line);margin-top:8px;padding-top:12px;font-size:18px;font-weight:700}
+.pixbox{display:grid;place-items:center;gap:10px;text-align:center;padding:10px}
+.pixbox svg{width:180px;height:180px}
+.code{font-family:ui-monospace,monospace;font-size:13px;background:var(--soft);padding:10px;border-radius:8px;overflow-wrap:anywhere}
+@media(max-width:800px){.co{grid-template-columns:1fr}.fields{grid-template-columns:1fr}}
+.pol{max-width:780px;margin:0 auto}.pol h2{font-size:clamp(30px,4vw,40px);line-height:1.1;margin:0 0 6px}
+.pol h3{font-size:22px;margin:28px 0 8px;color:var(--wine)}.pol p,.pol li{max-width:70ch}.pol ul{padding-left:20px}
+.pol .id{background:var(--soft);border-radius:12px;padding:14px 16px;font-size:14px;margin:16px 0}
+.pol .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:18px 0}
+.pol .facts div{border:1px solid var(--line);border-radius:12px;padding:12px}.pol .facts b{display:block;font-size:20px;color:var(--wine)}
+.pnav{display:flex;flex-wrap:wrap;gap:6px;margin-top:36px;border-top:1px solid var(--line);padding-top:18px}
+.pnav a{padding:8px 12px;border-radius:999px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:14px}
+.note{font-size:13px;color:var(--mute);margin-top:14px}
+@media(max-width:900px){.perks{grid-template-columns:repeat(2,minmax(0,1fr))}footer .cols{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.hero{grid-template-columns:1fr}.mbox{grid-template-columns:1fr}.mbox .thumb{min-height:240px}}
+@media(max-width:600px){.top{flex-wrap:wrap;gap:10px}.search{order:3;flex-basis:100%}.logo{flex:1}.grid,.row{grid-auto-columns:minmax(160px,1fr);grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.row{grid-template-columns:none}.sec-h h2{font-size:26px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="promo">Frete grátis acima de R$ 199 · 5% de desconto no Pix · Até 6x sem juros</div>
+<header>
+  <div class="top">
+    <a class="logo" href="#inicio">Unibella<small>Cosméticos</small></a>
+    <form class="search" id="sf" role="search"><input id="q" type="search" placeholder="Buscar produtos, marcas…" aria-label="Buscar produtos"><button>Buscar</button></form>
+    <button class="cartbtn" id="openCart" aria-label="Abrir carrinho">Carrinho <b id="count">0</b></button>
+  </div>
+  <nav class="cats" id="nav"></nav>
+</header>
+
+<main id="app"><section class="band"><div class="wrap empty">Carregando catálogo…</div></section></main>
+
+<footer class="band">
+  <div class="wrap">
+    <div class="cols">
+      <div><div class="logo" style="color:inherit">Unibella</div><p style="font-size:14px;opacity:.85">Dermocosméticos, maquiagem e cuidados para todos os dias.</p></div>
+      <div><h4>Categorias</h4><div id="fcats"></div></div>
+      <div><h4>Ajuda</h4><a href="#trocas-e-devolucoes">Trocas e devoluções</a><a href="#reembolso">Reembolso</a><a href="#frete">Política de frete</a><a href="#pagamento">Formas de pagamento</a><a href="#fale-conosco">Fale conosco</a></div>
+      <div><h4>Institucional</h4><a href="#quem-somos">Quem somos</a><a href="#privacidade">Política de privacidade</a><a href="#termos">Termos de uso</a><a href="#aviso-legal">Aviso legal</a></div>
+    </div>
+    <div class="legal">© 2026 UNIBELLA COSMETICOS LTDA · CNPJ 50.466.324/0001-98 · Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589 · WhatsApp (62) 9294-0453<br>Fotos dos produtos em breve.</div>
+  </div>
+</footer>
+
+<div class="shade" id="shade"></div>
+<aside class="drawer" id="drawer" aria-label="Carrinho">
+  <div class="dh"><h3>Seu carrinho</h3><button class="x" data-close aria-label="Fechar">×</button></div>
+  <div class="items" id="items"></div>
+  <div class="df" id="df"></div>
+</aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true"><div class="mbox" id="mbox"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+{
+const CATS=[
+ {id:'dermocosmeticos',n:'Dermocosméticos'},
+ {id:'protecao-solar',n:'Proteção Solar'},
+ {id:'maquiagem',n:'Maquiagem'},
+ {id:'cabelos',n:'Cuidados Capilares'},
+ {id:'infantil',n:'Mamãe e Bebê'}];
+const PAL={dermocosmeticos:['#9cc6e0','#b8e0d2','#f4c6d0','#c9a7e8'],'protecao-solar':['#ffd56b','#ffb347','#f7a399'],maquiagem:['#c0616f','#d4a17d','#a8644b','#e8c3a0'],cabelos:['#e6c27a','#f2a7b8','#9ad1b0','#c8c2e8'],infantil:['#a7d8f0','#ffe08a','#c8e6a0','#ffc8a8']};
+let P=[];
+function shapeOf(n){n=n.toLowerCase();
+ if(/fralda|len[çc]o|kit /.test(n))return 'pack';
+ if(/batom|l[áa]pis|r[íi]mel|c[íi]lios|delineador|bast[ãa]o|stick|corretivo/.test(n))return 'stick';
+ if(/s[ée]rum|[óo]leo|ampola|gotas/.test(n))return 'drop';
+ if(/m[áa]scara capilar|m[áa]scara de (hidrata|trata|nutri|recons)|creme|pote|p[óo] |paleta|manteiga|pomada/.test(n))return 'jar';
+ if(/gel|protetor|bisnaga|tubo|fps/.test(n))return 'tube';
+ return 'bottle'}
+function prep(x){const pal=PAL[x.c]||PAL.dermocosmeticos;
+ return {id:x.id,slug:x.s,cat:x.c,brand:x.b||'',name:x.n,size:'',price:x.p,old:x.o||0,sku:x.k,ean:x.e,stock:x.q,
+  color:pal[x.id%pal.length],shape:shapeOf(x.n),desc:''}}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const brl=v=>v.toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+
+function art(p){if(p.img)return `<img src="${esc(p.img)}" alt="${esc(p.name)}" loading="lazy" style="width:100%;height:100%;object-fit:contain;background:#fff">`;
+ const c=p.color,cap='#6b1d33';
+ const s={
+  bottle:`<rect x="70" y="58" width="60" height="22" rx="6" fill="${cap}"/><rect x="58" y="78" width="84" height="112" rx="18" fill="${c}"/><rect x="66" y="88" width="10" height="86" rx="5" fill="#fff" opacity=".45"/><rect x="72" y="118" width="56" height="34" rx="4" fill="#fff" opacity=".85"/>`,
+  jar:`<rect x="52" y="92" width="96" height="22" rx="8" fill="${cap}"/><rect x="48" y="112" width="104" height="70" rx="16" fill="${c}"/><rect x="58" y="120" width="10" height="52" rx="5" fill="#fff" opacity=".45"/><rect x="76" y="132" width="48" height="26" rx="4" fill="#fff" opacity=".85"/>`,
+  tube:`<path d="M66 50h68l-6 104H72z" fill="${c}"/><rect x="74" y="152" width="52" height="34" rx="6" fill="${cap}"/><rect x="74" y="60" width="9" height="84" rx="4" fill="#fff" opacity=".45"/><rect x="86" y="84" width="38" height="30" rx="3" fill="#fff" opacity=".85"/>`,
+  drop:`<rect x="90" y="40" width="20" height="30" rx="8" fill="#2b1118"/><rect x="82" y="66" width="36" height="16" rx="3" fill="${cap}"/><rect x="66" y="80" width="68" height="108" rx="14" fill="${c}"/><rect x="74" y="90" width="9" height="84" rx="4" fill="#fff" opacity=".45"/><rect x="80" y="120" width="40" height="30" rx="3" fill="#fff" opacity=".85"/>`,
+  stick:`<rect x="82" y="40" width="36" height="60" rx="14" fill="${c}"/><rect x="76" y="96" width="48" height="94" rx="10" fill="${cap}"/><rect x="84" y="106" width="7" height="74" rx="3" fill="#fff" opacity=".35"/>`,
+  pack:`<rect x="44" y="64" width="112" height="120" rx="14" fill="${c}"/><rect x="44" y="64" width="112" height="22" rx="10" fill="${cap}"/><circle cx="100" cy="132" r="26" fill="#fff" opacity=".8"/>`}[p.shape];
+ return `<svg viewBox="0 0 200 220" aria-hidden="true"><ellipse cx="100" cy="196" rx="62" ry="8" fill="#6b1d33" opacity=".12"/>${s}</svg>`;
+}
+function card(p){
+ const off=p.old?Math.round((1-p.price/p.old)*100):0;
+ return `<article class="card"><a class="thumb" href="#produto-${p.id}" aria-label="Ver ${esc(p.name)}">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</a>
+ <div class="info"><span class="brand">${esc(p.brand)}</span><a class="name" href="#produto-${p.id}">${esc(p.name)}</a>
+ <div class="price">${p.old?`<s>${brl(p.old)}</s>`:''}<b>${brl(p.price)}</b></div><span class="pix">${brl(p.price*.95)} no Pix</span>
+ <button class="add" data-add="${p.id}">Adicionar</button></div></article>`;
+}
+const scene=`<svg class="scene" viewBox="0 0 560 400" role="img" aria-label="Frascos de cosméticos em uma prateleira">
+<defs><radialGradient id="glow" cx="50%" cy="35%" r="60%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sh" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#e9b9ad"/><stop offset="1" stop-color="#d79c8f"/></linearGradient></defs>
+<circle cx="290" cy="160" r="190" fill="url(#glow)"/>
+<rect x="20" y="318" width="520" height="22" rx="6" fill="url(#sh)"/><rect x="20" y="336" width="520" height="10" rx="4" fill="#6b1d33" opacity=".18"/>
+<g><rect x="70" y="150" width="70" height="170" rx="22" fill="#f2b544"/><rect x="88" y="112" width="34" height="40" rx="6" fill="#6b1d33"/><rect x="82" y="168" width="12" height="130" rx="6" fill="#fff" opacity=".45"/><rect x="88" y="210" width="44" height="42" rx="4" fill="#fff" opacity=".9"/></g>
+<g><path d="M175 120h70l-8 160h-54z" fill="#f4c6d0"/><rect x="182" y="278" width="56" height="42" rx="6" fill="#6b1d33"/><rect x="186" y="132" width="10" height="130" rx="5" fill="#fff" opacity=".5"/></g>
+<g><rect x="270" y="70" width="28" height="44" rx="10" fill="#2b1118"/><rect x="262" y="108" width="44" height="20" rx="4" fill="#6b1d33"/><rect x="246" y="126" width="76" height="194" rx="18" fill="#e2553f"/><rect x="256" y="140" width="11" height="160" rx="5" fill="#fff" opacity=".4"/><rect x="262" y="200" width="46" height="46" rx="4" fill="#fff" opacity=".9"/></g>
+<g><rect x="345" y="240" width="120" height="26" rx="10" fill="#6b1d33"/><rect x="340" y="262" width="130" height="58" rx="18" fill="#9cc6e0"/><rect x="352" y="270" width="12" height="40" rx="6" fill="#fff" opacity=".5"/></g>
+<g><rect x="480" y="200" width="34" height="60" rx="14" fill="#c0616f"/><rect x="474" y="256" width="46" height="64" rx="10" fill="#6b1d33"/></g>
+<circle cx="150" cy="80" r="6" fill="#fff" opacity=".8"/><circle cx="420" cy="120" r="4" fill="#fff" opacity=".8"/><circle cx="470" cy="70" r="7" fill="#fff" opacity=".6"/></svg>`;
+
+let cart={};try{cart=JSON.parse(localStorage.getItem('ub-cart')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('ub-cart',JSON.stringify(cart))}catch(e){}};
+const byId=id=>P.find(p=>p.id==id);
+
+function home(){
+ return `<section class="hero band"><div class="wrap" style="display:contents"><div>
+ <h1>Sua rotina de beleza, do jeito certo</h1><p>Mais de 2.500 produtos de dermocosméticos, proteção solar, maquiagem e cabelos, com entrega rápida para todo o Brasil.</p>
+ <a class="cta" href="#ofertas">Ver ofertas</a></div>${scene}</div></section>
+ <div class="band" style="padding-block:0"><div class="wrap perks"><div><b>Frete grátis</b>acima de R$ 199</div><div><b>5% no Pix</b>desconto automático</div><div><b>6x sem juros</b>no cartão</div><div><b>Compra segura</b>troca em até 7 dias</div></div></div>
+ ${CATS.map(c=>`<section class="band"><div class="wrap"><div class="sec-h"><h2>${c.n}</h2><a href="#${c.id}">Ver todos →</a></div>
+ <div class="row">${P.filter(p=>p.cat==c.id).slice(0,12).map(card).join('')}</div></div></section>`).join('')}
+ `;
+}
+function list(title,items){
+ return `<section class="band"><div class="wrap"><div class="sec-h"><h2>${esc(title)}</h2><a href="#inicio">← Início</a></div>
+ <div class="toolbar"><span>${items.length} produto${items.length==1?'':'s'}</span><select id="sort" aria-label="Ordenar">
+ <option value="rel">Mais relevantes</option><option value="asc">Menor preço</option><option value="desc">Maior preço</option><option value="off">Maior desconto</option></select></div>
+ <div class="grid" id="g"></div><div style="text-align:center;margin-top:22px"><button class="back" id="more" hidden>Ver mais produtos</button></div></div></section>`;
+}
+let current=[],shown=0;const PAGE=48;
+function paint(reset){const g=$('#g');if(!g)return;if(reset){shown=0;g.innerHTML=current.length?'':'<div class="empty">Nenhum produto encontrado. Tente outro termo.</div>'}
+ const next=current.slice(shown,shown+PAGE);g.insertAdjacentHTML('beforeend',next.map(card).join(''));shown+=next.length;$('#more').hidden=shown>=current.length;
+ if(!$('#more').hidden)$('#more').textContent=`Ver mais produtos (${current.length-shown} restantes)`}
+const EMP={rs:'UNIBELLA COSMETICOS LTDA',fan:'Unibella Cosméticos',cnpj:'50.466.324/0001-98',
+ end:'Rua RSP-24, s/n, Quadra 15, Lote 14, Residencial Solar das Paineiras, Goianira/GO, CEP 75373-589',
+ wpp:'(62) 9294-0453',email:'e-mail de atendimento a definir',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
+const ID=`<div class="id"><b>${EMP.rs}</b> (${EMP.fan}) · CNPJ ${EMP.cnpj}<br>${EMP.end}<br>WhatsApp ${EMP.wpp} · ${EMP.email}</div>`;
+const CT=`<h3>Contato</h3><p>WhatsApp <b>${EMP.wpp}</b> · ${EMP.email}<br>Atendimento: ${EMP.hor}.</p>`;
+const POL={
+'quem-somos':['Quem somos',`<p>A Unibella Cosméticos é uma empresa goiana, com sede em Goianira/GO, que vende dermocosméticos, proteção solar, maquiagem, cuidados capilares e itens para mamãe e bebê.</p>
+<p>Atuamos no varejo e no atacado de cosméticos e perfumaria. Trabalhamos apenas com produtos originais, com nota fiscal e regularizados na Anvisa, e enviamos para todo o Brasil.</p>${CT}`],
+'fale-conosco':['Fale conosco',`<p>Fale com a gente para dúvidas sobre produtos, pedidos, entregas, trocas e pagamentos.</p>
+<ul><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li><li><b>Endereço:</b> ${EMP.end}</li></ul>
+<p>Para agilizar, tenha em mãos o número do pedido. Respondemos em até 1 dia útil.</p>`],
+'pagamento':['Formas de pagamento',`<div class="facts"><div><b>5% off</b>no Pix</div><div><b>6x</b>sem juros no cartão</div><div><b>3 dias úteis</b>vencimento do boleto</div></div>
+<h3>Pix</h3><p>Pagamento instantâneo com 5% de desconto sobre os produtos. O código vale por 30 minutos; sem pagamento nesse prazo, o pedido é cancelado automaticamente.</p>
+<h3>Cartão de crédito</h3><p>Visa, Mastercard, Elo, American Express e Hipercard, em até 6x sem juros. A aprovação depende da operadora do cartão e costuma sair em poucos minutos.</p>
+<h3>Boleto bancário</h3><p>Vence em 3 dias úteis. A compensação leva até 2 dias úteis depois do pagamento.</p>
+<h3>Segurança</h3><p>Os dados do cartão são digitados direto no ambiente do intermediador de pagamento e não ficam guardados pela Unibella.</p>
+<h3>Quando o pedido anda</h3><p>A separação começa só depois da confirmação do pagamento. A nota fiscal é emitida em nome de ${EMP.rs} e enviada por e-mail junto com o código de rastreio.</p>${CT}`],
+'frete':['Política de frete',`<div class="facts"><div><b>1 a 2 dias úteis</b>para separar o pedido</div><div><b>Grátis</b>acima de R$ 199</div><div><b>Todo o Brasil</b>pelos Correios</div></div>
+<h3>Modalidades</h3><ul><li><b>PAC:</b> R$ 19,90, entrega estimada de 6 a 9 dias úteis após a postagem.</li><li><b>Sedex:</b> R$ 34,90, entrega estimada de 2 a 4 dias úteis após a postagem.</li><li><b>Retirada em Goianira/GO:</b> grátis, pronta em até 1 dia útil após o pagamento.</li></ul>
+<p>Em compras a partir de R$ 199 em produtos, o PAC e o Sedex saem grátis. Os prazos contam a partir da confirmação do pagamento e podem variar conforme a região.</p>
+<h3>Entrega e endereço</h3><p>Confira o endereço antes de finalizar. Os Correios fazem até 3 tentativas; se não houver ninguém para receber, o pacote volta para a loja e o novo envio pode ter frete cobrado.</p>
+<h3>Atrasos</h3><p>Greves, feriados, chuvas e outros fatores externos podem atrasar a entrega. Nesses casos, acompanhamos o pacote com os Correios e mantemos você informado.</p>
+<h3>Rastreio</h3><p>O código de rastreio chega por e-mail e WhatsApp no dia da postagem.</p>${CT}`],
+'trocas-e-devolucoes':['Trocas e devoluções',`<div class="facts"><div><b>7 dias</b>para desistir da compra</div><div><b>30 dias</b>para produto com defeito</div><div><b>Frete por nossa conta</b>em defeito, erro ou desistência</div></div>
+<h3>Desistência da compra</h3><p>Pelo art. 49 do Código de Defesa do Consumidor, você pode desistir em até 7 dias corridos depois de receber o pedido. O produto deve voltar lacrado, sem uso e na embalagem original.</p>
+<h3>Produto com defeito</h3><p>Avise em até 30 dias corridos após o recebimento (art. 26 do CDC). Depois de analisar o item, trocamos por outro igual, damos crédito na loja ou devolvemos o valor, como você preferir.</p>
+<h3>Produto errado, avariado ou faltando</h3><p>Fale com a gente em até 7 dias corridos, com fotos da embalagem e do produto. Enviamos o item certo sem custo.</p>
+<h3>Roubo ou extravio no transporte</h3><p>Se os Correios confirmarem o extravio, reenviamos o pedido ou devolvemos o valor integral.</p>
+<h3>O que não entra na desistência</h3><p>Por higiene e segurança, produtos abertos, usados ou com o lacre rompido não podem ser devolvidos por simples arrependimento. Defeitos continuam cobertos.</p>
+<h3>Passo a passo</h3><ul><li>Chame no WhatsApp com o número do pedido e o motivo.</li><li>Enviamos o código de postagem reversa dos Correios.</li><li>Leve o pacote a uma agência em até 7 dias.</li><li>Com o produto recebido e conferido, fazemos a troca ou o reembolso.</li></ul>${CT}`],
+'reembolso':['Política de reembolso',`<div class="facts"><div><b>Integral</b>se cancelar antes da postagem</div><div><b>Até 3 dias úteis</b>para estornar o Pix</div><div><b>Até 2 faturas</b>no estorno do cartão</div></div>
+<h3>Quando devolvemos o valor</h3><ul><li>Pedido cancelado antes de ser postado.</li><li>Desistência em até 7 dias após o recebimento.</li><li>Produto com defeito, quando você prefere o reembolso à troca.</li><li>Extravio ou roubo confirmado pelos Correios.</li></ul>
+<h3>Como o dinheiro volta</h3><ul><li><b>Pix e boleto:</b> transferência para uma conta no nome do comprador, em até 3 dias úteis após a aprovação.</li><li><b>Cartão:</b> estorno pedido à operadora em até 3 dias úteis; o crédito aparece em até duas faturas, conforme o banco.</li></ul>
+<p>Na desistência e nos casos de defeito ou erro nosso, o frete também é devolvido.</p>${CT}`],
+'privacidade':['Política de privacidade',`<p>Esta política explica como a ${EMP.rs}, controladora dos dados, trata suas informações pessoais, conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
+<h3>Quais dados coletamos</h3><ul><li><b>Cadastro:</b> nome, CPF, e-mail e celular.</li><li><b>Entrega:</b> endereço completo.</li><li><b>Compra:</b> itens, valores e forma de pagamento. Dados de cartão ficam com o intermediador, não conosco.</li><li><b>Navegação:</b> IP, aparelho, páginas vistas e cookies.</li><li><b>Atendimento:</b> mensagens que você envia.</li></ul>
+<h3>Para que usamos</h3><p>Processar e entregar pedidos, emitir nota fiscal, prevenir fraudes, prestar atendimento, cumprir obrigações legais e, se você autorizar, enviar ofertas.</p>
+<h3>Bases legais</h3><p>Execução de contrato, cumprimento de obrigação legal, legítimo interesse e consentimento (art. 7º da LGPD).</p>
+<h3>Com quem compartilhamos</h3><p>Só com quem é necessário para a compra: intermediadores de pagamento, Correios e transportadoras, provedores de hospedagem e órgãos públicos quando a lei exigir. Não vendemos seus dados.</p>
+<h3>Cookies</h3><p>Usamos cookies essenciais para o carrinho e o login, e cookies de métricas e anúncios somente com sua autorização.</p>
+<h3>Guarda e segurança</h3><p>Os dados ficam em servidores com criptografia e acesso restrito. Guardamos pelo tempo necessário para as finalidades acima e pelos prazos legais, como os fiscais.</p>
+<h3>Seus direitos</h3><p>Você pode pedir acesso, correção, exclusão, portabilidade e informações sobre o uso dos seus dados, além de retirar o consentimento a qualquer momento (art. 18 da LGPD).</p>
+<h3>Menores de idade</h3><p>As compras devem ser feitas por maiores de 18 anos ou com acompanhamento dos responsáveis.</p>
+<h3>Mudanças</h3><p>Esta política pode ser atualizada. A versão em vigor é sempre a publicada nesta página. Última atualização: 24/11/2026.</p>${CT}`],
+'termos':['Termos e condições de uso',`<h3>Concordância</h3><p>Ao navegar ou comprar no site da ${EMP.fan}, você concorda com estes termos e com as demais políticas da loja.</p>
+<h3>Quem pode comprar</h3><p>Pessoas maiores de 18 anos e capazes, ou menores acompanhados pelos responsáveis, e empresas com CNPJ ativo.</p>
+<h3>Conta do cliente</h3><p>Os dados informados devem ser verdadeiros. Você cuida da sua senha; a Unibella nunca pede senha por telefone, e-mail ou WhatsApp.</p>
+<h3>Catálogo e preços</h3><p>Fotos são ilustrativas e as embalagens podem mudar por decisão do fabricante. Preços e estoque podem mudar sem aviso, mas o valor confirmado no checkout é o que vale para o seu pedido. Em caso de erro evidente de preço, avisamos e você escolhe entre seguir com o valor correto ou cancelar com reembolso integral.</p>
+<h3>Confirmação da compra</h3><p>O pedido é confirmado quando o pagamento é aprovado. Pedidos com indício de fraude podem ser cancelados, com devolução integral do valor.</p>
+<h3>Uso do site</h3><p>Não é permitido usar o site para fins ilícitos, coletar dados de forma automatizada ou tentar invadir os sistemas.</p>
+<h3>Propriedade intelectual</h3><p>A marca Unibella, os textos e o layout do site pertencem à empresa. As marcas dos produtos pertencem aos seus fabricantes.</p>
+<h3>Documentos complementares</h3><p>Fazem parte destes termos as políticas de <a href="#privacidade">privacidade</a>, <a href="#frete">frete</a>, <a href="#pagamento">pagamento</a>, <a href="#trocas-e-devolucoes">trocas e devoluções</a> e <a href="#reembolso">reembolso</a>.</p>
+<h3>Foro</h3><p>Vale a legislação brasileira. Fica eleito o foro do domicílio do consumidor, como garante o Código de Defesa do Consumidor.</p>${CT}`],
+'aviso-legal':['Aviso legal',`<h3>Quem é a loja</h3><ul><li><b>Razão social:</b> ${EMP.rs}</li><li><b>Nome fantasia:</b> ${EMP.fan}</li><li><b>CNPJ:</b> ${EMP.cnpj}</li><li><b>Endereço:</b> ${EMP.end}</li><li><b>WhatsApp:</b> ${EMP.wpp}</li><li><b>E-mail:</b> ${EMP.email}</li><li><b>Horário:</b> ${EMP.hor}</li></ul>
+<h3>O que vendemos</h3><p>Cosméticos, produtos de perfumaria e de higiene pessoal, no varejo e no atacado.</p>
+<h3>Produtos e preços</h3><p>Trabalhamos com produtos originais, regularizados na Anvisa, com nota fiscal. Descrições e fotos seguem as informações dos fabricantes.</p>
+<h3>Uso dos produtos</h3><p>As informações do site não substituem a orientação de médico ou dermatologista. Leia o rótulo, faça o teste de sensibilidade e suspenda o uso se houver irritação.</p>
+<h3>Leis aplicáveis</h3><p>Código de Defesa do Consumidor (Lei 8.078/1990), Decreto do Comércio Eletrônico (7.962/2013), Marco Civil da Internet (Lei 12.965/2014) e LGPD (Lei 13.709/2018).</p>${CT}`]};
+function polPage(k){const [t,b]=POL[k];return `<section class="band"><div class="pol"><h2>${t}</h2>${ID}${b}
+<nav class="pnav">${Object.entries(POL).filter(([x])=>x!=k).map(([x,[n]])=>`<a href="#${x}">${n}</a>`).join('')}</nav></div></section>`}
+const co={step:0,d:{},ship:'pac',pay:'pix',inst:1,order:null};
+const SHIP={pac:{n:'PAC',dias:'6 a 9 dias úteis',v:19.9},sedex:{n:'Sedex',dias:'2 a 4 dias úteis',v:34.9},retira:{n:'Retirar em Goianira/GO',dias:'Pronto em até 1 dia útil',v:0}};
+const F=[['nome','Nome completo','full'],['email','E-mail',''],['tel','Celular',''],['cpf','CPF','']];
+const FE=[['cep','CEP',''],['rua','Endereço','full'],['num','Número',''],['comp','Complemento (opcional)',''],['bairro','Bairro',''],['cidade','Cidade',''],['uf','Estado (UF)','']];
+function totals(){let sub=0;for(const id in cart)sub+=byId(id).price*cart[id];
+ const s=SHIP[co.ship],frete=co.ship=='retira'||sub>=199?0:s.v,desc=co.pay=='pix'?sub*.05:0;return{sub,frete,desc,tot:sub+frete-desc}}
+function field([k,l,c]){return `<div class="fl ${c}"><label for="f-${k}">${l}</label><input id="f-${k}" data-f="${k}" value="${esc(co.d[k]||'')}" ${k=='email'?'type="email"':''} ${['cpf','cep','tel','num'].includes(k)?'inputmode="numeric"':''} autocomplete="on"></div>`}
+function validate(){
+ const need=co.step==0?['nome','email','tel','cpf']:co.step==1&&co.ship!='retira'?['cep','rua','num','bairro','cidade','uf']:[];
+ const ok={email:v=>/^\S+@\S+\.\S+$/.test(v),cpf:v=>v.replace(/\D/g,'').length==11,cep:v=>v.replace(/\D/g,'').length==8,tel:v=>v.replace(/\D/g,'').length>=10};
+ let bad=need.filter(k=>{const v=(co.d[k]||'').trim();return !v||(ok[k]&&!ok[k](v))});
+ bad.forEach(k=>$('#f-'+k).classList.add('bad'));
+ $('#err').textContent=bad.length?'Confira os campos destacados.':'';return !bad.length}
+function resume(){const t=totals(),items=co.order?co.items:Object.entries(cart).map(([id,q])=>({p:byId(id),q})),T=co.order?co.totals:t;
+ return `<aside class="panel resume" id="res"><h3>Resumo</h3>${items.map(i=>`<div class="ln"><span>${i.q}× ${esc(i.p.name)}</span><b style="white-space:nowrap">${brl(i.p.price*i.q)}</b></div>`).join('')}
+ <div class="ln" style="border-top:1px solid var(--line);margin-top:8px;padding-top:10px"><span>Subtotal</span><span>${brl(T.sub)}</span></div>
+ <div class="ln"><span>Frete</span><span>${T.frete?brl(T.frete):'Grátis'}</span></div>
+ ${T.desc?`<div class="ln"><span>Desconto Pix (5%)</span><span>−${brl(T.desc)}</span></div>`:''}
+ <div class="ln tot"><span>Total</span><span>${brl(T.tot)}</span></div></aside>`}
+function checkout(){
+ if(!co.order&&!Object.keys(cart).length)return `<section class="band"><div class="wrap"><div class="empty">Seu carrinho está vazio. <a href="#inicio" style="color:var(--wine)">Voltar às compras</a></div></div></section>`;
+ const names=['Identificação','Entrega','Pagamento','Confirmação'];
+ const st=`<div class="steps">${names.map((n,i)=>`<span class="${i==co.step?'on':i<co.step?'ok':''}">${i<co.step?'✓ ':''}${n}</span>`).join('')}</div>`;
+ const t=totals();let body='';
+ if(co.step==0)body=`<h3>Seus dados</h3><div class="fields">${F.map(field).join('')}</div>`;
+ if(co.step==1)body=`<h3>Entrega</h3>${Object.entries(SHIP).map(([k,s])=>`<label class="opt"><input type="radio" name="ship" value="${k}" ${co.ship==k?'checked':''}><div><b>${s.n}</b><small>${s.dias}</small></div><b>${k=='retira'||t.sub>=199?'Grátis':brl(s.v)}</b></label>`).join('')}
+  ${co.ship!='retira'?`<div class="fields" style="margin-top:14px">${FE.map(field).join('')}</div>`:'<p class="pix">Retirada em Goianira/GO: Rua RSP-24, Qd. 15, Lt. 14, Residencial Solar das Paineiras. Avisamos pelo WhatsApp quando estiver pronto.</p>'}`;
+ if(co.step==2){const inst=[1,2,3,4,5,6].map(n=>`<option value="${n}" ${co.inst==n?'selected':''}>${n}x de ${brl(t.tot/n)} sem juros</option>`).join('');
+  body=`<h3>Pagamento</h3>
+  <label class="opt"><input type="radio" name="pay" value="pix" ${co.pay=='pix'?'checked':''}><div><b>Pix</b><small>5% de desconto · aprovação na hora</small></div></label>
+  <label class="opt"><input type="radio" name="pay" value="cartao" ${co.pay=='cartao'?'checked':''}><div><b>Cartão de crédito</b><small>Até 6x sem juros</small></div></label>
+  <label class="opt"><input type="radio" name="pay" value="boleto" ${co.pay=='boleto'?'checked':''}><div><b>Boleto</b><small>Vence em 3 dias úteis</small></div></label>
+  ${co.pay=='cartao'?`<div class="fl" style="margin-top:6px"><label for="inst">Parcelas</label><select id="inst" style="width:100%;min-height:46px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:16px;padding:0 10px">${inst}</select></div>
+  <p class="pix">Os dados do cartão serão digitados na tela segura do meio de pagamento (Mercado Pago ou Stripe), conectado na versão completa.</p>`:''}`}
+ if(co.step==3){const T=co.totals,code='00020126UNIBELLA'+co.order+'5204000053039865802BR6304TESTE';
+  body=`<h3>Pedido ${co.order} recebido!</h3><p>Enviamos a confirmação para <b>${esc(co.d.email||'')}</b>.</p>
+  ${co.pay=='pix'?`<div class="pixbox">${qr(co.order)}<b>Pague ${brl(T.tot)} com Pix</b><div class="code">${code}</div><button class="back" data-co="copy" data-v="${code}">Copiar código Pix</button></div>`
+   :co.pay=='boleto'?`<p>Boleto de <b>${brl(T.tot)}</b> gerado. Vencimento em 3 dias úteis.</p>`:`<p>Pagamento de <b>${brl(T.tot)}</b> em ${co.inst}x no cartão.</p>`}
+  <p class="note">Pedido de teste: nenhuma cobrança real é feita neste protótipo.</p>`}
+ const acts=co.step==3?`<button class="go" data-co="home" style="padding:0 26px">Continuar comprando</button>`
+  :`${co.step?'<button class="back" data-co="prev">← Voltar</button>':'<a class="back" href="#inicio" style="display:inline-flex;align-items:center;text-decoration:none">← Continuar comprando</a>'}
+  <button class="go" data-co="${co.step==2?'place':'next'}" style="padding:0 26px">${co.step==2?'Confirmar pedido':'Continuar'}</button>`;
+ return `<section class="band"><div class="wrap"><h2 style="font-size:36px;margin:0 0 16px">Checkout</h2>${st}<div class="co"><div class="panel">${body}<div class="err" id="err"></div><div class="acts">${acts}</div></div>${resume()}</div></div></section>`}
+function qr(seed){let h=0;for(const c of seed)h=(h*31+c.charCodeAt(0))>>>0;let r='';
+ for(let y=0;y<25;y++)for(let x=0;x<25;x++){const f=(x<7&&y<7)||(x>17&&y<7)||(x<7&&y>17);
+  const on=f?(x%6==0||y%6==0||x>17&&(x==18||x==24)||y>17&&(y==18||y==24)||((x%18>1&&x%18<5)&&(y%18>1&&y%18<5))):((h=(h*1103515245+12345)>>>0)>>16)&1;
+  if(on)r+=`<rect x="${x}" y="${y}" width="1" height="1"/>`}
+ return `<svg viewBox="-2 -2 29 29" role="img" aria-label="QR Code Pix de exemplo"><rect x="-2" y="-2" width="29" height="29" fill="#fff"/><g fill="#2b1118">${r}</g></svg>`}
+function route(){
+ const h=location.hash.slice(1)||'inicio';
+ document.querySelectorAll('nav.cats a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')=='#'+h));
+ const c=CATS.find(c=>c.id==h);
+ if(c){current=P.filter(p=>p.cat==c.id);$('#app').innerHTML=list(c.n,current)}
+ else if(/^produto-\d+$/.test(h)&&byId(h.slice(8))){$('#app').innerHTML=prodPage(byId(h.slice(8)))}
+ else if(h=='checkout'){$('#app').innerHTML=checkout()}
+ else if(POL[h]){$('#app').innerHTML=polPage(h)}
+ else if(h=='ofertas'){current=P.filter(p=>p.old);$('#app').innerHTML=list('Ofertas',current)}
+ else if(h=='busca'){const t=norm($('#q').value.trim());current=P.filter(p=>norm(p.name+' '+p.brand+' '+p.cat).includes(t));$('#app').innerHTML=list(`Resultados para “${$('#q').value.trim()}”`,current)}
+ else $('#app').innerHTML=home();
+ paint(true);window.scrollTo(0,0);
+}
+const navHtml=[{id:'ofertas',n:'Ofertas'},...CATS].map(c=>`<a href="#${c.id}">${c.n}</a>`).join('');
+$('#nav').innerHTML=navHtml;
+$('#fcats').innerHTML=CATS.map(c=>`<a href="#${c.id}">${c.n}</a>`).join('');
+
+function renderCart(){
+ const ids=Object.keys(cart);let n=0,t=0;
+ ids.forEach(id=>{n+=cart[id];t+=byId(id).price*cart[id]});
+ $('#count').textContent=n;
+ $('#items').innerHTML=ids.length?ids.map(id=>{const p=byId(id);return `<div class="it"><div class="mini">${art(p)}</div>
+ <div><p>${esc(p.name)}</p><div class="qty"><button data-q="${id}" data-d="-1" aria-label="Menos">−</button><span>${cart[id]}</span><button data-q="${id}" data-d="1" aria-label="Mais">+</button></div></div>
+ <div style="text-align:right"><b style="white-space:nowrap">${brl(p.price*cart[id])}</b><br><button class="rm" data-rm="${id}">Remover</button></div></div>`}).join('')
+ :'<div class="empty" style="margin-top:20px">Seu carrinho está vazio.</div>';
+ const falta=Math.max(0,199-t);
+ $('#df').innerHTML=ids.length?`<div style="font-size:14px">${falta?`Faltam <b>${brl(falta)}</b> para frete grátis`:'Você ganhou <b>frete grátis</b>!'}</div>
+ <div class="bar"><i style="width:${Math.min(100,t/199*100)}%"></i></div>
+ <div class="sum"><span>Subtotal</span><b>${brl(t)}</b></div><div class="pix" style="text-align:right">${brl(t*.95)} no Pix</div>
+ <button class="go" id="checkout">Finalizar compra</button>`:'';
+}
+function toast(m){const e=$('#toast');e.textContent=m;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
+function openCart(o){$('#drawer').classList.toggle('on',o);$('#shade').classList.toggle('on',o||$('#modal').classList.contains('on'))}
+let pq=1;
+function prodPage(p){pq=1;const c=CATS.find(c=>c.id==p.cat),off=p.old?Math.round((1-p.price/p.old)*100):0;
+ const rel=P.filter(x=>x.cat==p.cat&&x.id!=p.id&&(!p.brand||x.brand==p.brand)).slice(0,8);
+ const more=rel.length<8?P.filter(x=>x.cat==p.cat&&x.id!=p.id&&!rel.includes(x)).slice(0,8-rel.length):[];
+ return `<section class="band"><div class="wrap"><nav class="crumb"><a href="#inicio">Início</a> › <a href="#${c.id}">${c.n}</a>${p.brand?` › ${esc(p.brand)}`:''}</nav>
+ <div class="pdp"><div class="gal" style="position:relative">${off?`<span class="tag">-${off}%</span>`:''}${art(p)}</div>
+ <div><span class="brand">${esc(p.brand||c.n)}</span><h1>${esc(p.name)}</h1>
+ <div class="price">${p.old?`<s>${brl(p.old)}</s>`:''}<div class="big">${brl(p.price)}</div></div>
+ <div class="pix" style="font-size:15px"><b style="color:var(--ink)">${brl(p.price*.95)}</b> no Pix (5% off) · ou 6x de ${brl(p.price/6)} sem juros</div>
+ ${p.stock>0?`<div class="buy"><div class="qsel"><button data-pq="-1" aria-label="Menos">−</button><span id="pqv">1</span><button data-pq="1" aria-label="Mais">+</button></div>
+ <button class="add" data-addq="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button>
+ <button class="add" data-buy="${p.id}">Comprar agora</button></div>`:'<p class="empty" style="margin:18px 0">Produto indisponível no momento.</p>'}
+ <div class="ship"><b>Frete grátis</b> em compras acima de R$ 199 · Envio em 1 a 2 dias úteis · Troca em até 7 dias</div>
+ <h3 style="font-size:22px;margin:24px 0 8px">Descrição</h3><p>${p.desc?esc(p.desc):'Descrição em breve.'}</p>
+ <div class="specs">${[['Marca',p.brand],['Categoria',c.n],['EAN',p.ean],['Código',p.sku],['Disponibilidade',p.stock>0?'Em estoque':'Indisponível']].filter(x=>x[1]).map(([a,b])=>`<div><span>${a}</span><b>${esc(b)}</b></div>`).join('')}</div>
+ </div></div>
+ ${rel.length+more.length?`<div class="sec-h" style="margin-top:48px"><h2>Você também pode gostar</h2><a href="#${c.id}">Ver ${c.n} →</a></div><div class="row">${rel.concat(more).map(card).join('')}</div>`:''}
+ </div></section>`}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-pq],[data-addq],[data-buy]');if(!t)return;
+ if(t.dataset.pq){pq=Math.max(1,Math.min(20,pq+(+t.dataset.pq)));$('#pqv').textContent=pq;return}
+ const id=t.dataset.addq||t.dataset.buy;cart[id]=(cart[id]||0)+pq;save();renderCart();
+ if(t.dataset.buy){co.step=0;co.order=null;location.hash='checkout'}else toast(pq>1?`${pq} unidades adicionadas`:'Adicionado ao carrinho')});
+function view(id){const p=byId(id),c=CATS.find(c=>c.id==p.cat);
+ $('#mbox').innerHTML=`<button class="x" data-close aria-label="Fechar">×</button><div class="thumb">${art(p)}</div><div class="mtxt">
+ <span class="brand">${esc(p.brand)} · ${esc(c.n)}</span><h3>${esc(p.name)}</h3><span class="pix">${p.ean?"EAN "+esc(p.ean):""}${p.ean&&p.sku?" · ":""}${p.sku?"SKU "+esc(p.sku):""}</span>
+ <div class="price">${p.old?`<s>${brl(p.old)}</s>`:''}<b style="font-size:26px">${brl(p.price)}</b></div>
+ <span class="pix">${brl(p.price*.95)} no Pix ou 6x de ${brl(p.price/6)} sem juros</span><p class="pix">${p.stock>0?'Em estoque':'Indisponível no momento'}</p>
+ <button class="add" data-add="${p.id}" style="background:var(--wine);color:var(--bg)">Adicionar ao carrinho</button></div>`;
+ $('#modal').classList.add('on');$('#shade').classList.add('on')}
+function closeAll(){$('#modal').classList.remove('on');openCart(false)}
+
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-add],[data-view],[data-q],[data-rm],[data-close],#openCart,#checkout');
+ if(e.target.id=='shade'||e.target.id=='modal')return closeAll();
+ if(!t)return;
+ if(t.dataset.add){cart[t.dataset.add]=(cart[t.dataset.add]||0)+1;save();renderCart();toast('Adicionado ao carrinho')}
+ else if(t.dataset.view)view(t.dataset.view);
+ else if(t.dataset.q){const id=t.dataset.q;cart[id]+=+t.dataset.d;if(cart[id]<1)delete cart[id];save();renderCart()}
+ else if(t.dataset.rm){delete cart[t.dataset.rm];save();renderCart()}
+ else if(t.hasAttribute('data-close'))closeAll();
+ else if(t.id=='openCart'){$('#modal').classList.remove('on');openCart(true)}
+ else if(t.id=='checkout'){openCart(false);co.step=0;co.order=null;location.hash=='#checkout'?route():location.hash='checkout'}
+});
+document.addEventListener('click',e=>{
+ const t=e.target.closest('[data-co]');if(!t)return;const a=t.dataset.co;
+ if(a=='next'){if(!validate())return;co.step++;}
+ if(a=='prev')co.step--;
+ if(a=='place'){co.order='UB'+String(Date.now()).slice(-6);co.items=Object.entries(cart).map(([id,q])=>({p:byId(id),q}));co.totals=totals();cart={};save();renderCart();co.step=3}
+ if(a=='copy'){navigator.clipboard.writeText(t.dataset.v).then(()=>toast('Código copiado'),()=>toast('Não foi possível copiar'));return}
+ if(a=='home'){location.hash='inicio';return}
+ $('#app').innerHTML=checkout();window.scrollTo(0,0)});
+document.addEventListener('input',e=>{const f=e.target;if(!f.dataset.f)return;
+ let v=f.value;
+ if(f.dataset.f=='cpf'){v=v.replace(/\D/g,'').slice(0,11).replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');f.value=v}
+ if(f.dataset.f=='cep'){v=v.replace(/\D/g,'').slice(0,8).replace(/(\d{5})(\d)/,'$1-$2');f.value=v}
+ if(f.dataset.f=='tel'){v=v.replace(/\D/g,'').slice(0,11).replace(/(\d{2})(\d)/,'($1) $2').replace(/(\d{5})(\d{1,4})$/,'$1-$2');f.value=v}
+ co.d[f.dataset.f]=f.value;f.classList.remove('bad')});
+document.addEventListener('change',e=>{const f=e.target;
+ if(f.name=='ship'){co.ship=f.value;$('#res').outerHTML=resume()}
+ if(f.name=='pay'){co.pay=f.value;$('#app').innerHTML=checkout()}
+ if(f.id=='inst'){co.inst=+f.value}});
+document.addEventListener('keydown',e=>{if(e.key=='Escape')closeAll()});
+document.addEventListener('change',e=>{if(e.target.id!='sort')return;const v=e.target.value,a=[...current];
+ if(v=='asc')a.sort((x,y)=>x.price-y.price);if(v=='desc')a.sort((x,y)=>y.price-x.price);if(v=='off')a.sort((x,y)=>(y.old?1-y.price/y.old:0)-(x.old?1-x.price/x.old:0));
+ current=a;paint(true)});
+document.addEventListener('click',e=>{if(e.target.id=='more')paint(false)});
+$('#sf').addEventListener('submit',e=>{e.preventDefault();if(location.hash=='#busca')route();else location.hash='busca'});
+window.addEventListener('hashchange',route);
+const SB='https://wilralriqtfvklgyjlef.supabase.co',SBK='sb_publishable_fO0oCD_OQUSxmSgp8I8Blg_TUgO4vDA';
+async function loadSB(){let all=[];for(let o=0;;o+=1000){const r=await fetch(`${SB}/rest/v1/produtos?select=id,slug,categoria_id,marca,nome,descricao,preco,preco_antigo,estoque,imagem_url,sku,ean&ativo=eq.true&order=id&offset=${o}&limit=1000`,{headers:{apikey:SBK}});if(!r.ok)throw 0;const d=await r.json();all=all.concat(d);if(d.length<1000)break}
+ return all.map(x=>({...prep({id:x.id,s:x.slug,c:x.categoria_id,b:x.marca,n:x.nome,p:+x.preco,o:+x.preco_antigo||0,k:x.sku,e:x.ean,q:x.estoque}),desc:x.descricao||'',img:x.imagem_url||''}))}
+loadSB().catch(()=>fetch('products.json').then(r=>r.json()).then(d=>d.map(prep))).then(d=>{P=d;for(const id in cart)if(!byId(id))delete cart[id];route();renderCart()}).catch(()=>{$('#app').innerHTML='<section class="band"><div class="wrap empty">Não foi possível carregar o catálogo.</div></section>'});
+}
+</script>
+</body>
+</html>
