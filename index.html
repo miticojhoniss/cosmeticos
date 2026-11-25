@@ -151,7 +151,6 @@ footer .legal{margin-top:28px;font-size:13px;opacity:.7}
 </style>
 </head>
 <body>
-<div class="promo">Frete grátis acima de R$ 199 · 5% de desconto no Pix · Até 6x sem juros</div>
 <header>
   <div class="top">
     <a class="logo" href="#inicio" aria-label="Malta Cosméticos — início"><img src="assets/logo.webp" alt="Malta Cosméticos" width="90" height="60"></a>
@@ -245,7 +244,6 @@ const byId=id=>P.find(p=>p.id==id);
 
 function home(){
  return `<a class="banner" href="#cabelos"><img src="assets/banner-capilares.webp" alt="Confira a coleção Cuidados Capilares" width="2000" height="719"></a>
- <div class="band" style="padding-block:0"><div class="wrap perks"><div><b>Frete grátis</b>acima de R$ 199</div><div><b>5% no Pix</b>desconto automático</div><div><b>6x sem juros</b>no cartão</div><div><b>Compra segura</b>troca em até 7 dias</div></div></div>
  ${CATS.map(c=>`<section class="band"><div class="wrap"><div class="sec-h"><h2>${c.n}</h2><a href="#${c.id}">Ver todos →</a></div>
  <div class="row">${P.filter(p=>p.cat==c.id).slice(0,12).map(card).join('')}</div></div></section>`).join('')}
  `;
