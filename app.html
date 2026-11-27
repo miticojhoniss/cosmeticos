@@ -318,7 +318,7 @@ body.cko .ckstrip{display:block;background:var(--wine);color:#fff;text-align:cen
       <div class="ft-contact"><h3>Contato</h3>
         <a class="ci" href="https://www.google.com/maps/search/?api=1&query=Alameda+Rui+Ferreira+61+Centro+Foz+do+Igua%C3%A7u+PR+85851-400" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.1 7-12a7 7 0 1 0-14 0c0 5.9 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/></svg><p>Alameda Rui Ferreira, 61, Centro, Foz do Iguaçu/PR, CEP 85851-400</p></a>
         <a class="ci" href="https://wa.me/5545999658427" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12Z"/></svg><p><b>WhatsApp</b><br>(45) 99965-8427</p></a>
-        <a class="ci" href="mailto:atendimento@maltacosmeticos.com.br"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><p>atendimento@maltacosmeticos.com.br</p></a>
+        <a class="ci" href="mailto:atendimento@maltacosmeticos.online"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><p>atendimento@maltacosmeticos.online</p></a>
         <a class="ci" href="/fale-conosco"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><p><b>Horário de atendimento:</b><br>segunda a sexta, 9h às 18h · sábado, 9h às 13h</p></a>
       </div>
     </div>
@@ -431,7 +431,7 @@ function aboutPage(){const dias=[['Segunda-feira','09:00h às 18:00h'],['Terça-
  <p>Nossos preços refletem a operação de uma loja independente e podem ser diferentes dos praticados em outras lojas ou no canal oficial de cada marca.</p>
  <h2>Conheça a Malta Cosméticos</h2><img class="ab-img" src="/assets/loja-malta.webp" alt="Produtos de beleza nas prateleiras da Malta Cosméticos" width="836" height="814" loading="lazy">
  <h2>Confira nossas informações</h2><dl class="ab-dl"><div><dt>Razão social</dt><dd>${EMP.rs}</dd></div><div><dt>Nome fantasia</dt><dd>${EMP.fan}</dd></div><div><dt>CNPJ</dt><dd>${EMP.cnpj}</dd></div>
- <div><dt>E-mail</dt><dd><a href="mailto:atendimento@maltacosmeticos.com.br">atendimento@maltacosmeticos.com.br</a></dd></div><div><dt>Site</dt><dd><a href="/">${location.host}</a></dd></div>
+ <div><dt>E-mail</dt><dd><a href="mailto:atendimento@maltacosmeticos.online">atendimento@maltacosmeticos.online</a></dd></div><div><dt>Site</dt><dd><a href="/">${location.host}</a></dd></div>
  <div><dt>WhatsApp</dt><dd><a href="https://wa.me/5545999658427" target="_blank" rel="noopener">(45) 99965-8427</a></dd></div><div><dt>Endereço</dt><dd>${EMP.end}</dd></div></dl>
  <div class="ab-g"><div class="panel"><h3>Horário de atendimento</h3><ul class="ab-h">${dias.map(([d,h],i)=>`<li class="${i==hoje?'today':''}"><span>${d}</span><b>${h}</b></li>`).join('')}</ul></div>
  <div class="panel"><h3>Onde estamos</h3><p>${EMP.end}</p><a class="cta" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query=Alameda+Rui+Ferreira+61+Centro+Foz+do+Igua%C3%A7u+PR+85851-400">Ver no mapa</a></div></div></div></section>`}
@@ -439,7 +439,7 @@ function catTiles(){return `<section class="band" style="padding-bottom:0"><div 
 const FAQ=[['Como funciona a devolução?','Você pode desistir da compra em até 7 dias após receber, com o produto lacrado. Produtos com defeito podem ser trocados em até 30 dias. Veja a <a href="/trocas-e-devolucoes">política de trocas</a>.'],
 ['Qual o tempo de entrega?','Separamos o pedido em 1 a 2 dias úteis. Depois da postagem, o PAC leva de 6 a 9 dias úteis e o Sedex de 2 a 4 dias úteis. Acima de R$ 199 o frete é grátis.'],
 ['Quais as formas de pagamento?','Pix e cartão de crédito em até 6x sem juros (parcela mínima de R$ 10). Veja as <a href="/pagamento">formas de pagamento</a>.'],
-['Como falar com o atendimento?','Pelo WhatsApp <a href="https://wa.me/5545999658427">(45) 99965-8427</a> ou pelo e-mail atendimento@maltacosmeticos.com.br.']];
+['Como falar com o atendimento?','Pelo WhatsApp <a href="https://wa.me/5545999658427">(45) 99965-8427</a> ou pelo e-mail atendimento@maltacosmeticos.online.']];
 function list(title,items){baseItems=items;brandSel=new Set();sortV='rel';
  const opts=[['rel','Relevância'],['desc','Maior preço'],['asc','Menor preço'],['off','Maior desconto'],['new','Lançamentos'],['az','A - Z'],['za','Z - A']];
  return `<section class="band"><div class="wrap"><div class="sec-h"><h1 style="font-size:34px;margin:0">${esc(title)}</h1><a href="/">← Início</a></div>
@@ -460,7 +460,7 @@ function paint(reset){const g=$('#g');if(!g)return;if(reset){shown=0;g.innerHTML
  if(!$('#more').hidden)$('#more').textContent=`Ver mais produtos (${current.length-shown} restantes)`}
 const EMP={rs:'67.600.045 PRISCILA DE PAULA PEREIRA MALTA',fan:'Malta Cosméticos',cnpj:'67.600.045/0001-78',
  end:'Alameda Rui Ferreira, 61, Centro, Foz do Iguaçu/PR, CEP 85851-400',
- wpp:'(45) 99965-8427',email:'atendimento@maltacosmeticos.com.br',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
+ wpp:'(45) 99965-8427',email:'atendimento@maltacosmeticos.online',hor:'segunda a sexta, das 9h às 18h; sábado, das 9h às 13h (exceto feriados)'};
 const ID=`<div class="id"><b>${EMP.rs}</b> (${EMP.fan}) · CNPJ ${EMP.cnpj}<br>${EMP.end}<br>WhatsApp ${EMP.wpp} · ${EMP.email}</div>`;
 const CT=`<h3>Contato</h3><p>WhatsApp <a href="https://wa.me/5545999658427"><b>${EMP.wpp}</b></a> · ${EMP.email}<br>Atendimento: ${EMP.hor}.</p>`;
 const POL={

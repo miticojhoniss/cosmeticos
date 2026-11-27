@@ -34,6 +34,6 @@ async function all(path) {
 const STORE = {
   name: 'Malta Cosméticos', legal: '67.600.045 PRISCILA DE PAULA PEREIRA MALTA', cnpj: '67.600.045/0001-78',
   street: 'Alameda Rui Ferreira, 61, Centro', city: 'Foz do Iguaçu', uf: 'PR', cep: '85851-400',
-  phone: '+55-45-99965-8427', email: 'atendimento@maltacosmeticos.com.br',
+  phone: '+55-45-99965-8427', email: 'atendimento@maltacosmeticos.online',
 };
 module.exports = { SB, KEY, CATS, POL, NOINDEX, norm, bslug, esc, q, all, STORE };
