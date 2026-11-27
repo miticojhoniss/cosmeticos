@@ -9,13 +9,17 @@
       "destination": "/api/feed"
     },
     {
-      "source": "/:path((?!api/|assets/|products\\.json$|robots\\.txt$|index\\.html$).+)",
+      "source": "/",
+      "destination": "/api/render?p="
+    },
+    {
+      "source": "/:path((?!api/|assets/|products\\.json$|robots\\.txt$|app\\.html$).+)",
       "destination": "/api/render?p=:path"
     }
   ],
   "functions": {
     "api/render.js": {
-      "includeFiles": "index.html"
+      "includeFiles": "app.html"
     }
   }
 }
