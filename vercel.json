@@ -21,5 +21,18 @@
     "api/render.js": {
       "includeFiles": "app.html"
     }
-  }
+  },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "cosmeticos-fawn.vercel.app"
+        }
+      ],
+      "destination": "https://maltacosmeticos.online/:path*",
+      "permanent": true
+    }
+  ]
 }
