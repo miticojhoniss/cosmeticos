@@ -1,7 +1,7 @@
 const { CATS, POL, bslug, all } = require('./_lib');
 module.exports = async (req, res) => {
   const proto = req.headers['x-forwarded-proto'] || 'https';
-  const base = `${proto}://${req.headers['x-forwarded-host'] || req.headers.host}`;
+  const base = 'https://maltacosmeticos.online';
   const today = new Date().toISOString().slice(0, 10);
   const u = (loc, pri, freq, img) => `<url><loc>${base}${loc}</loc><lastmod>${today}</lastmod><changefreq>${freq}</changefreq><priority>${pri}</priority>${img ? `<image:image><image:loc>${img.replace(/&/g, '&amp;')}</image:loc></image:image>` : ''}</url>`;
   try {

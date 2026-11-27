@@ -57,7 +57,7 @@ const cardList = (rows) => `<div class="grid" id="g">${rows.map((p) => `<article
 
 module.exports = async (req, res) => {
   const proto = req.headers['x-forwarded-proto'] || 'https';
-  const base = `${proto}://${req.headers['x-forwarded-host'] || req.headers.host}`;
+  const base = 'https://maltacosmeticos.online';
   const raw = String(req.query.p || '').replace(/^\/+|\/+$/g, '');
   const key = decodeURIComponent(raw.split('?')[0]);
   const send = (status, html, cache = 's-maxage=3600, stale-while-revalidate=86400') => {

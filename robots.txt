@@ -9,4 +9,4 @@ Disallow: /busca
 Disallow: /nova-senha
 Disallow: /api/
 
-Sitemap: https://cosmeticos-fawn.vercel.app/sitemap.xml
+Sitemap: https://maltacosmeticos.online/sitemap.xml

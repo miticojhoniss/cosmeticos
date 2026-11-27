@@ -5,7 +5,7 @@ const cut = (t, n) => (t.length > n ? t.slice(0, n).replace(/\s+\S*$/, '').repla
 const gtinOk = (g) => { if (!/^\d{8}$|^\d{12,14}$/.test(g || '')) return false; const d = g.split('').map(Number); const c = d.pop(); let s = 0; d.reverse().forEach((v, i) => (s += v * (i % 2 ? 1 : 3))); return (10 - (s % 10)) % 10 === c; };
 module.exports = async (req, res) => {
   const proto = req.headers['x-forwarded-proto'] || 'https';
-  const base = `${proto}://${req.headers['x-forwarded-host'] || req.headers.host}`;
+  const base = 'https://maltacosmeticos.online';
   try {
     const rows = await all('produtos?select=id,slug,nome,marca,descricao,preco,estoque,imagem_url,imagens,sku,ean,categoria_id&ativo=eq.true&order=id');
     const items = rows.map((p) => {
